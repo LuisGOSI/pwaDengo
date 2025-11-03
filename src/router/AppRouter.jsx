@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { Menu } from "../pages/Menu/Menu.jsx";
 import { Sucursales } from "../pages/Sucursales/Sucursales.jsx";
+import {Productos} from "../pages/admin/Productos/Productos.jsx"
 
 export const AppRouter = () => {
 	return (
@@ -11,6 +12,7 @@ export const AppRouter = () => {
             // TODO: Agregar las demas rutas
 			<Route path="/menu" element={<Menu />} />
 			<Route path="/sucursales" element={<Sucursales />} />
+			<Route path="/productos" element= {<Productos />}/>
 
             //* Ruta para manejar errores 404
             <Route path="/*" element={<h1>404 - Not Found</h1>} ></Route>
