@@ -68,15 +68,7 @@ export default function Header() {
           </button>
 
           <nav className={`header-nav ${isMenuOpen ? 'active' : ''}`}>
-            <a
-              href="/inicio"
-              className="header-nav-link"
-              onClick={(e) => {
-                e.preventDefault();
-                closeMenu();
-                window.location.href = '/';
-              }}
-            >
+            <a href="/" className="header-nav-link" onClick={closeMenu}>
               <span className="header-nav-text">Inicio</span>
             </a>
             <a
