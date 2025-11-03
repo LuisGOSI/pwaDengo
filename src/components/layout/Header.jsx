@@ -68,25 +68,69 @@ export default function Header() {
           </button>
 
           <nav className={`header-nav ${isMenuOpen ? 'active' : ''}`}>
-            <a href="#inicio" className="header-nav-link" onClick={closeMenu}>
+            <a
+              href="/inicio"
+              className="header-nav-link"
+              onClick={(e) => {
+                e.preventDefault();
+                closeMenu();
+                window.location.href = '/';
+              }}
+            >
               <span className="header-nav-text">Inicio</span>
             </a>
-            <a href="#galeria" className="header-nav-link" onClick={closeMenu}>
+            <a
+              href="/galeria"
+              className="header-nav-link"
+              onClick={(e) => {
+                e.preventDefault();
+                closeMenu();
+                window.location.href = '/galeria';
+              }}
+            >
               <span className="header-nav-text">Galería</span>
             </a>
-            <a href="#menu" className="header-nav-link" onClick={closeMenu}>
+            <a
+              href="/menu"
+              className="header-nav-link"
+              onClick={(e) => {
+                e.preventDefault();
+                closeMenu();
+                window.location.href = '/menu';
+              }}
+            >
               <span className="header-nav-text">Menú</span>
             </a>
-            <a href="#nosotros" className="header-nav-link" onClick={closeMenu}>
+            <a
+              href="/nosotros"
+              className="header-nav-link"
+              onClick={(e) => {
+                e.preventDefault();
+                closeMenu();
+                window.location.href = '/nosotros';
+              }}
+            >
               <span className="header-nav-text">Nosotros</span>
             </a>
-            <a href="#contacto" className="header-nav-link" onClick={closeMenu}>
+            <a
+              href="/contacto"
+              className="header-nav-link"
+              onClick={(e) => {
+                e.preventDefault();
+                closeMenu();
+                window.location.href = '/contacto';
+              }}
+            >
               <span className="header-nav-text">Contacto</span>
             </a>
             <button
               aria-label="Perfil de usuario"
               className="header-user-btn header-user-btn-mobile"
-              onClick={closeMenu}>
+              onClick={() => {
+                closeMenu();
+                window.location.href = '/login';
+              }}
+            >
               <UserCircle className="header-user-icon" />
               <span className="header-nav-text">Inicio de sesión</span>
             </button>
@@ -95,6 +139,9 @@ export default function Header() {
           <button
             aria-label="Perfil de usuario"
             className="header-user-btn header-user-btn-desktop"
+            onClick={() => {
+              window.location.href = '/login';
+            }}
           >
             <UserCircle className="header-user-icon" />
           </button>
@@ -108,7 +155,6 @@ export default function Header() {
           aria-hidden="true"
         />
       )}
-
 
     </div>
   );
