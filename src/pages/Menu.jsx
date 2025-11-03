@@ -1,4 +1,6 @@
 
 export const Menu = () => {
-	return <div>Menu</div>;
+	return <div>
+		<h1>Menu</h1>
+	</div>;
 };
