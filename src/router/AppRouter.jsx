@@ -1,15 +1,17 @@
 import { Route, Routes } from "react-router-dom";
-import { Menu } from "../pages/Menu/Menu.jsx";
 import { Sucursales } from "../pages/admin/Sucursales/Sucursales.jsx";
 import { ProtectedRoute } from "../components/common/ProtectedRoute.jsx";
 import NoAutorizado from "../pages/NoAutorizado/NoAutorizado.jsx";
 import Login from "../pages/Login/Login.jsx";
+import {Productos} from "../pages/admin/Productos/Productos.jsx"
+import { Inicio } from "../pages/Inicio";
+import { Menu } from "../pages/Menu/Menu";
 
 export const AppRouter = () => {
 	return (
 		<Routes>
 			{/* Rutas públicas */}
-			<Route path="/" element={<Menu />} />
+			<Route path="/" element={<Inicio />} />
 			<Route path="/login" element={<Login />} />
 			<Route path="/menu" element={<Menu />} />
 
@@ -18,7 +20,7 @@ export const AppRouter = () => {
 				path="/admin/productos"
 				element={
 					<ProtectedRoute allowedRoles={[1]}>
-						<h1>Gestión de Productos</h1>
+						<Productos />
 					</ProtectedRoute>
 				}
 			/>
