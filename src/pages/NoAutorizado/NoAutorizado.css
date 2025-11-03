@@ -1,0 +1,213 @@
+.unauthorized-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f1ed 0%, #e8ddd3 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.unauthorized-content {
+    background: white;
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(139, 111, 71, 0.15);
+    position: relative;
+    z-index: 2;
+}
+
+.blocked-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 2rem;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-10px);
+    }
+
+    75% {
+        transform: translateX(10px);
+    }
+}
+
+.unauthorized-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2d2d2d;
+    margin-bottom: 1rem;
+    font-family: 'Georgia', serif;
+    letter-spacing: -0.5px;
+}
+
+.unauthorized-subtitle {
+    font-size: 1.125rem;
+    color: #6b6b6b;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.unauthorized-message {
+    background: #fef3f2;
+    border-left: 4px solid #DC2626;
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2.5rem;
+    text-align: left;
+}
+
+.unauthorized-message p {
+    color: #4a4a4a;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.unauthorized-message p+p {
+    margin-top: 0.5rem;
+}
+
+.unauthorized-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 0.875rem 2rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    letter-spacing: 0.3px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #8B6F47 0%, #A0826D 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(139, 111, 71, 0.3);
+}
+
+.btn-secondary {
+    background: white;
+    color: #8B6F47;
+    border: 2px solid #e8e8e8;
+}
+
+.btn-secondary:hover {
+    border-color: #A0826D;
+    background: #fafafa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.btn-primary:active,
+.btn-secondary:active {
+    transform: translateY(0);
+}
+
+/* Decoración de granos de café */
+.coffee-bean {
+    position: absolute;
+    background: rgba(139, 111, 71, 0.1);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.bean-1 {
+    width: 100px;
+    height: 100px;
+    top: 10%;
+    left: 5%;
+    animation: float 6s ease-in-out infinite;
+}
+
+.bean-2 {
+    width: 150px;
+    height: 150px;
+    bottom: 15%;
+    right: 8%;
+    animation: float 8s ease-in-out infinite reverse;
+}
+
+.bean-3 {
+    width: 80px;
+    height: 80px;
+    top: 60%;
+    left: 10%;
+    animation: float 7s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-20px) rotate(5deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .unauthorized-container {
+        padding: 1rem;
+    }
+
+    .unauthorized-content {
+        padding: 2rem 1.5rem;
+        border-radius: 16px;
+    }
+
+    .blocked-icon {
+        width: 100px;
+        height: 100px;
+    }
+
+    .unauthorized-title {
+        font-size: 2rem;
+    }
+
+    .unauthorized-subtitle {
+        font-size: 1rem;
+    }
+
+    .unauthorized-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+    }
+
+    .bean-1,
+    .bean-2,
+    .bean-3 {
+        display: none;
+    }
+}

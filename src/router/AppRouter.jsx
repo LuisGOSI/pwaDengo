@@ -1,5 +1,8 @@
 import { Route, Routes } from "react-router-dom";
-import { Sucursales } from "../pages/Sucursales/Sucursales.jsx";
+import { Sucursales } from "../pages/admin/Sucursales/Sucursales.jsx";
+import { ProtectedRoute } from "../components/common/ProtectedRoute.jsx";
+import NoAutorizado from "../pages/NoAutorizado/NoAutorizado.jsx";
+import Login from "../pages/Login/Login.jsx";
 import {Productos} from "../pages/admin/Productos/Productos.jsx"
 import { Inicio } from "../pages/Inicio";
 import { Menu } from "../pages/Menu/Menu";
@@ -7,16 +10,33 @@ import { Menu } from "../pages/Menu/Menu";
 export const AppRouter = () => {
 	return (
 		<Routes>
-			<Route path="/" element={<h1> { <Inicio /> } </h1>} ></Route>
-			<Route path="/login" element={<h1>Inicio de sesion</h1>} ></Route>
-			
-            // TODO: Agregar las demas rutas
+			{/* Rutas públicas */}
+			<Route path="/" element={<Inicio />} />
+			<Route path="/login" element={<Login />} />
 			<Route path="/menu" element={<Menu />} />
-			<Route path="/sucursales" element={<Sucursales />} />
-			<Route path="/productos" element= {<Productos />}/>
 
-            //* Ruta para manejar errores 404
-            <Route path="/*" element={<h1>404 - Not Found</h1>} ></Route>
+			{/* Rutas protegidas */}
+			<Route
+				path="/admin/productos"
+				element={
+					<ProtectedRoute allowedRoles={[1]}>
+						<Productos />
+					</ProtectedRoute>
+				}
+			/>
+
+			<Route
+				path="/admin/sucursales"
+				element={
+					<ProtectedRoute allowedRoles={[1]}>
+						<Sucursales />
+					</ProtectedRoute>
+				}
+			/>
+
+			{/* Rutas especiales */}
+			<Route path="/no-autorizado" element={<NoAutorizado />} />
+			<Route path="/*" element={<h1>404 - Not Found</h1>} />
 		</Routes>
 	);
 };

@@ -68,13 +68,13 @@ export default function Header() {
           </button>
 
           <nav className={`header-nav ${isMenuOpen ? 'active' : ''}`}>
-            <a href="#inicio" className="header-nav-link" onClick={closeMenu}>
+            <a href="/" className="header-nav-link" onClick={closeMenu}>
               <span className="header-nav-text">Inicio</span>
             </a>
             <a href="#galeria" className="header-nav-link" onClick={closeMenu}>
               <span className="header-nav-text">Galería</span>
             </a>
-            <a href="#menu" className="header-nav-link" onClick={closeMenu}>
+            <a href="/menu" className="header-nav-link" onClick={closeMenu}>
               <span className="header-nav-text">Menú</span>
             </a>
             <a href="#nosotros" className="header-nav-link" onClick={closeMenu}>
