@@ -7,6 +7,7 @@ export const AppRouter = () => {
 		<Routes>
 			<Route path="/" element={<h1>Raiz</h1>} ></Route>
 			<Route path="/login" element={<h1>Inicio de sesion</h1>} ></Route>
+			<Route path="/menu" element={<Menu />} />
             // TODO: Agregar las demas rutas
 			<Route path="/menu" element={<Menu />} />
 			<Route path="/sucursales" element={<Sucursales />} />
