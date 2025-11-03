@@ -1,13 +1,14 @@
 import { Route, Routes } from "react-router-dom";
-import { Menu } from "../pages/Menu/Menu.jsx";
-import { Sucursales } from "../pages/Sucursales/Sucursales.jsx";
+import { Inicio } from "../pages/Inicio";
+import { Sucursales } from "../pages/Sucursales/Sucursales";
+import { Menu } from "../pages/Menu/Menu";
 
 export const AppRouter = () => {
 	return (
 		<Routes>
-			<Route path="/" element={<h1>Raiz</h1>} ></Route>
+			<Route path="/" element={<h1> { <Inicio /> } </h1>} ></Route>
 			<Route path="/login" element={<h1>Inicio de sesion</h1>} ></Route>
-			<Route path="/menu" element={<Menu />} />
+			
             // TODO: Agregar las demas rutas
 			<Route path="/menu" element={<Menu />} />
 			<Route path="/sucursales" element={<Sucursales />} />
