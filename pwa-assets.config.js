@@ -8,5 +8,5 @@ export default defineConfig({
         preset: '2023',
     },
     preset,
-    images: ['/logo_oscuro.svg'],
+    images: ['public/logo_oscuro.svg'],
 })
