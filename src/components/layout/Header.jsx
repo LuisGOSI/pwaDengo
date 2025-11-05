@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { UserCircle } from "lucide-react";
-import logo from "../../assets/images/logo_blanco.svg";
+import logo from "../../assets/images/icono_dengo.svg";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -71,22 +71,71 @@ export default function Header() {
             <a href="/" className="header-nav-link" onClick={closeMenu}>
               <span className="header-nav-text">Inicio</span>
             </a>
-            <a href="#galeria" className="header-nav-link" onClick={closeMenu}>
+            <a
+              href="/galeria"
+              className="header-nav-link"
+              onClick={(e) => {
+                e.preventDefault();
+                closeMenu();
+                window.location.href = '/galeria';
+              }}
+            >
               <span className="header-nav-text">Galería</span>
             </a>
-            <a href="/menu" className="header-nav-link" onClick={closeMenu}>
+            <a
+              href="/menu"
+              className="header-nav-link"
+              onClick={(e) => {
+                e.preventDefault();
+                closeMenu();
+                window.location.href = '/menu';
+              }}
+            >
               <span className="header-nav-text">Menú</span>
             </a>
-            <a href="#nosotros" className="header-nav-link" onClick={closeMenu}>
+            <a
+              href="/nosotros"
+              className="header-nav-link"
+              onClick={(e) => {
+                e.preventDefault();
+                closeMenu();
+                window.location.href = '/nosotros';
+              }}
+            >
               <span className="header-nav-text">Nosotros</span>
             </a>
-            <a href="#contacto" className="header-nav-link" onClick={closeMenu}>
+            <a
+              href="/contacto"
+              className="header-nav-link"
+              onClick={(e) => {
+                e.preventDefault();
+                closeMenu();
+                window.location.href = '/contacto';
+              }}
+            >
               <span className="header-nav-text">Contacto</span>
             </a>
+            <a
+              href="/CarteleraEventos"
+              className="header-nav-link"
+              onClick={(e) => {
+                e.preventDefault();
+                closeMenu();
+                window.location.href = '/CarteleraEventos';
+              }}
+            >
+              <span className="header-nav-text">Cartelera de eventos</span>
+            </a>
+
+            { /* Boton de inicio de usuario */ }
             <button
               aria-label="Perfil de usuario"
               className="header-user-btn header-user-btn-mobile"
-              onClick={closeMenu}>
+              onClick={() => {
+                closeMenu();
+                window.location.href = '/login';
+              }}
+            >
               <UserCircle className="header-user-icon" />
               <span className="header-nav-text">Inicio de sesión</span>
             </button>
@@ -95,6 +144,9 @@ export default function Header() {
           <button
             aria-label="Perfil de usuario"
             className="header-user-btn header-user-btn-desktop"
+            onClick={() => {
+              window.location.href = '/login';
+            }}
           >
             <UserCircle className="header-user-icon" />
           </button>
@@ -108,7 +160,6 @@ export default function Header() {
           aria-hidden="true"
         />
       )}
-
 
     </div>
   );
