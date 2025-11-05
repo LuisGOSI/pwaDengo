@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Footer } from "../../../components/layout/Footer.jsx"
 import Header from '../../../components/layout/Header.jsx'
 import "./Sucursales.css"
 
 export const Sucursales = () => {
 	const [mostrarFormulario, setMostrarFormulario] = useState(false)
+	const [editando, setEditando] = useState(null)
 	const [formData, setFormData] = useState({
 		nombre: '',
 		direccion: '',
@@ -14,48 +15,26 @@ export const Sucursales = () => {
 		horario_apertura: ''
 	})
 
-	const [sucursales, setSucursales] = useState([
-		{
-			nombre: 'Sucursal Centro',
-			direccion: 'Av. Principal 123, Centro',
-			latitud: 21.1219,
-			longitud: -101.6827,
-			telefono: '(477) 123-4567',
-			horario_apertura: '08:00'
-		},
-		{
-			nombre: 'Sucursal Norte',
-			direccion: 'Blvd. Norte 456, Col. Industrial',
-			latitud: 21.1500,
-			longitud: -101.7000,
-			telefono: '(477) 234-5678',
-			horario_apertura: '09:00'
-		},
-		{
-			nombre: 'Sucursal Sur',
-			direccion: 'Calzada Sur 789, Col. Residencial',
-			latitud: 21.1000,
-			longitud: -101.6500,
-			telefono: '(477) 345-6789',
-			horario_apertura: '08:30'
-		},
-		{
-			nombre: 'Sucursal Plaza León',
-			direccion: 'Plaza Comercial León, Local 45',
-			latitud: 21.1300,
-			longitud: -101.6900,
-			telefono: '(477) 456-7890',
-			horario_apertura: '10:00'
-		},
-		{
-			nombre: 'Sucursal Universidad',
-			direccion: 'Blvd. Universitario 321, Col. Jardines',
-			latitud: 21.1400,
-			longitud: -101.6700,
-			telefono: '(477) 567-8901',
-			horario_apertura: '08:00'
+	const [sucursales, setSucursales] = useState([])
+
+	const API_URL = 'http://localhost:3000/api/sucursales'
+
+	useEffect(() => {
+		cargarSucursales()
+	}, [])
+
+	const cargarSucursales = async () => {
+		try {
+			const response = await fetch(API_URL)
+			const result = await response.json()
+			
+			if (result.success) {
+				setSucursales(result.data)
+			}
+		} catch (err) {
+			console.error('Error al cargar sucursales:', err)
 		}
-	])
+	}
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target
@@ -65,16 +44,70 @@ export const Sucursales = () => {
 		})
 	}
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault()
-		setSucursales([
-			...sucursales,
-			{
-				...formData,
-				latitud: parseFloat(formData.latitud),
-				longitud: parseFloat(formData.longitud)
+
+		try {
+			const url = editando ? `${API_URL}/${editando}` : API_URL
+			const method = editando ? 'PUT' : 'POST'
+
+			const response = await fetch(url, {
+				method,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					...formData,
+					latitud: parseFloat(formData.latitud),
+					longitud: parseFloat(formData.longitud)
+				})
+			})
+
+			const result = await response.json()
+
+			if (result.success) {
+				await cargarSucursales()
+				resetForm()
 			}
-		])
+		} catch (err) {
+			console.error('Error al guardar sucursal:', err)
+		}
+	}
+
+	const handleEditar = (sucursal) => {
+		setEditando(sucursal.id)
+		setFormData({
+			nombre: sucursal.nombre,
+			direccion: sucursal.direccion || '',
+			latitud: sucursal.latitud || '',
+			longitud: sucursal.longitud || '',
+			telefono: sucursal.telefono || '',
+			horario_apertura: sucursal.horario_apertura || ''
+		})
+		setMostrarFormulario(true)
+	}
+
+	const handleToggleActiva = async (id, activaActual) => {
+		try {
+			const response = await fetch(`${API_URL}/activa/${id}`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ activa: !activaActual })
+			})
+
+			const result = await response.json()
+
+			if (result.success) {
+				await cargarSucursales()
+			}
+		} catch (err) {
+			console.error('Error al cambiar estado:', err)
+		}
+	}
+
+	const resetForm = () => {
 		setFormData({
 			nombre: '',
 			direccion: '',
@@ -84,23 +117,15 @@ export const Sucursales = () => {
 			horario_apertura: ''
 		})
 		setMostrarFormulario(false)
+		setEditando(null)
 	}
 
 	const handleCancelar = () => {
-		setFormData({
-			nombre: '',
-			direccion: '',
-			latitud: '',
-			longitud: '',
-			telefono: '',
-			horario_apertura: ''
-		})
-		setMostrarFormulario(false)
+		resetForm()
 	}
 
 	return (
 		<div>
-			<Header />
 			<div className="sucursales-container">
 				<div className="sucursales-content">
 					<div className="sucursales-card">
@@ -110,7 +135,12 @@ export const Sucursales = () => {
 							</div>
 							<button
 								className="btn-nuevo-evento"
-								onClick={() => setMostrarFormulario(!mostrarFormulario)}
+								onClick={() => {
+									if (!mostrarFormulario) {
+										resetForm()
+									}
+									setMostrarFormulario(!mostrarFormulario)
+								}}
 							>
 								<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
@@ -121,7 +151,9 @@ export const Sucursales = () => {
 
 						{mostrarFormulario && (
 							<div className="formulario-container">
-								<h3 className="formulario-title">Nueva Sucursal</h3>
+								<h3 className="formulario-title">
+									{editando ? 'Editar Sucursal' : 'Nueva Sucursal'}
+								</h3>
 								<form onSubmit={handleSubmit} className="formulario-sucursal">
 									<div className="form-row">
 										<div className="form-group">
@@ -211,7 +243,7 @@ export const Sucursales = () => {
 											Cancelar
 										</button>
 										<button type="submit" className="btn-guardar">
-											Guardar Sucursal
+											{editando ? 'Actualizar Sucursal' : 'Guardar Sucursal'}
 										</button>
 									</div>
 								</form>
@@ -228,6 +260,7 @@ export const Sucursales = () => {
 								<div>COORDENADAS</div>
 								<div>TELÉFONO</div>
 								<div>HORARIO APERTURA</div>
+								<div>ACCIONES</div>
 							</div>
 
 							<div className="sucursales-items">
@@ -254,6 +287,32 @@ export const Sucursales = () => {
 											<span className="horario-badge">
 												{sucursal.horario_apertura}
 											</span>
+										</div>
+										<div className="sucursal-acciones">
+											<button
+												onClick={() => handleEditar(sucursal)}
+												className="btn-accion btn-editar"
+												title="Editar"
+											>
+												<svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+												</svg>
+											</button>
+											<button
+												onClick={() => handleToggleActiva(sucursal.id, sucursal.activa)}
+												className={`btn-accion ${sucursal.activa ? 'btn-desactivar' : 'btn-activar'}`}
+												title={sucursal.activa ? 'Desactivar' : 'Activar'}
+											>
+												{sucursal.activa ? (
+													<svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+													</svg>
+												) : (
+													<svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+													</svg>
+												)}
+											</button>
 										</div>
 									</div>
 								))}

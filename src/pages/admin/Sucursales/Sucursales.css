@@ -129,7 +129,7 @@
 
 .table-header {
 	display: grid;
-	grid-template-columns: repeat(5, 1fr);
+	grid-template-columns: 1.2fr 1.5fr 1fr 1fr 0.8fr 0.8fr;
 	gap: 16px;
 	padding: 0 16px;
 	margin-bottom: 12px;
@@ -147,7 +147,7 @@
 
 .sucursal-item {
 	display: grid;
-	grid-template-columns: repeat(5, 1fr);
+	grid-template-columns: 1.2fr 1.5fr 1fr 1fr 0.8fr 0.8fr;
 	gap: 16px;
 	align-items: center;
 	background-color: white;
@@ -302,6 +302,50 @@
 	background-color: #78350f;
 }
 
+/* Estilos para los botones de acción */
+.sucursal-acciones {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.btn-accion {
+	padding: 8px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: all 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: transparent;
+}
+
+.btn-editar {
+	color: #2563eb;
+}
+
+.btn-editar:hover {
+	background-color: #dbeafe;
+}
+
+.btn-desactivar {
+	color: #dc2626;
+}
+
+.btn-desactivar:hover {
+	background-color: #fee2e2;
+}
+
+.btn-activar {
+	color: #16a34a;
+}
+
+.btn-activar:hover {
+	background-color: #dcfce7;
+}
+
 @media (max-width: 1023px) {
 	.sucursales-container {
 		margin-left: 0;
@@ -326,6 +370,13 @@
 		display: block;
 		margin-bottom: 4px;
 		color: #6b7280;
+	}
+
+	.sucursal-acciones {
+		justify-content: flex-start;
+		padding-top: 8px;
+		border-top: 1px solid #e5e7eb;
+		margin-top: 8px;
 	}
 }
 
