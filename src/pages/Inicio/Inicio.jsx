@@ -3,6 +3,7 @@ import { useState } from 'react';
 import './Inicio.css';
 import coffeInicio from "../../assets/images/coffe-inicio.png";
 import coffeSplash from "../../assets/images/coffe-splash.png";
+import Sidebar from '../../components/layout/Sidebar';
 
 export default function InicioPage() {
     const [currentSlide, setCurrentSlide] = useState(0);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { UserCircle } from "lucide-react";
-import logo from "../../assets/images/logo_blanco.svg";
+import logo from "../../assets/images/icono_dengo.svg";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -115,6 +115,19 @@ export default function Header() {
             >
               <span className="header-nav-text">Contacto</span>
             </a>
+            <a
+              href="/CarteleraEventos"
+              className="header-nav-link"
+              onClick={(e) => {
+                e.preventDefault();
+                closeMenu();
+                window.location.href = '/CarteleraEventos';
+              }}
+            >
+              <span className="header-nav-text">Cartelera de eventos</span>
+            </a>
+
+            { /* Boton de inicio de usuario */ }
             <button
               aria-label="Perfil de usuario"
               className="header-user-btn header-user-btn-mobile"

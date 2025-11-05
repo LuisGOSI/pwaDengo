@@ -52,7 +52,7 @@ export default function Login() {
 
 				if (error) throw error;
 
-				navigate("/menu");
+				navigate("/dashboard");
 			}
 		} catch (error) {
 			alert(error.message || "Ocurrió un error");
@@ -84,16 +84,16 @@ export default function Login() {
 					<div className="brand-section">
 						<div className="coffee-icon">
 							<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path d="M16 24C16 24 20 16 28 16C36 16 40 24 40 24" stroke="#8B6F47" strokeWidth="2" strokeLinecap="round"/>
-								<path d="M12 28H44C46 28 48 30 48 32V48C48 52 44 56 40 56H16C12 56 8 52 8 48V32C8 30 10 28 12 28Z" fill="#A0826D" stroke="#8B6F47" strokeWidth="2"/>
-								<path d="M48 32H52C54 32 56 34 56 36V40C56 42 54 44 52 44H48" stroke="#8B6F47" strokeWidth="2"/>
-								<circle cx="28" cy="40" r="3" fill="#6B5447" opacity="0.3"/>
+								<path d="M16 24C16 24 20 16 28 16C36 16 40 24 40 24" stroke="#8B6F47" strokeWidth="2" strokeLinecap="round" />
+								<path d="M12 28H44C46 28 48 30 48 32V48C48 52 44 56 40 56H16C12 56 8 52 8 48V32C8 30 10 28 12 28Z" fill="#A0826D" stroke="#8B6F47" strokeWidth="2" />
+								<path d="M48 32H52C54 32 56 34 56 36V40C56 42 54 44 52 44H48" stroke="#8B6F47" strokeWidth="2" />
+								<circle cx="28" cy="40" r="3" fill="#6B5447" opacity="0.3" />
 							</svg>
 						</div>
 						<h1 className="brand-title">Dengo Cafetería</h1>
 						<p className="brand-subtitle">Descubre el arte de un café perfecto</p>
 					</div>
-					
+
 					<div className="coffee-beans"></div>
 					<div className="coffee-beans-2"></div>
 				</div>
@@ -105,8 +105,8 @@ export default function Login() {
 							{isSignUp ? "Crear cuenta" : "Bienvenido de nuevo"}
 						</h2>
 						<p className="form-subtitle">
-							{isSignUp 
-								? "Únete a nuestra comunidad cafetera" 
+							{isSignUp
+								? "Únete a nuestra comunidad cafetera"
 								: "Inicia sesión para continuar"}
 						</p>
 
@@ -143,8 +143,8 @@ export default function Login() {
 								{loading
 									? "Cargando..."
 									: isSignUp
-									? "Crear cuenta"
-									: "Iniciar sesión"}
+										? "Crear cuenta"
+										: "Iniciar sesión"}
 							</button>
 						</form>
 
