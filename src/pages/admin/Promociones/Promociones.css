@@ -1,5 +1,5 @@
-/* Sucursales Container */
-.sucursales-container {
+/* Promociones Container */
+.promociones-container {
     padding: 24px;
     background-color: #f8f8f8;
     min-height: 100vh;
@@ -9,32 +9,32 @@
 }
 
 /* Header */
-.sucursales-header {
+.promociones-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 32px;
 }
 
-.sucursales-header-left {
+.promociones-header-left {
     display: flex;
     flex-direction: column;
 }
 
-.sucursales-titulo {
+.promociones-titulo {
     font-size: 32px;
     font-weight: 600;
     color: #2c2c2c;
     margin: 0 0 4px 0;
 }
 
-.sucursales-breadcrumb {
+.promociones-breadcrumb {
     font-size: 14px;
     color: #999;
     margin: 0;
 }
 
-.btn-nueva-sucursal {
+.btn-nueva-promocion {
     background-color: #7a5c3f;
     color: white;
     border: none;
@@ -50,19 +50,19 @@
     box-shadow: 0 2px 8px rgba(122, 92, 63, 0.3);
 }
 
-.btn-nueva-sucursal:hover {
+.btn-nueva-promocion:hover {
     background-color: #6b4d35;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(122, 92, 63, 0.4);
 }
 
-.btn-icono-plus {
+.btn-icono {
     font-size: 20px;
     font-weight: 300;
 }
 
 /* Filtros */
-.sucursales-filtros {
+.promociones-filtros {
     background-color: white;
     border-radius: 12px;
     padding: 24px;
@@ -128,8 +128,8 @@
     border-color: #ccc;
 }
 
-/* Lista de Sucursales */
-.sucursales-lista {
+/* Lista de Promociones */
+.promociones-lista {
     background-color: white;
     border-radius: 12px;
     padding: 24px;
@@ -158,205 +158,122 @@
     overflow-x: auto;
 }
 
-.table-header {
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	gap: 16px;
-	padding: 0 16px;
-	margin-bottom: 12px;
-	font-size: 14px;
-	font-weight: 500;
-	color: #737373;
-    font-weight: 700;
+.promociones-tabla {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.sucursales-items {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-}
-
-.sucursal-item {
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	gap: 16px;
-	align-items: center;
-	background-color: white;
-	border: 1px solid #e5e7eb;
-	border-radius: 8px;
-	padding: 16px;
-	transition: background-color 0.2s;
-}
-
-.sucursales-tabla tbody tr:hover {
+.promociones-tabla thead {
     background-color: #fafafa;
 }
 
-/* Sucursal Info */
-.sucursal-info {
+.promociones-tabla th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.promociones-tabla td {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.promociones-tabla tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.promociones-tabla tbody tr:hover {
+    background-color: #fafafa;
+}
+
+/* Promoción Info */
+.promocion-info {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.sucursal-avatar {
+.promocion-avatar {
     width: 44px;
     height: 44px;
     border-radius: 50%;
+    background-color: #8b6f47;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     flex-shrink: 0;
 }
 
-.sucursal-datos {
+.promocion-datos {
     display: flex;
     flex-direction: column;
 }
 
-.sucursal-direccion,
-.sucursal-coordenadas,
-.sucursal-telefono {
-	font-size: 14px;
-	color: #3a3e44;
-}
-
-.horario-badge {
-	display: inline-block;
-	background-color: #d1fae5;
-	color: #065f46;
-	padding: 6px 12px;
-	border-radius: 9999px;
-	font-size: 14px;
-	font-weight: 500;
-}
-
-.no-results {
-	text-align: center;
-	padding: 48px 0;
-	color: #6b7280;
-}
-
-.formulario-container {
-	background-color: #f9fafb;
-	border: 1px solid #e5e7eb;
-	border-radius: 8px;
-	padding: 24px;
-	margin-bottom: 24px;
-    font-family: "Inter", sans-serif;
-}
-
-.formulario-title {
-	font-size: 18px;
-	font-weight: 600;
-	color: #1f2937;
-	margin: 0 0 20px 0;
-}
-
-/* Dirección */
-.direccion-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.direccion-icon {
-    color: #666;
-    flex-shrink: 0;
-}
-
-.sucursal-direccion {
+.promocion-nombre {
     font-size: 14px;
-    color: #666;
-}
-
-.form-group {
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-}
-
-.form-group label {
-	font-size: 14px;
-	font-weight: 500;
-	color: #374151;
-}
-
-.form-group input {
-	padding: 10px 12px;
-	border: 1px solid #d1d5db;
-	border-radius: 6px;
-	font-size: 14px;
-	transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.form-group input:focus {
-	outline: none;
-	border-color: #92400e;
-	box-shadow: 0 0 0 3px rgba(146, 64, 14, 0.1);
-}
-
-.form-actions {
-	display: flex;
-	justify-content: flex-end;
-	gap: 12px;
-	margin-top: 8px;
-}
-
-.btn-cancelar,
-.btn-guardar {
-	padding: 10px 20px;
-	border-radius: 6px;
-	font-size: 14px;
-	font-weight: 500;
-	cursor: pointer;
-	transition: all 0.2s;
-	border: none;
-}
-
-.btn-cancelar {
-	background-color: #f3f4f6;
-	color: #374151;
-}
-
-.btn-cancelar:hover {
-	background-color: #e5e7eb;
-}
-
-.btn-guardar {
-	background-color: #835C3E;
-	color: white;
-}
-
-.btn-guardar:hover {
-	background-color: #78350f;
-}
-
-/* Teléfono */
-.telefono-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.telefono-icon {
-    color: #666;
-    flex-shrink: 0;
-}
-
-.sucursal-telefono {
-    font-size: 14px;
-    color: #666;
-}
-
-/* Horario */
-.sucursal-horario {
-    font-size: 14px;
+    font-weight: 600;
     color: #2c2c2c;
+    margin: 0 0 2px 0;
+}
+
+.promocion-descripcion {
+    font-size: 12px;
+    color: #999;
+    margin: 0;
+}
+
+/* Tipo Badges */
+.tipo-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 12px;
     font-weight: 500;
+}
+
+.tipo-descuento {
+    background-color: #dce9ff;
+    color: #1976d2;
+}
+
+.tipo-2x1 {
+    background-color: #f3e5f5;
+    color: #8e24aa;
+}
+
+.tipo-combo {
+    background-color: #ffe8d6;
+    color: #e65100;
+}
+
+.tipo-especial {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+/* Sucursal, Descuento y Vigencia */
+.promocion-sucursal {
+    font-size: 14px;
+    color: #666;
+}
+
+.promocion-descuento {
+    font-size: 15px;
+    color: #2c2c2c;
+    font-weight: 600;
+}
+
+.promocion-vigencia {
+    font-size: 14px;
+    color: #666;
 }
 
 /* Responsive Design */
@@ -367,59 +284,63 @@
 }
 
 @media (max-width: 768px) {
-    .sucursales-container {
+    .promociones-container {
         padding: 16px;
     }
-    
-    .sucursales-header {
+
+    .promociones-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 16px;
     }
-    
-    .btn-nueva-sucursal {
+
+    .btn-nueva-promocion {
         width: 100%;
         justify-content: center;
     }
-    
+
     .filtros-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .btn-filtrar {
         width: 100%;
     }
-    
+
     .tabla-container {
         overflow-x: scroll;
     }
-    
-    .sucursales-tabla {
-        min-width: 900px;
+
+    .promociones-tabla {
+        min-width: 700px;
     }
 }
 
 @media (max-width: 480px) {
-    .sucursales-titulo {
+    .promociones-titulo {
         font-size: 26px;
     }
-    
-    .sucursales-filtros,
-    .sucursales-lista {
+
+    .promociones-filtros,
+    .promociones-lista {
         padding: 16px;
     }
-    
-    .sucursal-avatar {
+
+    .promocion-avatar {
         width: 38px;
         height: 38px;
-        font-size: 12px;
+        font-size: 11px;
     }
-    
-    .sucursal-nombre {
+
+    .promocion-nombre {
         font-size: 13px;
     }
-    
-    .sucursal-ciudad {
+
+    .promocion-descripcion {
         font-size: 11px;
+    }
+
+    .promocion-descuento {
+        font-size: 14px;
     }
 }
