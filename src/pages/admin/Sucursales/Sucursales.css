@@ -4,7 +4,6 @@
     background-color: #f8f8f8;
     min-height: 100vh;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
-    margin: 20px;
     border-radius: 15px;
 }
 
@@ -26,6 +25,7 @@
     font-weight: 600;
     color: #2c2c2c;
     margin: 0 0 4px 0;
+    font-family: "Open Sans", sans-serif;
 }
 
 .sucursales-breadcrumb {
@@ -61,6 +61,101 @@
     font-weight: 300;
 }
 
+/* Formulario */
+.formulario-container {
+    background-color: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    font-family: "Inter", sans-serif;
+}
+
+.formulario-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c2c2c;
+    margin: 0 0 20px 0;
+}
+
+.formulario-sucursal {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+}
+
+.form-group input {
+    padding: 10px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #f5f5f5;
+    transition: all 0.2s ease;
+    color: #2c2c2c;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #7a5c3f;
+    background-color: white;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.btn-cancelar,
+.btn-guardar {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-cancelar {
+    background-color: white;
+    color: #666;
+    border: 1px solid #e0e0e0;
+}
+
+.btn-cancelar:hover {
+    background-color: #f5f5f5;
+    border-color: #ccc;
+}
+
+.btn-guardar {
+    background-color: #7a5c3f;
+    color: white;
+}
+
+.btn-guardar:hover {
+    background-color: #6b4d35;
+}
+
 /* Filtros */
 .sucursales-filtros {
     background-color: white;
@@ -72,9 +167,8 @@
 
 .filtros-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr;
     gap: 16px;
-    margin-bottom: 20px;
 }
 
 .filtro-group {
@@ -89,9 +183,8 @@
     font-weight: 500;
 }
 
-.filtro-input,
-.filtro-select {
-    padding: 10px 14px;
+.filtro-input {
+    padding: 10px 20px;
     border: 1px solid #e0e0e0;
     border-radius: 6px;
     font-size: 14px;
@@ -100,32 +193,10 @@
     color: #2c2c2c;
 }
 
-.filtro-input:focus,
-.filtro-select:focus {
+.filtro-input:focus {
     outline: none;
     border-color: #7a5c3f;
     background-color: white;
-}
-
-.filtro-select {
-    cursor: pointer;
-}
-
-.btn-filtrar {
-    background-color: white;
-    color: #666;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    padding: 10px 32px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-filtrar:hover {
-    background-color: #f5f5f5;
-    border-color: #ccc;
 }
 
 /* Lista de Sucursales */
@@ -158,34 +229,33 @@
     overflow-x: auto;
 }
 
-.table-header {
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	gap: 16px;
-	padding: 0 16px;
-	margin-bottom: 12px;
-	font-size: 14px;
-	font-weight: 500;
-	color: #737373;
-    font-weight: 700;
+.sucursales-tabla {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.sucursales-items {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
+.sucursales-tabla thead {
+    background-color: #fafafa;
 }
 
-.sucursal-item {
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	gap: 16px;
-	align-items: center;
-	background-color: white;
-	border: 1px solid #e5e7eb;
-	border-radius: 8px;
-	padding: 16px;
-	transition: background-color 0.2s;
+.sucursales-tabla th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.sucursales-tabla td {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.sucursales-tabla tbody tr {
+    transition: background-color 0.2s ease;
 }
 
 .sucursales-tabla tbody tr:hover {
@@ -217,43 +287,12 @@
     flex-direction: column;
 }
 
-.sucursal-direccion,
-.sucursal-coordenadas,
-.sucursal-telefono {
-	font-size: 14px;
-	color: #3a3e44;
-}
-
-.horario-badge {
-	display: inline-block;
-	background-color: #d1fae5;
-	color: #065f46;
-	padding: 6px 12px;
-	border-radius: 9999px;
-	font-size: 14px;
-	font-weight: 500;
-}
-
-.no-results {
-	text-align: center;
-	padding: 48px 0;
-	color: #6b7280;
-}
-
-.formulario-container {
-	background-color: #f9fafb;
-	border: 1px solid #e5e7eb;
-	border-radius: 8px;
-	padding: 24px;
-	margin-bottom: 24px;
-    font-family: "Inter", sans-serif;
-}
-
-.formulario-title {
-	font-size: 18px;
-	font-weight: 600;
-	color: #1f2937;
-	margin: 0 0 20px 0;
+.sucursal-nombre {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c2c2c;
+    margin: 0 0 2px 0;
+    font-family: "Open Sans", sans-serif;
 }
 
 /* Dirección */
@@ -273,66 +312,10 @@
     color: #666;
 }
 
-.form-group {
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-}
-
-.form-group label {
-	font-size: 14px;
-	font-weight: 500;
-	color: #374151;
-}
-
-.form-group input {
-	padding: 10px 12px;
-	border: 1px solid #d1d5db;
-	border-radius: 6px;
-	font-size: 14px;
-	transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.form-group input:focus {
-	outline: none;
-	border-color: #92400e;
-	box-shadow: 0 0 0 3px rgba(146, 64, 14, 0.1);
-}
-
-.form-actions {
-	display: flex;
-	justify-content: flex-end;
-	gap: 12px;
-	margin-top: 8px;
-}
-
-.btn-cancelar,
-.btn-guardar {
-	padding: 10px 20px;
-	border-radius: 6px;
-	font-size: 14px;
-	font-weight: 500;
-	cursor: pointer;
-	transition: all 0.2s;
-	border: none;
-}
-
-.btn-cancelar {
-	background-color: #f3f4f6;
-	color: #374151;
-}
-
-.btn-cancelar:hover {
-	background-color: #e5e7eb;
-}
-
-.btn-guardar {
-	background-color: #835C3E;
-	color: white;
-}
-
-.btn-guardar:hover {
-	background-color: #78350f;
+/* Coordenadas */
+.sucursal-coordenadas {
+    font-size: 14px;
+    color: #666;
 }
 
 /* Teléfono */
@@ -359,10 +342,92 @@
     font-weight: 500;
 }
 
+/* Estado Badges */
+.estado-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.estado-activo {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.estado-inactivo {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Acciones */
+.sucursal-acciones {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.btn-accion {
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+}
+
+.btn-editar {
+    color: #2563eb;
+}
+
+.btn-editar:hover {
+    background-color: #dbeafe;
+}
+
+.btn-desactivar {
+    color: #dc2626;
+}
+
+.btn-desactivar:hover {
+    background-color: #fee2e2;
+}
+
+.btn-activar {
+    color: #16a34a;
+}
+
+.btn-activar:hover {
+    background-color: #dcfce7;
+}
+
+/* No Results */
+.no-results {
+    text-align: center;
+    padding: 48px 0;
+    color: #999;
+    font-size: 14px;
+}
+
 /* Responsive Design */
-@media (max-width: 1024px) {
-    .filtros-grid {
-        grid-template-columns: repeat(2, 1fr);
+@media (max-width: 1023px) {
+    .sucursales-container {
+        margin-left: 0;
+        margin-top: 70px;
+        padding: 16px;
+        z-index: 1;
+    }
+
+    .tabla-container {
+        overflow-x: scroll;
+    }
+
+    .sucursales-tabla {
+        min-width: 1000px;
     }
 }
 
@@ -382,31 +447,19 @@
         justify-content: center;
     }
     
-    .filtros-grid {
+    .form-row {
         grid-template-columns: 1fr;
     }
     
-    .btn-filtrar {
-        width: 100%;
-    }
-    
-    .tabla-container {
-        overflow-x: scroll;
-    }
-    
-    .sucursales-tabla {
-        min-width: 900px;
+    .sucursales-filtros,
+    .sucursales-lista {
+        padding: 16px;
     }
 }
 
 @media (max-width: 480px) {
     .sucursales-titulo {
         font-size: 26px;
-    }
-    
-    .sucursales-filtros,
-    .sucursales-lista {
-        padding: 16px;
     }
     
     .sucursal-avatar {
@@ -417,9 +470,5 @@
     
     .sucursal-nombre {
         font-size: 13px;
-    }
-    
-    .sucursal-ciudad {
-        font-size: 11px;
     }
 }
