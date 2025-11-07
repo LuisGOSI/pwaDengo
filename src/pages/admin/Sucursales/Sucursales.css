@@ -1,347 +1,474 @@
+/* Sucursales Container */
 .sucursales-container {
-	min-height: 100vh;
-	background-color: #f9fafb;
-	padding: 24px;
-	margin-left: 270px;
-	margin-top: 50px;
-	margin-right: 20px;
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-	border-radius: 30px;
-	position: relative;
-	z-index: 1;
-	transition: margin-left 0.3s ease;
+    padding: 24px;
+    background-color: #f8f8f8;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+    border-radius: 15px;
 }
 
-.sucursales-content {
-	max-width: 100%;
-	margin: 0;
-	width: 100%;
-}
-
-.sucursales-card {
-	background-color: white;
-	border-radius: 8px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-	border: 1px solid #e5e7eb;
-	padding: 24px;
-}
-
+/* Header */
 .sucursales-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.sucursales-header-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.sucursales-titulo {
+    font-size: 32px;
+    font-weight: 600;
+    color: #2c2c2c;
+    margin: 0 0 4px 0;
     font-family: "Open Sans", sans-serif;
-    font-weight: 700;
 }
 
-.sucursales-title {
-	font-size: 24px;
-	font-weight: 600;
-	color: #1f2937;
-	margin: 0 0 4px 0;
+.sucursales-breadcrumb {
+    font-size: 14px;
+    color: #999;
+    margin: 0;
 }
 
-.sucursales-subtitle {
-	font-size: 14px;
-	color: #6b7280;
-	margin: 0;
-}
-
-.btn-nuevo-evento {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	background-color: #835C3E;
-	color: white;
-	padding: 10px 16px;
-	border-radius: 8px;
-	border: none;
-	cursor: pointer;
-	font-size: 14px;
-	font-weight: 500;
-	transition: background-color 0.2s;
-}
-
-.btn-nuevo-evento:hover {
-	background-color: #78350f;
-}
-
-.sucursales-filtros {
-	background-color: #f9fafb;
-	border-radius: 8px;
-	padding: 16px;
-	margin-bottom: 24px;
-}
-
-.filtro-label {
-	display: block;
-	font-size: 14px;
-	font-weight: 500;
-	color: #374151;
-	margin-bottom: 8px;
-}
-
-.search-container {
-	position: relative;
-}
-
-.search-icon {
-	position: absolute;
-	left: 12px;
-	top: 50%;
-	transform: translateY(-50%);
-	color: #9ca3af;
-	pointer-events: none;
-}
-
-.search-input {
-	width: 100%;
-	padding: 10px 10px 10px 40px;
-	border: 1px solid #d1d5db;
-	border-radius: 8px;
-	font-size: 14px;
-}
-
-.search-input:focus {
-	outline: none;
-	border-color: #92400e;
-	box-shadow: 0 0 0 3px rgba(146, 64, 14, 0.1);
-}
-
-.sucursales-lista {
-	margin-top: 16px;
-}
-
-.lista-title {
-	font-size: 25px;
-	font-weight: 500;
-	color: #181818;
-	margin: 0 0 8px 0;
-}
-
-.lista-total {
-	font-size: 17px;
-	color: #6b7280;
-	margin: 0 0 16px 0;
-    
-}
-
-.table-header {
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	gap: 16px;
-	padding: 0 16px;
-	margin-bottom: 12px;
-	font-size: 14px;
-	font-weight: 500;
-	color: #737373;
-    font-weight: 700;
-}
-
-.sucursales-items {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-}
-
-.sucursal-item {
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	gap: 16px;
-	align-items: center;
-	background-color: white;
-	border: 1px solid #e5e7eb;
-	border-radius: 8px;
-	padding: 16px;
-	transition: background-color 0.2s;
-}
-
-.sucursal-item:hover {
-	background-color: #f9fafb;
-}
-
-.sucursal-nombre-col {
-	display: flex;
-	align-items: center;
-	gap: 12px;
+.btn-nueva-sucursal {
+    background-color: #7a5c3f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
     font-size: 15px;
-    font-family: "Open Sans", sans-serif;
-    font-weight: 700;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(122, 92, 63, 0.3);
 }
 
-.sucursal-avatar {
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	background-color: #835C3E;
-	color: white;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-weight: 600;
-	font-size: 16px;
-	flex-shrink: 0;
+.btn-nueva-sucursal:hover {
+    background-color: #6b4d35;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(122, 92, 63, 0.4);
 }
 
-.sucursal-nombre-text {
-	font-weight: 500;
-	color: #1f2937;
+.btn-icono-plus {
+    font-size: 20px;
+    font-weight: 300;
 }
 
-.sucursal-direccion,
-.sucursal-coordenadas,
-.sucursal-telefono {
-	font-size: 14px;
-	color: #3a3e44;
-}
-
-.horario-badge {
-	display: inline-block;
-	background-color: #d1fae5;
-	color: #065f46;
-	padding: 6px 12px;
-	border-radius: 9999px;
-	font-size: 14px;
-	font-weight: 500;
-}
-
-.no-results {
-	text-align: center;
-	padding: 48px 0;
-	color: #6b7280;
-}
-
+/* Formulario */
 .formulario-container {
-	background-color: #f9fafb;
-	border: 1px solid #e5e7eb;
-	border-radius: 8px;
-	padding: 24px;
-	margin-bottom: 24px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     font-family: "Inter", sans-serif;
 }
 
 .formulario-title {
-	font-size: 18px;
-	font-weight: 600;
-	color: #1f2937;
-	margin: 0 0 20px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c2c2c;
+    margin: 0 0 20px 0;
 }
 
 .formulario-sucursal {
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .form-row {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-	gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
 }
 
 .form-group {
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .form-group label {
-	font-size: 14px;
-	font-weight: 500;
-	color: #374151;
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
 }
 
 .form-group input {
-	padding: 10px 12px;
-	border: 1px solid #d1d5db;
-	border-radius: 6px;
-	font-size: 14px;
-	transition: border-color 0.2s, box-shadow 0.2s;
+    padding: 10px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #f5f5f5;
+    transition: all 0.2s ease;
+    color: #2c2c2c;
 }
 
 .form-group input:focus {
-	outline: none;
-	border-color: #92400e;
-	box-shadow: 0 0 0 3px rgba(146, 64, 14, 0.1);
+    outline: none;
+    border-color: #7a5c3f;
+    background-color: white;
 }
 
 .form-actions {
-	display: flex;
-	justify-content: flex-end;
-	gap: 12px;
-	margin-top: 8px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
 }
 
 .btn-cancelar,
 .btn-guardar {
-	padding: 10px 20px;
-	border-radius: 6px;
-	font-size: 14px;
-	font-weight: 500;
-	cursor: pointer;
-	transition: all 0.2s;
-	border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
 }
 
 .btn-cancelar {
-	background-color: #f3f4f6;
-	color: #374151;
+    background-color: white;
+    color: #666;
+    border: 1px solid #e0e0e0;
 }
 
 .btn-cancelar:hover {
-	background-color: #e5e7eb;
+    background-color: #f5f5f5;
+    border-color: #ccc;
 }
 
 .btn-guardar {
-	background-color: #835C3E;
-	color: white;
+    background-color: #7a5c3f;
+    color: white;
 }
 
 .btn-guardar:hover {
-	background-color: #78350f;
+    background-color: #6b4d35;
 }
 
+/* Filtros */
+.sucursales-filtros {
+    background-color: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.filtros-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.filtro-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filtro-group label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.filtro-input {
+    padding: 10px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #f5f5f5;
+    transition: all 0.2s ease;
+    color: #2c2c2c;
+}
+
+.filtro-input:focus {
+    outline: none;
+    border-color: #7a5c3f;
+    background-color: white;
+}
+
+/* Lista de Sucursales */
+.sucursales-lista {
+    background-color: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.lista-header {
+    margin-bottom: 24px;
+}
+
+.lista-titulo {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c2c2c;
+    margin: 0 0 4px 0;
+}
+
+.lista-subtitulo {
+    font-size: 13px;
+    color: #999;
+    margin: 0;
+}
+
+/* Tabla */
+.tabla-container {
+    overflow-x: auto;
+}
+
+.sucursales-tabla {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.sucursales-tabla thead {
+    background-color: #fafafa;
+}
+
+.sucursales-tabla th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.sucursales-tabla td {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.sucursales-tabla tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.sucursales-tabla tbody tr:hover {
+    background-color: #fafafa;
+}
+
+/* Sucursal Info */
+.sucursal-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sucursal-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.sucursal-datos {
+    display: flex;
+    flex-direction: column;
+}
+
+.sucursal-nombre {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c2c2c;
+    margin: 0 0 2px 0;
+    font-family: "Open Sans", sans-serif;
+}
+
+/* Dirección */
+.direccion-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.direccion-icon {
+    color: #666;
+    flex-shrink: 0;
+}
+
+.sucursal-direccion {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Coordenadas */
+.sucursal-coordenadas {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Teléfono */
+.telefono-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.telefono-icon {
+    color: #666;
+    flex-shrink: 0;
+}
+
+.sucursal-telefono {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Horario */
+.sucursal-horario {
+    font-size: 14px;
+    color: #2c2c2c;
+    font-weight: 500;
+}
+
+/* Estado Badges */
+.estado-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.estado-activo {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.estado-inactivo {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Acciones */
+.sucursal-acciones {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.btn-accion {
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+}
+
+.btn-editar {
+    color: #2563eb;
+}
+
+.btn-editar:hover {
+    background-color: #dbeafe;
+}
+
+.btn-desactivar {
+    color: #dc2626;
+}
+
+.btn-desactivar:hover {
+    background-color: #fee2e2;
+}
+
+.btn-activar {
+    color: #16a34a;
+}
+
+.btn-activar:hover {
+    background-color: #dcfce7;
+}
+
+/* No Results */
+.no-results {
+    text-align: center;
+    padding: 48px 0;
+    color: #999;
+    font-size: 14px;
+}
+
+/* Responsive Design */
 @media (max-width: 1023px) {
-	.sucursales-container {
-		margin-left: 0;
-		margin-top: 70px;
-		padding: 16px;
-		z-index: 1;
-	}
+    .sucursales-container {
+        margin-left: 0;
+        margin-top: 70px;
+        padding: 16px;
+        z-index: 1;
+    }
 
-	.table-header,
-	.sucursal-item {
-		grid-template-columns: 1fr;
-		gap: 8px;
-	}
+    .tabla-container {
+        overflow-x: scroll;
+    }
 
-	.table-header div {
-		display: none;
-	}
-
-	.sucursal-item > div::before {
-		content: attr(data-label);
-		font-weight: 600;
-		display: block;
-		margin-bottom: 4px;
-		color: #6b7280;
-	}
+    .sucursales-tabla {
+        min-width: 1000px;
+    }
 }
 
 @media (max-width: 768px) {
-	.form-row {
-		grid-template-columns: 1fr;
-	}
+    .sucursales-container {
+        padding: 16px;
+    }
+    
+    .sucursales-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    .btn-nueva-sucursal {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .sucursales-filtros,
+    .sucursales-lista {
+        padding: 16px;
+    }
+}
 
-	.sucursales-header {
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 16px;
-	}
-
-	.btn-nuevo-evento {
-		width: 100%;
-		justify-content: center;
-	}
+@media (max-width: 480px) {
+    .sucursales-titulo {
+        font-size: 26px;
+    }
+    
+    .sucursal-avatar {
+        width: 38px;
+        height: 38px;
+        font-size: 12px;
+    }
+    
+    .sucursal-nombre {
+        font-size: 13px;
+    }
 }

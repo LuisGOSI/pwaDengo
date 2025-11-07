@@ -1,0 +1,569 @@
+/* Container Principal */
+.cartelera-eventos-container {
+    background-color: #f5f6fa;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+    margin-top: 120px;
+}
+
+/* Header con selector de sucursal */
+.cartelera-header {
+    background-color: white;
+    padding: 16px 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.sucursal-selector {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sucursal-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #e8f0fe;
+    padding: 12px 20px;
+    border-radius: 50px;
+    color: #1976d2;
+    font-weight: 600;
+}
+
+.vip-badge {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.btn-cerrar {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.btn-cerrar:hover {
+    background-color: #f0f0f0;
+}
+
+/* Hero Banner */
+.hero-banner {
+    position: relative;
+    padding: 80px 24px;
+    overflow: hidden;
+    color: white;
+}
+
+.banner-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.banner-nav-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.banner-nav-btn.prev {
+    left: 24px;
+}
+
+.banner-nav-btn.next {
+    right: 24px;
+}
+
+.banner-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.banner-imagen {
+    display: flex;
+    justify-content: center;
+}
+
+.imagen-evento {
+    width: 400px;
+    height: 550px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.emoji-evento {
+    font-size: 160px;
+}
+
+.banner-info {
+    padding-right: 60px;
+}
+
+.banner-titulo {
+    font-size: 56px;
+    font-weight: 800;
+    margin: 0 0 16px 0;
+    line-height: 1.1;
+}
+
+.banner-subtitulo {
+    font-size: 24px;
+    font-weight: 300;
+    margin: 0 0 24px 0;
+    opacity: 0.9;
+}
+
+.banner-descripcion {
+    font-size: 18px;
+    line-height: 1.6;
+    margin: 0 0 32px 0;
+    opacity: 0.85;
+}
+
+.btn-obtener-tickets {
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    padding: 18px 48px;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(66, 133, 244, 0.4);
+}
+
+.btn-obtener-tickets:hover {
+    background-color: #3367d6;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(66, 133, 244, 0.5);
+}
+
+.banner-indicators {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+}
+
+.banner-indicators .indicator {
+    width: 80px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.banner-indicators .indicator.active {
+    background-color: white;
+}
+
+/* Tabs */
+.tabs-container {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    padding: 0 24px;
+}
+
+.tab {
+    flex: 1;
+    max-width: 300px;
+    padding: 20px;
+    border: none;
+    background-color: transparent;
+    font-size: 18px;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tab.active {
+    color: #4285f4;
+    border-bottom-color: #4285f4;
+}
+
+/* Selector de días */
+.dias-selector-container {
+    background-color: white;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.scroll-btn {
+    background-color: #f0f0f0;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.scroll-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.dias-scroll {
+    flex: 1;
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.dias-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.dia-btn {
+    min-width: 120px;
+    padding: 16px 24px;
+    background-color: #f8f9fa;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.3s ease;
+}
+
+.dia-btn:hover {
+    background-color: #e8f0fe;
+    border-color: #4285f4;
+}
+
+.dia-btn.active {
+    background-color: #4285f4;
+    color: white;
+}
+
+.dia-nombre {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.dia-fecha {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.acciones-extra {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-accion {
+    background-color: transparent;
+    border: 2px solid #e0e0e0;
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-accion:hover {
+    border-color: #4285f4;
+    color: #4285f4;
+}
+
+/* Categorías */
+.categorias-tabs {
+    max-width: 1400px;
+    margin: 24px auto;
+    padding: 0 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.categoria-tab {
+    background-color: white;
+    border: 2px solid #e0e0e0;
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.categoria-tab:hover {
+    border-color: #4285f4;
+    color: #4285f4;
+}
+
+.categoria-tab.active {
+    background-color: #4285f4;
+    border-color: #4285f4;
+    color: white;
+}
+
+/* Grid de eventos tipo cartelera */
+.eventos-cartelera-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 32px;
+}
+
+.evento-pelicula-card {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.evento-pelicula-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.pelicula-poster {
+    width: 100%;
+    height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.poster-emoji {
+    font-size: 120px;
+}
+
+.clasificacion-badge {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background-color: #ffd700;
+    color: #1a1a1a;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.pelicula-info {
+    padding: 16px;
+}
+
+.info-superior {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.duracion {
+    font-size: 13px;
+    color: #666;
+    font-weight: 600;
+}
+
+.btn-disponibilidad {
+    background-color: #10b981;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.pelicula-titulo {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 16px 0;
+    line-height: 1.3;
+    min-height: 48px;
+}
+
+.btn-ver-detalle {
+    width: 100%;
+    background-color: transparent;
+    border: 2px solid #4285f4;
+    color: #4285f4;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-ver-detalle:hover {
+    background-color: #4285f4;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .banner-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .banner-info {
+        padding-right: 0;
+    }
+
+    .banner-titulo {
+        font-size: 42px;
+    }
+
+    .imagen-evento {
+        width: 300px;
+        height: 420px;
+    }
+
+    .emoji-evento {
+        font-size: 120px;
+    }
+
+    .eventos-cartelera-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .banner-nav-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .banner-nav-btn.prev {
+        left: 12px;
+    }
+
+    .banner-nav-btn.next {
+        right: 12px;
+    }
+
+    .banner-titulo {
+        font-size: 32px;
+    }
+
+    .banner-subtitulo {
+        font-size: 18px;
+    }
+
+    .dias-scroll {
+        gap: 8px;
+    }
+
+    .dia-btn {
+        min-width: 100px;
+        padding: 12px 16px;
+    }
+
+    .eventos-cartelera-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .pelicula-poster {
+        height: 280px;
+    }
+
+    .poster-emoji {
+        font-size: 90px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-banner {
+        padding: 40px 16px;
+    }
+
+    .imagen-evento {
+        width: 250px;
+        height: 350px;
+    }
+
+    .emoji-evento {
+        font-size: 100px;
+    }
+
+    .banner-titulo {
+        font-size: 28px;
+    }
+
+    .eventos-cartelera-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .acciones-extra {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn-accion {
+        width: 100%;
+        justify-content: center;
+    }
+}

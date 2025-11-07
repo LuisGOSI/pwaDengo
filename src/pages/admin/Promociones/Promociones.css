@@ -1,5 +1,5 @@
-/* Productos Container */
-.productos-container {
+/* Promociones Container */
+.promociones-container {
     padding: 24px;
     background-color: #f8f8f8;
     min-height: 100vh;
@@ -9,32 +9,32 @@
 }
 
 /* Header */
-.productos-header {
+.promociones-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 32px;
 }
 
-.productos-header-left {
+.promociones-header-left {
     display: flex;
     flex-direction: column;
 }
 
-.productos-titulo {
+.promociones-titulo {
     font-size: 32px;
     font-weight: 600;
     color: #2c2c2c;
     margin: 0 0 4px 0;
 }
 
-.productos-breadcrumb {
+.promociones-breadcrumb {
     font-size: 14px;
     color: #999;
     margin: 0;
 }
 
-.btn-nuevo-producto {
+.btn-nueva-promocion {
     background-color: #7a5c3f;
     color: white;
     border: none;
@@ -50,7 +50,7 @@
     box-shadow: 0 2px 8px rgba(122, 92, 63, 0.3);
 }
 
-.btn-nuevo-producto:hover {
+.btn-nueva-promocion:hover {
     background-color: #6b4d35;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(122, 92, 63, 0.4);
@@ -62,7 +62,7 @@
 }
 
 /* Filtros */
-.productos-filtros {
+.promociones-filtros {
     background-color: white;
     border-radius: 12px;
     padding: 24px;
@@ -128,8 +128,8 @@
     border-color: #ccc;
 }
 
-/* Lista de Productos */
-.productos-lista {
+/* Lista de Promociones */
+.promociones-lista {
     background-color: white;
     border-radius: 12px;
     padding: 24px;
@@ -158,16 +158,16 @@
     overflow-x: auto;
 }
 
-.productos-tabla {
+.promociones-tabla {
     width: 100%;
     border-collapse: collapse;
 }
 
-.productos-tabla thead {
+.promociones-tabla thead {
     background-color: #fafafa;
 }
 
-.productos-tabla th {
+.promociones-tabla th {
     padding: 14px 16px;
     text-align: left;
     font-size: 11px;
@@ -178,27 +178,27 @@
     border-bottom: 1px solid #e8e8e8;
 }
 
-.productos-tabla td {
+.promociones-tabla td {
     padding: 16px;
     border-bottom: 1px solid #f0f0f0;
 }
 
-.productos-tabla tbody tr {
+.promociones-tabla tbody tr {
     transition: background-color 0.2s ease;
 }
 
-.productos-tabla tbody tr:hover {
+.promociones-tabla tbody tr:hover {
     background-color: #fafafa;
 }
 
-/* Producto Info */
-.producto-info {
+/* Promoción Info */
+.promocion-info {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.producto-avatar {
+.promocion-avatar {
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -207,31 +207,31 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     flex-shrink: 0;
 }
 
-.producto-datos {
+.promocion-datos {
     display: flex;
     flex-direction: column;
 }
 
-.producto-nombre {
+.promocion-nombre {
     font-size: 14px;
     font-weight: 600;
     color: #2c2c2c;
     margin: 0 0 2px 0;
 }
 
-.producto-descripcion {
+.promocion-descripcion {
     font-size: 12px;
     color: #999;
     margin: 0;
 }
 
-/* Categoría Badges */
-.categoria-badge {
+/* Tipo Badges */
+.tipo-badge {
     display: inline-block;
     padding: 6px 14px;
     border-radius: 16px;
@@ -239,41 +239,41 @@
     font-weight: 500;
 }
 
-.categoria-cafe {
+.tipo-descuento {
     background-color: #dce9ff;
     color: #1976d2;
 }
 
-.categoria-panaderia {
+.tipo-2x1 {
     background-color: #f3e5f5;
     color: #8e24aa;
 }
 
-.categoria-comida {
+.tipo-combo {
     background-color: #ffe8d6;
     color: #e65100;
 }
 
-.categoria-bebidas {
+.tipo-especial {
     background-color: #e8f5e9;
     color: #2e7d32;
 }
 
-.categoria-postres {
-    background-color: #fff3e0;
-    color: #ef6c00;
-}
-
-/* Sucursal y Precio */
-.producto-sucursal {
+/* Sucursal, Descuento y Vigencia */
+.promocion-sucursal {
     font-size: 14px;
     color: #666;
 }
 
-.producto-precio {
+.promocion-descuento {
     font-size: 15px;
     color: #2c2c2c;
     font-weight: 600;
+}
+
+.promocion-vigencia {
+    font-size: 14px;
+    color: #666;
 }
 
 /* Responsive Design */
@@ -284,63 +284,63 @@
 }
 
 @media (max-width: 768px) {
-    .productos-container {
+    .promociones-container {
         padding: 16px;
     }
-    
-    .productos-header {
+
+    .promociones-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 16px;
     }
-    
-    .btn-nuevo-producto {
+
+    .btn-nueva-promocion {
         width: 100%;
         justify-content: center;
     }
-    
+
     .filtros-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .btn-filtrar {
         width: 100%;
     }
-    
+
     .tabla-container {
         overflow-x: scroll;
     }
-    
-    .productos-tabla {
+
+    .promociones-tabla {
         min-width: 700px;
     }
 }
 
 @media (max-width: 480px) {
-    .productos-titulo {
+    .promociones-titulo {
         font-size: 26px;
     }
-    
-    .productos-filtros,
-    .productos-lista {
+
+    .promociones-filtros,
+    .promociones-lista {
         padding: 16px;
     }
-    
-    .producto-avatar {
+
+    .promocion-avatar {
         width: 38px;
         height: 38px;
-        font-size: 12px;
-    }
-    
-    .producto-nombre {
-        font-size: 13px;
-    }
-    
-    .producto-descripcion {
         font-size: 11px;
     }
-    
-    .producto-precio {
+
+    .promocion-nombre {
+        font-size: 13px;
+    }
+
+    .promocion-descripcion {
+        font-size: 11px;
+    }
+
+    .promocion-descuento {
         font-size: 14px;
     }
 }

@@ -1,5 +1,5 @@
-/* Productos Container */
-.productos-container {
+/* Usuarios Container */
+.usuarios-container {
     padding: 24px;
     background-color: #f8f8f8;
     min-height: 100vh;
@@ -9,32 +9,32 @@
 }
 
 /* Header */
-.productos-header {
+.usuarios-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 32px;
 }
 
-.productos-header-left {
+.usuarios-header-left {
     display: flex;
     flex-direction: column;
 }
 
-.productos-titulo {
+.usuarios-titulo {
     font-size: 32px;
     font-weight: 600;
     color: #2c2c2c;
     margin: 0 0 4px 0;
 }
 
-.productos-breadcrumb {
+.usuarios-breadcrumb {
     font-size: 14px;
     color: #999;
     margin: 0;
 }
 
-.btn-nuevo-producto {
+.btn-nuevo-usuario {
     background-color: #7a5c3f;
     color: white;
     border: none;
@@ -50,7 +50,7 @@
     box-shadow: 0 2px 8px rgba(122, 92, 63, 0.3);
 }
 
-.btn-nuevo-producto:hover {
+.btn-nuevo-usuario:hover {
     background-color: #6b4d35;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(122, 92, 63, 0.4);
@@ -62,7 +62,7 @@
 }
 
 /* Filtros */
-.productos-filtros {
+.usuarios-filtros {
     background-color: white;
     border-radius: 12px;
     padding: 24px;
@@ -128,8 +128,8 @@
     border-color: #ccc;
 }
 
-/* Lista de Productos */
-.productos-lista {
+/* Lista de Usuarios */
+.usuarios-lista {
     background-color: white;
     border-radius: 12px;
     padding: 24px;
@@ -158,16 +158,16 @@
     overflow-x: auto;
 }
 
-.productos-tabla {
+.usuarios-tabla {
     width: 100%;
     border-collapse: collapse;
 }
 
-.productos-tabla thead {
+.usuarios-tabla thead {
     background-color: #fafafa;
 }
 
-.productos-tabla th {
+.usuarios-tabla th {
     padding: 14px 16px;
     text-align: left;
     font-size: 11px;
@@ -178,27 +178,27 @@
     border-bottom: 1px solid #e8e8e8;
 }
 
-.productos-tabla td {
+.usuarios-tabla td {
     padding: 16px;
     border-bottom: 1px solid #f0f0f0;
 }
 
-.productos-tabla tbody tr {
+.usuarios-tabla tbody tr {
     transition: background-color 0.2s ease;
 }
 
-.productos-tabla tbody tr:hover {
+.usuarios-tabla tbody tr:hover {
     background-color: #fafafa;
 }
 
-/* Producto Info */
-.producto-info {
+/* Usuario Info */
+.usuario-info {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.producto-avatar {
+.usuario-avatar {
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -212,26 +212,26 @@
     flex-shrink: 0;
 }
 
-.producto-datos {
+.usuario-datos {
     display: flex;
     flex-direction: column;
 }
 
-.producto-nombre {
+.usuario-nombre {
     font-size: 14px;
     font-weight: 600;
     color: #2c2c2c;
     margin: 0 0 2px 0;
 }
 
-.producto-descripcion {
+.usuario-email {
     font-size: 12px;
     color: #999;
     margin: 0;
 }
 
-/* Categoría Badges */
-.categoria-badge {
+/* Rol Badges */
+.rol-badge {
     display: inline-block;
     padding: 6px 14px;
     border-radius: 16px;
@@ -239,41 +239,31 @@
     font-weight: 500;
 }
 
-.categoria-cafe {
+.rol-administrador {
     background-color: #dce9ff;
     color: #1976d2;
 }
 
-.categoria-panaderia {
+.rol-gerente {
     background-color: #f3e5f5;
     color: #8e24aa;
 }
 
-.categoria-comida {
+.rol-barista {
     background-color: #ffe8d6;
     color: #e65100;
 }
 
-.categoria-bebidas {
+.rol-caja {
     background-color: #e8f5e9;
     color: #2e7d32;
 }
 
-.categoria-postres {
-    background-color: #fff3e0;
-    color: #ef6c00;
-}
-
-/* Sucursal y Precio */
-.producto-sucursal {
+/* Sucursal y Teléfono */
+.usuario-sucursal,
+.usuario-telefono {
     font-size: 14px;
     color: #666;
-}
-
-.producto-precio {
-    font-size: 15px;
-    color: #2c2c2c;
-    font-weight: 600;
 }
 
 /* Responsive Design */
@@ -284,17 +274,17 @@
 }
 
 @media (max-width: 768px) {
-    .productos-container {
+    .usuarios-container {
         padding: 16px;
     }
     
-    .productos-header {
+    .usuarios-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 16px;
     }
     
-    .btn-nuevo-producto {
+    .btn-nuevo-usuario {
         width: 100%;
         justify-content: center;
     }
@@ -311,36 +301,34 @@
         overflow-x: scroll;
     }
     
-    .productos-tabla {
+    .usuarios-tabla {
         min-width: 700px;
     }
 }
 
 @media (max-width: 480px) {
-    .productos-titulo {
+    .usuarios-titulo {
         font-size: 26px;
     }
     
-    .productos-filtros,
-    .productos-lista {
+    .usuarios-filtros,
+    .usuarios-lista {
         padding: 16px;
     }
     
-    .producto-avatar {
+    .usuario-avatar {
         width: 38px;
         height: 38px;
         font-size: 12px;
     }
     
-    .producto-nombre {
+    .usuario-nombre {
         font-size: 13px;
     }
     
-    .producto-descripcion {
+    .usuario-email {
         font-size: 11px;
     }
-    
-    .producto-precio {
-        font-size: 14px;
-    }
 }
+
+

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import './Inicio.css';
 import coffeInicio from "../../assets/images/coffe-inicio.png";
 import coffeSplash from "../../assets/images/coffe-splash.png";
+import Sidebar from '../../components/layout/Sidebar';
 
 export default function InicioPage() {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -36,20 +37,23 @@ export default function InicioPage() {
             <section className="hero-section">
                 <div className="hero-content">
                     <div className="hero-text">
-                        <h1 className="hero-title">DESCUBRE EL ARTE DE UN CAFÉ PERFECTO</h1>
+                        <h1 className="hero-title">DESCUBRE EL ARTE DE UN CAFÉ EXCEPCIONAL</h1>
 
                         <p className="hero-description">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                            Porque cada día merece un comienzo extraordinario. Sumérgete en la experiencia de un café preparado con pasión,
+                            donde la calidad de cada grano se une a la precisión de una receta perfecta.
+                            No es solo una bebida, es un ritual que despierta tus sentidos y te conecta con lo que realmente importa.
                         </p>
 
                         <p className="hero-description">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                            Desde el primer aroma hasta el último sorbo, cada detalle ha sido pensado para ofrecerte un momento de calma,
+                            inspiración y energía. Ya sea que empieces tu día en la oficina, trabajes desde casa o busques un descanso entre reuniones,
+                            nuestra app te acerca al placer de disfrutar un café con estilo, sin complicaciones.
+                        </p>
+
+                        <p className="hero-description">
+                            Descarga la app y vive la experiencia de pedir, personalizar y disfrutar tu café favorito donde quieras, cuando quieras.
+                            Porque el café perfecto no se encuentra por casualidad — se elige, se crea y se saborea.
                         </p>
 
                         <button className="hero-btn">
@@ -58,15 +62,19 @@ export default function InicioPage() {
                     </div>
 
                     <div className="hero-image">
-                        <img src={coffeInicio}
-                            alt="Café splash"
-                            className="coffee-splash"
-                        />
-                        <img
-                            src={coffeSplash}
-                            alt="Salpicadura de café"
-                            className="coffee-liquid"
-                        />
+                        <div className="image-container coffee-container">
+                            <img src={coffeInicio}
+                                alt="Café splash"
+                                className="coffee-splash"
+                            />
+                        </div>
+                        <div className="image-container liquid-container">
+                            <img
+                                src={coffeSplash}
+                                alt="Salpicadura de café"
+                                className="coffee-liquid"
+                            />
+                        </div>
                     </div>
                 </div>
             </section>
