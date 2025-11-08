@@ -7,7 +7,6 @@ import { Productos } from "../pages/admin/Productos/Productos.jsx"
 import { Inicio } from "../pages/Inicio";
 import { Menu } from "../pages/Menu/Menu";
 import { Nosotros } from "../pages/Nosotros/Nosotros";
-import { Dashboard } from "../pages/admin/Dashboard/Dashboard.jsx";
 import { Galeria } from "../pages/Galeria/Galeria.jsx";
 import { Contacto } from "../pages/Contacto/Contacto.jsx";
 import { Eventos } from "../pages/admin/Eventos/Evento.jsx";
@@ -20,6 +19,7 @@ import { CorteCaja } from "../pages/caja/CorteCaja/CorteCaja.jsx";
 import { ReporteVenta } from "../pages/admin/ReporteVenta/ReporteVenta.jsx";
 import { CarteleraEventos } from "../pages/CarteleraEventos/CarteleraEventos.jsx";
 import { Resenias } from "../pages/admin/Resenias/Resenias.jsx";
+import { AdminPage } from "../pages/admin/AdminPage/AdminPage.jsx";
 
 export const AppRouter = () => {
 	return (
@@ -32,16 +32,10 @@ export const AppRouter = () => {
 			<Route path="/contacto" element={<Contacto />} />
 			<Route path="/galeria" element={<Galeria />} />
 			<Route path="/CarteleraEventos" element={<CarteleraEventos />} />
+			<Route path="/AdminPage" element={<AdminPage />} />
 
 			{/* Rutas protegidas */}
-			<Route
-				path="/admin/dashboard"
-				element={
-					<ProtectedRoute allowedRoles={[1,2]}>
-						<Dashboard />
-					</ProtectedRoute>
-				}
-			/>
+			
 			<Route
 				path="/admin/usuarios"
 				element={

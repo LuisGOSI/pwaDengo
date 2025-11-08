@@ -15,7 +15,7 @@ export default function Login() {
 
 	useEffect(() => {
 		if (session) {
-			navigate("/menu", { replace: true });
+			navigate("/AdminPage", { replace: true });
 		}
 	}, [session, navigate]);
 
@@ -52,7 +52,7 @@ export default function Login() {
 
 				if (error) throw error;
 
-				navigate("/dashboard");
+				navigate("/AdminPage");
 			}
 		} catch (error) {
 			alert(error.message || "Ocurrió un error");

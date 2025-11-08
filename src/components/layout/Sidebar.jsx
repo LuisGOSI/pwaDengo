@@ -46,7 +46,7 @@ export default function Sidebar() {
                     <div className="sidebar-section">
                         <h3 className="sidebar-section-title">GENERAL</h3>
                         <ul className="sidebar-menu">
-                            <li><a href="#dashboard" className="sidebar-link active">Dashboard</a></li>
+                            <li><a href="#inicio" className="sidebar-link active">Inicio</a></li>
                             <li><a href="#reportes" className="sidebar-link">Reportes</a></li>
                         </ul>
                     </div>

@@ -15,7 +15,7 @@ body {
 .header {
   width: 100%;
   background-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   position: fixed;
   top: 0;
   left: 0;
@@ -23,162 +23,227 @@ body {
 }
 
 .header-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 80px;
 }
 
-/* Logo */
+/* ===== LOGO REDISEÑADO ===== */
 .header-logo {
   display: flex;
   align-items: center;
-  gap: 0px;
-}
-
-.header-logo-img {
-  height: 90px;
-  width: auto;
-  display: block;
-}
-
-.header-logo-text {
-  display: flex;
-  flex-direction: column;
-  margin-right: 20px;
-}
-
-.header-logo-title {
-  font-family: Georgia, serif;
-  font-size: 20px;
-  font-weight: bold;
-  color: #1f2937;
-  line-height: 1.2;
-}
-
-.header-logo-subtitle {
-  font-family: Georgia, serif;
-  font-size: 11px;
-  color: #6b7280;
-  letter-spacing: 0.15em;
-  line-height: 1.2;
-}
-
-/* Navegación */
-.header-nav {
-  display: flex;
-  align-items: center;
-  gap: 90px;
-}
-
-.header-nav-link {
-  position: relative;
-  color: #374151;
+  gap: 12px;
   text-decoration: none;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 8px 4px;
-  overflow: hidden;
-}
-
-.header-nav-link:hover {
-  color: #111827;
-}
-
-/* Texto con animación */
-.header-nav-text {
+  padding: 8px 16px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
   position: relative;
-  display: inline-block;
-  transition: transform 0.3s ease, color 0.3s ease;
 }
 
-/* Línea animada debajo del link */
-.header-nav-link::after {
+.header-logo:hover {
+  background-color: #f9fafb;
+  transform: translateY(-2px);
+}
+
+.header-logo::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #92400e;
+  background: linear-gradient(90deg, #92400e, #d4c4b0);
   transition: width 0.3s ease;
 }
 
-/* Hover: texto sube y línea crece */
-.header-nav-link:hover .header-nav-text {
-  transform: translateY(-2px);
+.header-logo:hover::after {
+  width: 100%;
+}
+
+.header-logo-icon-wrapper {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #92400e 0%, #a85a2a 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(146, 64, 14, 0.2);
+  transition: all 0.3s ease;
+}
+
+.header-logo:hover .header-logo-icon-wrapper {
+  transform: rotate(-5deg) scale(1.05);
+  box-shadow: 0 6px 16px rgba(146, 64, 14, 0.3);
+}
+
+.header-logo-img {
+  width: 32px;
+  height: 32px;
+  filter: brightness(0) invert(1);
+}
+
+.header-logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.header-logo-title {
+  font-family: 'Georgia', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+
+.header-logo:hover .header-logo-title {
+  color: #92400e;
+}
+
+.header-logo-subtitle {
+  font-family: 'Georgia', serif;
+  font-size: 10px;
+  color: #6b7280;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1;
   font-weight: 500;
 }
 
+/* ===== NAVEGACIÓN ===== */
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.header-nav-link {
+  position: relative;
+  color: #374151;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.header-nav-link:hover {
+  color: #92400e;
+  background-color: #fef3c7;
+}
+
+/* Texto con animación */
+.header-nav-text {
+  position: relative;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+/* Línea animada debajo del link */
+.header-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #92400e, #d4c4b0);
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
 .header-nav-link:hover::after {
-  width: 100%;
+  width: 70%;
+}
+
+/* Hover: texto sube */
+.header-nav-link:hover .header-nav-text {
+  transform: translateY(-2px);
 }
 
 /* Click: efecto de rebote */
 .header-nav-link:active .header-nav-text {
-  transform: translateY(1px) scale(0.95);
+  transform: translateY(1px) scale(0.97);
   transition: transform 0.1s ease;
 }
 
-/* Animación de pulso al hacer click */
-@keyframes pulse-ring {
-  0% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-
-  100% {
-    transform: scale(1.5);
-    opacity: 0;
-  }
-}
-
-.header-nav-link:active::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  border-radius: 4px;
-  background-color: #92400e;
-  transform: translate(-50%, -50%);
-  animation: pulse-ring 0.5s ease-out;
-  pointer-events: none;
-}
-
-/* Botón de usuario */
+/* ===== BOTÓN DE USUARIO REDISEÑADO ===== */
 .header-user-btn {
-  background-color: #e9d5ff;
-  padding: 8px;
-  border-radius: 50%;
-  border: none;
+  background: linear-gradient(135deg, #92400e 0%, #a85a2a 100%);
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 2px solid transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s, transform 0.2s;
-  margin-left: 35px;
+  gap: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(146, 64, 14, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.header-user-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.header-user-btn:hover::before {
+  left: 100%;
 }
 
 .header-user-btn:hover {
-  background-color: #ddd6fe;
-  transform: scale(1.05);
+  background: linear-gradient(135deg, #a85a2a 0%, #92400e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(146, 64, 14, 0.35);
+  border-color: #d4c4b0;
 }
 
 .header-user-btn:active {
-  transform: scale(0.95);
+  transform: translateY(0) scale(0.97);
 }
 
 .header-user-icon {
-  color: #7c3aed;
-  width: 28px;
-  height: 28px;
+  color: #ffffff;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
 }
 
-/* Menú Hamburguesa (oculto en desktop) */
+.header-user-btn:hover .header-user-icon {
+  transform: translateX(3px);
+}
+
+.header-user-text {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: letter-spacing 0.3s ease;
+}
+
+.header-user-btn:hover .header-user-text {
+  letter-spacing: 0.5px;
+}
+
+/* ===== MENÚ HAMBURGUESA ===== */
 .header-menu-toggle {
   display: none;
   flex-direction: column;
@@ -198,7 +263,6 @@ body {
   transition: all 0.3s ease;
 }
 
-/* Animación del menú hamburguesa */
 .header-menu-toggle.active span:nth-child(1) {
   transform: rotate(45deg) translate(7px, 7px);
 }
@@ -211,28 +275,7 @@ body {
   transform: rotate(-45deg) translate(7px, -7px);
 }
 
-/* Contenido */
-.header-content {
-  margin-top: 100px;
-  padding: 64px 32px;
-  text-align: center;
-}
-
-.header-content-title {
-  font-size: 36px;
-  font-weight: bold;
-  color: #1f2937;
-  margin-bottom: 32px;
-}
-
-.header-content-text {
-  color: #4b5563;
-  font-size: 18px;
-}
-
-/* ===== ESTILOS ADICIONALES PARA HEADER RESPONSIVO ===== */
-
-/* Overlay para menú móvil */
+/* ===== OVERLAY ===== */
 .header-overlay {
   position: fixed;
   top: 0;
@@ -248,7 +291,6 @@ body {
   from {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
@@ -263,8 +305,70 @@ body {
   display: flex;
 }
 
-/* ===== RESPONSIVE PARA BOTONES DE USUARIO ===== */
+/* ===== RESPONSIVE MÓVIL ===== */
 @media (max-width: 768px) {
+  .header-container {
+    padding: 0 20px;
+    height: 70px;
+  }
+
+  .header-logo {
+    padding: 4px 8px;
+  }
+
+  .header-logo-icon-wrapper {
+    width: 40px;
+    height: 40px;
+  }
+
+  .header-logo-img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .header-logo-title {
+    font-size: 18px;
+  }
+
+  .header-logo-subtitle {
+    font-size: 9px;
+  }
+
+  /* Mostrar menú hamburguesa */
+  .header-menu-toggle {
+    display: flex;
+  }
+
+  /* Menú móvil */
+  .header-nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background-color: #ffffff;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 80px 20px 20px;
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+    overflow-y: auto;
+  }
+
+  .header-nav.active {
+    right: 0;
+  }
+
+  .header-nav-link {
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+
+  .header-nav-link::after {
+    display: none;
+  }
 
   /* Ocultar botón de usuario en desktop cuando está en móvil */
   .header-user-btn-desktop {
@@ -275,20 +379,23 @@ body {
   .header-user-btn-mobile {
     display: flex;
     width: 100%;
-    justify-content: flex-start;
-    border-radius: 8px;
-    padding: 12px;
+    justify-content: center;
+    border-radius: 12px;
+    padding: 14px 20px;
     gap: 12px;
+    margin-top: 20px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 30px;
   }
 
   .header-user-btn-mobile .header-user-icon {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 
-  /* Ajustar el menú hamburguesa para mejor alineación */
-  .header-menu-toggle {
-    margin-left: auto;
+  .header-user-btn-mobile .header-nav-text {
+    color: #ffffff;
+    font-weight: 600;
   }
 }
 
@@ -301,10 +408,6 @@ body.menu-open {
 
 /* Mejoras visuales para el menú móvil */
 @media (max-width: 768px) {
-  .header-nav {
-    overflow-y: auto;
-  }
-
   .header-nav::-webkit-scrollbar {
     width: 6px;
   }
@@ -325,21 +428,16 @@ body.menu-open {
 
 /* Animación para el menú que se desliza */
 @media (max-width: 768px) {
-  .header-nav {
-    will-change: transform;
-  }
-
   .header-nav.active {
     animation: slideIn 0.3s ease;
   }
 
   @keyframes slideIn {
     from {
-      transform: translateX(100%);
+      right: -100%;
     }
-
     to {
-      transform: translateX(0);
+      right: 0;
     }
   }
 }
