@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LogIn } from "lucide-react";
+import { LogIn, CircleUserRound } from "lucide-react";
 import logo from "../../assets/images/icono_dengo.svg";
 
 export default function Header() {
@@ -145,7 +145,7 @@ export default function Header() {
               window.location.href = '/login';
             }}
           >
-            <LogIn className="header-user-icon" />
+            <CircleUserRound className="header-user-icon" />
             <span className="header-user-text">Iniciar sesión</span>
           </button>
         </div>
