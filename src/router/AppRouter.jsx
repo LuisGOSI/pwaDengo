@@ -19,6 +19,7 @@ import { CorteCaja } from "../pages/caja/CorteCaja/CorteCaja.jsx";
 import { ReporteVenta } from "../pages/admin/ReporteVenta/ReporteVenta.jsx";
 import { CarteleraEventos } from "../pages/CarteleraEventos/CarteleraEventos.jsx";
 import { Resenias } from "../pages/admin/Resenias/Resenias.jsx";
+import { Ordenes } from "../pages/Ordenes/Ordenes.jsx";
 import { AdminPage } from "../pages/admin/AdminPage/AdminPage.jsx";
 
 export const AppRouter = () => {
@@ -40,7 +41,7 @@ export const AppRouter = () => {
 				path="/admin/usuarios"
 				element={
 					<ProtectedRoute allowedRoles={[1,2]}>
-						<Productos />
+						<Usuarios/>
 					</ProtectedRoute>
 				}
 			/>
@@ -48,7 +49,7 @@ export const AppRouter = () => {
 				path="/admin/productos"
 				element={
 					<ProtectedRoute allowedRoles={[1,2]}>
-						<Usuarios />
+						<Productos />
 					</ProtectedRoute>
 				}
 			/>
@@ -132,6 +133,17 @@ export const AppRouter = () => {
 					</ProtectedRoute>
 				}
 			/>
+			<Route
+				path="/ordenes"
+				element={
+					<ProtectedRoute allowedRoles={[1,3]}>
+					<Ordenes></Ordenes>
+					</ProtectedRoute>
+				}
+			/>
+			
+
+
 			
 
 			{/* Rutas especiales */}
