@@ -1,7 +1,11 @@
 import "./Ordenes.css";
 import { useState } from "react";
+import { Outlet } from 'react-router-dom';
+import Sidebar from "../../components/layout/Sidebar";
+import { useSidebar } from "../../context/SidebarContext";
 
 export const Ordenes = () => {
+  const { isOpen } = useSidebar();
   const [orders, setOrders] = useState([
     {
       id: "1",
@@ -133,9 +137,10 @@ export const Ordenes = () => {
   const listoOrders = orders.filter((o) => o.estado === "listo");
 
   return (
-    <div className="kitchen-container">
-      <div className="kitchen-layout">
-        <main className="kitchen-main ">
+    <main className={`main-content ${!isOpen ? 'sidebar-closed' : ''}`}>
+      <div className="kitchen-container">
+        <Sidebar />
+        <div className="kitchen-main">
           <div className="main-header">
             <h1 className="page-title">Pedidos Pendientes</h1>
             <div className="header-stats">
@@ -216,13 +221,14 @@ export const Ordenes = () => {
               )}
             </div>
           </section>
-        </main>
+        </div>
       </div>
-    </div>
+      <Outlet />
+    </main>
   );
 };
 
-function OrderCard({ order, onStatusChange, onRemove }) {
+function OrderCard({ order, onStatusChange }) {
   const getStatusLabel = (status) => {
     const labels = {
       recibido: "Recibido",

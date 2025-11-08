@@ -1,23 +1,46 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import supabase from "../../services/supabase";
 import { useAuth } from "../../services/AuthContext";
 import './Login.css'
 
 export default function Login() {
 	const navigate = useNavigate();
-	const { session } = useAuth();
+	const location = useLocation();
+	const { session, loading } = useAuth();
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [loading, setLoading] = useState(false);
+	const [authLoading, setAuthLoading] = useState(false);
 	const [isSignUp, setIsSignUp] = useState(false);
 
-	useEffect(() => {
-		if (session) {
-			navigate("/menu", { replace: true });
+	const handleGoogleSignIn = async () => {
+		setAuthLoading(true);
+		try {
+			const { error } = await supabase.auth.signInWithOAuth({
+				provider: "google",
+				options: {
+					redirectTo: `${window.location.origin}/admin`
+				}
+			});
+
+			if (error) throw error;
+			
+		} catch (error) {
+			alert(error.message || "Ocurrió un error con Google");
+			setAuthLoading(false);
 		}
-	}, [session, navigate]);
+	};
+
+	// Obtener la ruta a la que intentaba acceder el usuario
+	const from = location.state?.from?.pathname || "/admin";
+
+	useEffect(() => {
+		// Solo redirigir si hay sesión y no está cargando
+		if (!loading && session) {
+			navigate(from, { replace: true });
+		}
+	}, [session, loading, navigate, from]);
 
 	const handleAuth = async (e) => {
 		e.preventDefault();
@@ -32,11 +55,14 @@ export default function Login() {
 			return;
 		}
 
-		setLoading(true);
+		setAuthLoading(true);
 
 		try {
 			if (isSignUp) {
-				const { error } = await supabase.auth.signUp({ email, password });
+				const { error } = await supabase.auth.signUp({
+					email,
+					password
+				});
 
 				if (error) throw error;
 
@@ -51,30 +77,31 @@ export default function Login() {
 				});
 
 				if (error) throw error;
-
-				navigate("/dashboard");
 			}
 		} catch (error) {
 			alert(error.message || "Ocurrió un error");
 		} finally {
-			setLoading(false);
+			setAuthLoading(false);
 		}
 	};
 
-	const handleGoogleSignIn = async () => {
-		setLoading(true);
-		try {
-			const { error } = await supabase.auth.signInWithOAuth({
-				provider: "google",
-			});
+	// Mostrar spinner mientras verifica la sesión
+	if (loading) {
+		return (
+			<div className="flex justify-center items-center min-h-screen">
+				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+			</div>
+		);
+	}
 
-			if (error) throw error;
-		} catch (error) {
-			alert(error.message || "Ocurrió un error con Google");
-		} finally {
-			setLoading(false);
-		}
-	};
+	// Si ya hay sesión, mostrar spinner mientras redirige
+	if (session) {
+		return (
+			<div className="flex justify-center items-center min-h-screen">
+				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="login-container">
@@ -119,7 +146,7 @@ export default function Login() {
 									value={email}
 									onChange={(e) => setEmail(e.target.value)}
 									className="custom-input"
-									disabled={loading}
+									disabled={authLoading}
 								/>
 							</div>
 
@@ -131,16 +158,16 @@ export default function Login() {
 									value={password}
 									onChange={(e) => setPassword(e.target.value)}
 									className="custom-input"
-									disabled={loading}
+									disabled={authLoading}
 								/>
 							</div>
 
 							<button
 								type="submit"
 								className="submit-button"
-								disabled={loading}
+								disabled={authLoading}
 							>
-								{loading
+								{authLoading
 									? "Cargando..."
 									: isSignUp
 										? "Crear cuenta"
@@ -151,7 +178,7 @@ export default function Login() {
 						<button
 							onClick={() => setIsSignUp(!isSignUp)}
 							className="toggle-button"
-							disabled={loading}
+							disabled={authLoading}
 						>
 							{isSignUp
 								? "¿Ya tienes cuenta? Inicia sesión"
@@ -165,7 +192,7 @@ export default function Login() {
 						<button
 							onClick={handleGoogleSignIn}
 							className="google-button"
-							disabled={loading}
+							disabled={authLoading}
 						>
 							<img
 								src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
