@@ -44,7 +44,7 @@ export const AppRouter = () => {
 			{/* Rutas protegidas */}
 			{/* Ruta a Página de Admin */}
 			<Route path="/admin/*" element={
-				<ProtectedRoute allowedRoles={[1]}>
+				<ProtectedRoute allowedRoles={[1, 2, 3, 4]}>
 					<SidebarProvider>
 						<AdminPage />
 					</SidebarProvider>

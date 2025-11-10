@@ -92,16 +92,16 @@ export default function Sidebar() {
         {
             title: 'GENERAL',
             items: [
-                { id: 'inicio', label: 'Inicio', icon: Home, path: '/admin', roles: [1] },
+                { id: 'inicio', label: 'Inicio', icon: Home, path: '/admin', roles: [1, 2, 3, 4] },
                 { id: 'reportes', label: 'Reportes', icon: FileText, path: '/admin/ReporteVenta', roles: [1, 2] }
             ]
         },
         {
             title: 'OPERACIONES',
             items: [
-                { id: 'pedidos', label: 'Pedidos', icon: ShoppingCart, path: '/admin/ordenes', roles: [2, 3, 4] },
-                { id: 'corte-caja', label: 'Corte de caja', icon: DollarSign, path: '/admin/CorteCaja', roles: [1, 2, 4] },
-                { id: 'cobranza', label: 'Cobranza', icon: CreditCard, path: '/admin/CobranzaDigital', roles: [1, 2, 4] },
+                { id: 'pedidos', label: 'Pedidos', icon: ShoppingCart, path: '/barista/ordenes', roles: [2, 3, 4] },
+                { id: 'corte-caja', label: 'Corte de caja', icon: DollarSign, path: '/caja/CorteCaja', roles: [1, 2, 4] },
+                { id: 'cobranza', label: 'Cobranza', icon: CreditCard, path: '/caja/CobranzaDigital', roles: [1, 2, 4] },
                 { id: 'sucursales', label: 'Sucursales', icon: Grid, path: '/admin/Sucursal', roles: [1, 2] }
             ]
         },
