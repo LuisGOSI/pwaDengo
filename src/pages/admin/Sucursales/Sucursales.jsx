@@ -171,7 +171,7 @@ export const Sucursales = () => {
                     <div className="sucursales-header">
                         <div className="sucursales-header-left">
                             <h1 className="sucursales-titulo">Catálogo de Sucursales</h1>
-                            <p className="sucursales-breadcrumb">Operaciones | Ubicaciones</p>
+                            <p className="sucursales-breadcrumb">Operaciones | Sucursales</p>
                         </div>
                         <button
                             className="btn-nueva-sucursal"

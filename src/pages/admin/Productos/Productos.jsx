@@ -85,7 +85,7 @@ export const Productos = () => {
                 <div className="productos-header">
                     <div className="productos-header-left">
                         <h1 className="productos-titulo">Catálogo de Productos</h1>
-                        <p className="productos-breadcrumb">Clientes | Productos</p>
+                        <p className="productos-breadcrumb">Productos | Catálogo de Productos</p>
                     </div>
                     <button className="btn-nuevo-producto">
                         <span className="btn-icono">+</span>

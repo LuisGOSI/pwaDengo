@@ -72,7 +72,7 @@ export const CobranzaDigital = () => {
                 <div className="cobranza-header">
                     <div>
                         <h1 className="cobranza-title">Cobranza Digital</h1>
-                        <p className="cobranza-subtitle">Pagos | Transacciones</p>
+                        <p className="cobranza-subtitle">Operaciones | Cobranza Digital</p>
                     </div>
                     <button className="btn-primary" onClick={handleCancel}>
                         <span>+</span>

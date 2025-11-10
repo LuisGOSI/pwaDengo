@@ -1,8 +1,8 @@
 import "./Ordenes.css";
 import { useState } from "react";
 import { Outlet } from 'react-router-dom';
-import Sidebar from "../../components/layout/Sidebar";
-import { useSidebar } from "../../context/SidebarContext";
+import Sidebar from "../../../components/layout/Sidebar";
+import { useSidebar } from "../../../context/SidebarContext";
 
 export const Ordenes = () => {
   const { isOpen } = useSidebar();
