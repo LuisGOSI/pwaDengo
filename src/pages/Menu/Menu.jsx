@@ -1,129 +1,138 @@
-import { useState } from "react";
-import { Footer } from "../../components/layout/Footer";
+import React, { useState } from 'react';
 import Header from "../../components/layout/Header";
-import "./Menu.css";
+import './Menu.css';
 
 export const Menu = () => {
-	const [activeTab, setActiveTab] = useState("cafe");
+    const [categoriaActiva, setCategoriaActiva] = useState('CAFÉ');
 
-	const menuData = {
-		cafe: {
-			title: "CAFÉ",
-			subtitle: "Granos selectos, preparaciones artesanales",
-			items: [
-				{
-					name: "Espresso",
-					badge: "Clásico",
-					description:
-						"Shot doble de espresso intenso con notas de chocolate y caramelo",
-					size: "60mL",
-					price: "$45.00",
-				},
-			],
-		},
-		comida: {
-			title: "COMIDA",
-			subtitle: "Platillos frescos y deliciosos",
-			items: [
-				{
-					name: "Ensalada César",
-					badge: "Fresco",
-					description:
-						"Lechuga romana, crutones artesanales y aderezo césar casero",
-					size: "Porción completa",
-					price: "$120.00",
-				},
-			],
-		},
-		postre: {
-			title: "POSTRE",
-			subtitle: "Dulces tentaciones artesanales",
-			items: [
-				{
-					name: "Cheesecake",
-					badge: "Popular",
-					description: "Cremoso cheesecake de Nueva York con base de galleta",
-					size: "1 rebanada",
-					price: "$85.00",
-				},
-			],
-		},
-		comunidad: {
-			title: "COMUNIDAD",
-			subtitle: "Eventos y promociones especiales",
-			items: [
-				{
-					name: "Membresía VIP",
-					badge: "Exclusivo",
-					description: "Acceso a eventos privados y descuentos especiales",
-					size: "Membresía anual",
-					price: "$500.00",
-				},
-			],
-		},
-	};
+    const categorias = ['CAFÉ', 'COMIDA', 'POSTRE', 'COMUNIDAD'];
 
-	return (
-		<div>
-			<Header />
-			<div className="menu-section">
-				<h2>MENÚ</h2>
-				<p>
-					¡Sabores que inspiran! <br />
-					Explora nuestra cartelera para deleitarte con nuestras super promos y
-					lo que tenemos por ofrecerte
-				</p>
-			</div>
-			<div className="menu-tabs">
-				<button
-					className={`menu-tab ${activeTab === "cafe" ? "active" : ""}`}
-					onClick={() => setActiveTab("cafe")}
-				>
-					Café
-				</button>
-				<button
-					className={`menu-tab ${activeTab === "comida" ? "active" : ""}`}
-					onClick={() => setActiveTab("comida")}
-				>
-					Comida
-				</button>
-				<button
-					className={`menu-tab ${activeTab === "postre" ? "active" : ""}`}
-					onClick={() => setActiveTab("postre")}
-				>
-					Postre
-				</button>
-				<button
-					className={`menu-tab ${activeTab === "comunidad" ? "active" : ""}`}
-					onClick={() => setActiveTab("comunidad")}
-				>
-					Comunidad
-				</button>
-			</div>
-			<div className="category-section">
-				<div className="category-header">
-					<h3>{menuData[activeTab].title}</h3>
-					<p>{menuData[activeTab].subtitle}</p>
-				</div>
+    const menuItems = {
+        CAFÉ: [
+            {
+                id: 1,
+                nombre: 'Espresso',
+                badge: 'Clásico',
+                descripcion: 'Shot doble de espresso intenso con notas de chocolate y caramelo',
+                tamano: '60mL',
+                precio: '$45.00'
+            },
+            {
+                id: 2,
+                nombre: 'Cappuccino',
+                badge: 'Popular',
+                descripcion: 'Espresso con leche vaporizada y espuma cremosa',
+                tamano: '180mL',
+                precio: '$55.00'
+            },
+            {
+                id: 3,
+                nombre: 'Latte',
+                badge: 'Favorito',
+                descripcion: 'Café con leche suave y arte latte',
+                tamano: '240mL',
+                precio: '$60.00'
+            }
+        ],
+        COMIDA: [
+            {
+                id: 1,
+                nombre: 'Croissant',
+                badge: 'Fresco',
+                descripcion: 'Croissant francés recién horneado con mantequilla',
+                tamano: '80g',
+                precio: '$45.00'
+            },
+            {
+                id: 2,
+                nombre: 'Sandwich Club',
+                badge: 'Especial',
+                descripcion: 'Triple sandwich con pollo, tocino y vegetales',
+                tamano: '250g',
+                precio: '$95.00'
+            }
+        ],
+        POSTRE: [
+            {
+                id: 1,
+                nombre: 'Pastel de Chocolate',
+                badge: 'Delicioso',
+                descripcion: 'Rebanada generosa de pastel de chocolate belga',
+                tamano: '120g',
+                precio: '$55.00'
+            },
+            {
+                id: 2,
+                nombre: 'Cheesecake',
+                badge: 'Premium',
+                descripcion: 'Cheesecake cremoso con frutos rojos',
+                tamano: '150g',
+                precio: '$65.00'
+            }
+        ],
+        COMUNIDAD: [
+            {
+                id: 1,
+                nombre: 'Taller Barista',
+                badge: 'Nuevo',
+                descripcion: 'Aprende técnicas de preparación de café profesional',
+                tamano: '2 horas',
+                precio: '$350.00'
+            }
+        ]
+    };
 
-				<div className="menu-items">
-					{menuData[activeTab].items.map((item, index) => (
-						<div key={index} className="menu-item">
-							<div className="item-header">
-								<div className="item-title">
-									<h4>{item.name}</h4>
-									<span className="item-badge">{item.badge}</span>
-								</div>
-								<div className="item-price">{item.price}</div>
-							</div>
-							<p className="item-description">{item.description}</p>
-							<p className="item-size">{item.size}</p>
-						</div>
-					))}
-				</div>
-			</div>
+    const itemsActuales = menuItems[categoriaActiva] || [];
 
-			<Footer />
-		</div>
-	);
-};
+    return (
+        <div className="menu-container">
+          <Header />
+            {/* Hero Section */}
+            <div className="menu-hero">
+                <h1 className="menu-titulo">MENÚ</h1>
+                <p className="menu-subtitulo">¡Sabores que inspiran!</p>
+                <p className="menu-descripcion">
+                    Explora nuestra cartelera para deleitarte con nuestras súper promos y lo<br />
+                    que tenemos por ofrecerte
+                </p>
+            </div>
+
+            {/* Categorías */}
+            <div className="menu-categorias-wrapper">
+                <div className="menu-categorias">
+                    {categorias.map((categoria) => (
+                        <button
+                            key={categoria}
+                            className={`categoria-btn ${categoriaActiva === categoria ? 'categoria-activa' : ''}`}
+                            onClick={() => setCategoriaActiva(categoria)}
+                        >
+                            {categoria}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Sección de Productos */}
+            <div className="menu-seccion">
+                <h2 className="seccion-titulo">{categoriaActiva}</h2>
+                <p className="seccion-subtitulo">Granos selectos, preparaciones artesanales</p>
+
+                <div className="menu-items">
+                    {itemsActuales.map((item) => (
+                        <div key={item.id} className="menu-item-card">
+                            <div className="item-header">
+                                <h3 className="item-nombre">{item.nombre}</h3>
+                                <span className="item-badge">{item.badge}</span>
+                            </div>
+                            <p className="item-descripcion">{item.descripcion}</p>
+                            <div className="item-footer">
+                                <span className="item-tamano">{item.tamano}</span>
+                                <span className="item-precio">{item.precio}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}

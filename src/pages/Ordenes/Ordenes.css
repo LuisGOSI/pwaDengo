@@ -1,0 +1,726 @@
+
+
+.kitchen-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f5f3f0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+.kitchen-layout {
+  display: flex;
+  height: 100vh;
+  background-color: #f5f3f0;
+}
+
+/* ============================================
+   2. SIDEBAR STYLES
+   ============================================ */
+
+.kitchen-sidebar {
+  width: 240px;
+  background: linear-gradient(135deg, #8b6f47 0%, #9d7e52 100%);
+  color: #ffffff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  margin-bottom: 40px;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  font-size: 32px;
+}
+
+.logo-text h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.logo-text p {
+  margin: 2px 0 0 0;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+}
+
+.sidebar-nav {
+  flex: 1;
+  margin-bottom: 30px;
+}
+
+.nav-section {
+  margin-bottom: 28px;
+}
+
+.nav-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 12px;
+  padding-left: 8px;
+}
+
+.nav-item {
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 6px;
+  transition: all 0.2s ease;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.nav-item.active {
+  background-color: #d4a574;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 16px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #d4a574;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: #8b6f47;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-name {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.user-role {
+  margin: 2px 0 0 0;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* ============================================
+   3. MAIN CONTENT AREA
+   ============================================ */
+
+.kitchen-main {
+  flex: 1;
+  padding: 30px 40px;
+  overflow-y: auto;
+  background-color: #f5f3f0;
+}
+
+.kitchen-main::-webkit-scrollbar {
+  width: 8px;
+}
+
+.kitchen-main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.kitchen-main::-webkit-scrollbar-thumb {
+  background-color: #d4a574;
+  border-radius: 4px;
+}
+
+/* ============================================
+   4. MAIN HEADER & STATS
+   ============================================ */
+
+.main-header {
+  margin-bottom: 40px;
+}
+
+.page-title {
+  margin: 0 0 20px 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: #3d3d3d;
+  letter-spacing: -0.5px;
+}
+
+.header-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e8e4df;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #8b6f47;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #3d3d3d;
+}
+
+/* ============================================
+   5. ORDERS SECTIONS
+   ============================================ */
+
+.orders-section {
+  margin-bottom: 40px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #d4a574;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #3d3d3d;
+}
+
+.section-count {
+  background-color: #d4a574;
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.section-count.ready {
+  background-color: #6ba569;
+}
+
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  min-height: 60px;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 20px;
+  color: #9a8c7e;
+  font-size: 14px;
+  background: #ffffff;
+  border: 2px dashed #d4a574;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* ============================================
+   6. ORDER CARD
+   ============================================ */
+
+.order-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.order-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: #d4a574;
+  transition: background-color 0.3s ease;
+}
+
+.order-card-recibido::before {
+  background-color: #f59e0b;
+}
+
+.order-card-preparando::before {
+  background-color: #3b82f6;
+}
+
+.order-card-listo::before {
+  background-color: #6ba569;
+}
+
+.order-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.order-number {
+  font-size: 16px;
+  font-weight: 700;
+  color: #3d3d3d;
+  word-break: break-word;
+}
+
+/* ============================================
+   7. ORDER CUSTOMER INFO
+   ============================================ */
+
+.order-customer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 0;
+  border-bottom: 1px solid #e8e4df;
+}
+
+.customer-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3d3d3d;
+}
+
+.customer-branch {
+  font-size: 12px;
+  color: #8b6f47;
+  font-weight: 500;
+}
+
+/* ============================================
+   8. ORDER BADGES
+   ============================================ */
+
+.order-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.badge-recibido {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.badge-preparando {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-listo {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.badge-entregado {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.badge-cancelado {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* ============================================
+   9. ORDER ITEMS
+   ============================================ */
+
+.order-items {
+  padding: 12px 0;
+  border-top: 1px solid #e8e4df;
+  border-bottom: 1px solid #e8e4df;
+}
+
+.items-title {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #3d3d3d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.items-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item {
+  font-size: 13px;
+  color: #5a5a5a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.item-quantity {
+  display: inline-block;
+  background-color: #e8e4df;
+  color: #8b6f47;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+  min-width: 36px;
+  text-align: center;
+}
+
+.item-name {
+  flex: 1;
+}
+
+.item-price {
+  font-weight: 600;
+  color: #8b6f47;
+}
+
+/* ============================================
+   10. ORDER NOTES
+   ============================================ */
+
+.order-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px;
+  background-color: #fffbf0;
+  border-left: 3px solid #d4a574;
+  border-radius: 4px;
+}
+
+.notes-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8b6f47;
+  text-transform: uppercase;
+}
+
+.notes-text {
+  font-size: 12px;
+  color: #5a5a5a;
+}
+
+/* ============================================
+   11. ORDER TIME
+   ============================================ */
+
+.order-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #8b6f47;
+  font-weight: 500;
+}
+
+.time-icon {
+  font-size: 14px;
+}
+
+/* ============================================
+   12. ORDER ACTIONS
+   ============================================ */
+
+.order-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: inherit;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: #f59e0b;
+  color: #ffffff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #d97706;
+}
+
+.btn-success {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.btn-success:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.btn-danger {
+  background-color: #6ba569;
+  color: #ffffff;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #4d7c50;
+}
+
+.btn-secondary {
+  background-color: #9a8c7e;
+  color: #ffffff;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #7a6c5e;
+}
+
+/* ============================================
+   13. RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 1200px) {
+  .orders-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .kitchen-main {
+    padding: 20px 24px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .section-title {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .kitchen-layout {
+    flex-direction: column;
+  }
+
+  .kitchen-sidebar {
+    width: 100%;
+    padding: 16px;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    height: auto;
+    min-height: 80px;
+  }
+
+  .sidebar-header {
+    margin-bottom: 0;
+    min-width: 180px;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 0;
+    flex: 1;
+  }
+
+  .nav-section {
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-title {
+    display: none;
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+  .kitchen-main {
+    padding: 16px;
+  }
+
+  .page-title {
+    font-size: 20px;
+  }
+
+  .header-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .stat-card {
+    padding: 12px;
+    gap: 6px;
+  }
+
+  .stat-value {
+    font-size: 24px;
+  }
+
+  .orders-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .order-card {
+    padding: 16px;
+    gap: 10px;
+  }
+
+  .order-number {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .kitchen-sidebar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .sidebar-nav {
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .nav-section {
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .nav-item {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .page-title {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .header-stats {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 10px;
+  }
+
+  .btn {
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+
+  .item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .item-quantity {
+    min-width: 100%;
+  }
+}

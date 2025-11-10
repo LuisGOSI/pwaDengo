@@ -7,7 +7,6 @@ import { Productos } from "../pages/admin/Productos/Productos.jsx"
 import { Inicio } from "../pages/Inicio";
 import { Menu } from "../pages/Menu/Menu";
 import { Nosotros } from "../pages/Nosotros/Nosotros";
-import { Dashboard } from "../pages/admin/Dashboard/Dashboard.jsx";
 import { Galeria } from "../pages/Galeria/Galeria.jsx";
 import { Contacto } from "../pages/Contacto/Contacto.jsx";
 import { Eventos } from "../pages/admin/Eventos/Evento.jsx";
@@ -20,6 +19,10 @@ import { CorteCaja } from "../pages/caja/CorteCaja/CorteCaja.jsx";
 import { ReporteVenta } from "../pages/admin/ReporteVenta/ReporteVenta.jsx";
 import { CarteleraEventos } from "../pages/CarteleraEventos/CarteleraEventos.jsx";
 import { Resenias } from "../pages/admin/Resenias/Resenias.jsx";
+import { Ordenes } from "../pages/Ordenes/Ordenes.jsx";
+import { AdminPage } from "../pages/admin/AdminPage/AdminPage.jsx";
+import { SidebarProvider } from "../context/SidebarContext.jsx";
+import { NotFound } from "../components/layout/NotFound.jsx";
 
 export const AppRouter = () => {
 	return (
@@ -33,116 +36,129 @@ export const AppRouter = () => {
 			<Route path="/galeria" element={<Galeria />} />
 			<Route path="/CarteleraEventos" element={<CarteleraEventos />} />
 
+
 			{/* Rutas protegidas */}
-			<Route
-				path="/admin/dashboard"
-				element={
-					<ProtectedRoute allowedRoles={[1,2]}>
-						<Dashboard />
-					</ProtectedRoute>
-				}
-			/>
-			<Route
-				path="/admin/usuarios"
-				element={
-					<ProtectedRoute allowedRoles={[1,2]}>
-						<Productos />
-					</ProtectedRoute>
-				}
-			/>
-			<Route
-				path="/admin/productos"
-				element={
-					<ProtectedRoute allowedRoles={[1,2]}>
-						<Usuarios />
-					</ProtectedRoute>
-				}
-			/>
-			<Route
-				path="/admin/eventos"
-				element={
-					<ProtectedRoute allowedRoles={[1,2]}>
-						<Eventos />
-					</ProtectedRoute>
-				}
-			/>
-			<Route
-				path="/admin/CatalogoCategorias"
-				element={
-					<ProtectedRoute allowedRoles={[1,2]}>
-						<CatalogoCategorias />
-					</ProtectedRoute>
-				}
-			/>
-			<Route
-				path="/admin/promociones"
-				element={
-					<ProtectedRoute allowedRoles={[1,2]}>
-						<Promociones />
-					</ProtectedRoute>
-				}
-			/>
-			<Route
-				path="/admin/promociones"
-				element={
-					<ProtectedRoute allowedRoles={[1,2]}>
-						<Promociones />
-					</ProtectedRoute>
-				}
-			/>
-			<Route
-				path="/admin/SegmentacionPromociones"
-				element={
-					<ProtectedRoute allowedRoles={[1,2]}>
-						<SegmentacionPromociones />
-					</ProtectedRoute>
-				}
-			/>
-			<Route
-				path="/admin/CobranzaDigital"
-				element={
-					<ProtectedRoute allowedRoles={[1,2, 4]}>
-						<CobranzaDigital />
-					</ProtectedRoute>
-				}
-			/>
-			<Route
-				path="/admin/CorteCaja"
-				element={
-					<ProtectedRoute allowedRoles={[1,2, 4]}>
-						<CorteCaja />
-					</ProtectedRoute>
-				}
-			/>
-			<Route
-				path="/admin/ReporteVenta"
-				element={
-					<ProtectedRoute allowedRoles={[1,2]}>
+			{/* Ruta a Página de Admin */}
+			<Route path="/admin/*" element={
+				<ProtectedRoute allowedRoles={[1]}>
+					<SidebarProvider>
+						<AdminPage />
+					</SidebarProvider>
+				</ProtectedRoute>
+			} />
+			{/* Ruta a Resportes de las ventas */}
+			<Route path="/admin/ReporteVenta" element={
+				<ProtectedRoute allowedRoles={[1]}>
+					<SidebarProvider>
 						<ReporteVenta />
-					</ProtectedRoute>
-				}
-			/>
-			<Route
-				path="/admin/Sucursal"
-				element={
-					<ProtectedRoute allowedRoles={[1,2]}>
-						<Sucursales />
-					</ProtectedRoute>
-				}
-			/>
-			<Route
-				path="/admin/resenias"
-				element={
-					<ProtectedRoute allowedRoles={[1,2]}>
+					</SidebarProvider>
+				</ProtectedRoute>
+			} />
+			{/* Ruta a Gestión de pedidos / ordenes */}
+			<Route path="/admin/ordenes" element={
+				<ProtectedRoute allowedRoles={[1, 3]}>
+					<SidebarProvider>
+						<Ordenes />
+					</SidebarProvider>
+				</ProtectedRoute>
+			} />
+			{/* Ruta a Corte de caja */}
+			<Route path="/admin/CorteCaja" element={
+				<ProtectedRoute allowedRoles={[1, 2, 4]}>
+					<SidebarProvider>
+						<CorteCaja />
+					</SidebarProvider>
+				</ProtectedRoute>
+			} />
+			{/* Ruta a Cobranza digital */}
+			<Route path="/admin/CobranzaDigital" element={
+				<ProtectedRoute allowedRoles={[1, 2, 4]}>
+					<SidebarProvider>
+						<CobranzaDigital />
+					</SidebarProvider>
+				</ProtectedRoute>
+			} />
+			{/* Ruta a Gestión de productos */}
+			<Route path="/admin/productos" element={
+				<ProtectedRoute allowedRoles={[1]}>
+					<SidebarProvider>
+						<Productos />
+					</SidebarProvider>
+				</ProtectedRoute>
+			} />
+
+			{/*Ruta a Gestión de ingredientes*/}
+
+			{/* Ruta a Gestión de  categorias */}
+			<Route path="/admin/CatalogoCategorias" element={
+				<ProtectedRoute allowedRoles={[1, 2]}>
+					<SidebarProvider>
+						<CatalogoCategorias />
+					</SidebarProvider>
+				</ProtectedRoute>
+			} />
+
+			{/*Ruta a Productos de la comunidad*/}
+
+			{/* Ruta a Gestión de  promociones */}
+			<Route path="/admin/promociones" element={
+				<ProtectedRoute allowedRoles={[1, 2]}>
+					<SidebarProvider>
+						<Promociones />
+					</SidebarProvider>
+				</ProtectedRoute>
+			} />
+			{/*Ruta a Gestión de eventos*/}
+			<Route path="/admin/eventos" element={
+				<ProtectedRoute allowedRoles={[1, 2]}>
+					<SidebarProvider>
+						<Eventos />
+					</SidebarProvider>
+				</ProtectedRoute>
+			} />
+
+			{/*Ruta a Gestión de Cartelera*/}
+
+			{/* Ruta a Gestión de usuarios */}
+			<Route path="/admin/usuarios" element={
+				<ProtectedRoute allowedRoles={[1]}>
+					<SidebarProvider>
+						<Usuarios />
+					</SidebarProvider>
+				</ProtectedRoute>
+			} />
+			{/* Ruta a Gestión de reseñas */}
+			<Route path="/admin/resenias" element={
+				<ProtectedRoute allowedRoles={[1, 2]}>
+					<SidebarProvider>
 						<Resenias />
-					</ProtectedRoute>
-				}
-			/>
-			
+					</SidebarProvider>
+				</ProtectedRoute>
+			} />
+			{/* Ruta a Segmentación de promociones */}
+			<Route path="/admin/SegmentacionPromociones" element={
+				<ProtectedRoute allowedRoles={[1, 2]}>
+					<SidebarProvider>
+						<SegmentacionPromociones />
+					</SidebarProvider>
+				</ProtectedRoute>
+			} />
+			{/* Ruta a Gestión de sucursales */}
+			<Route path="/admin/Sucursal" element={
+				<ProtectedRoute allowedRoles={[1, 2]}>
+					<SidebarProvider>
+						<Sucursales />
+					</SidebarProvider>
+				</ProtectedRoute>
+			} />
+			{/* Ruta a Usuarios y roles*/}
+
+			{/* Ruta a configuración*/}
+
 
 			{/* Rutas especiales */}
 			<Route path="/no-autorizado" element={<NoAutorizado />} />
-			<Route path="/*" element={<h1>404 - Not Found</h1>} />
+			<Route path="/*" element={<NotFound />} />
 		</Routes>
 	);
 };
