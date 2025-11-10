@@ -1,207 +1,246 @@
-import React, { useState } from 'react';
-import './Productos.css';
-import { useSidebar } from '../../../context/SidebarContext';
-import { Outlet } from 'react-router-dom';
-import Sidebar from '../../../components/layout/Sidebar';
+import React, { useState, useEffect } from "react";
+import "./Productos.css";
+import { useSidebar } from "../../../context/SidebarContext";
+import { Outlet } from "react-router-dom";
+import Sidebar from "../../../components/layout/Sidebar";
+import { useAPI } from "../../../utils/UseAPI";
+import { useShowContent } from "../../../utils/UseShowContent";
+import { FormProductos } from "./FormProductos";
 
 export const Productos = () => {
-    const { isOpen } = useSidebar();
-    const [busqueda, setBusqueda] = useState('');
-    const [categoria, setCategoria] = useState('');
-    const [estado, setEstado] = useState('');
-    const [sucursal, setSucursal] = useState('');
+  const { isOpen } = useSidebar();
+  const [busqueda, setBusqueda] = useState("");
+  const [categoria, setCategoria] = useState("");
+  const [estado, setEstado] = useState("");
+  const [sucursal, setSucursal] = useState("");
 
-    const productos = [
-        {
-            id: 1,
-            nombre: 'Cappuccino Especial',
-            descripcion: 'Café espresso con espuma',
-            categoria: 'Café',
-            sucursal: 'Todas',
-            precio: '$65.00',
-            iniciales: 'CE',
-            colorCategoria: 'cafe'
-        },
-        {
-            id: 2,
-            nombre: 'Croissant Francés',
-            descripcion: 'Recién horneado',
-            categoria: 'Panadería',
-            sucursal: 'Centro',
-            precio: '$45.00',
-            iniciales: 'CF',
-            colorCategoria: 'panaderia'
-        },
-        {
-            id: 3,
-            nombre: 'Espresso Doble',
-            descripcion: 'Shot doble intenso',
-            categoria: 'Café',
-            sucursal: 'Centro',
-            precio: '$50.00',
-            iniciales: 'ED',
-            colorCategoria: 'cafe'
-        },
-        {
-            id: 4,
-            nombre: 'Sandwich Club',
-            descripcion: 'Triple piso con pollo',
-            categoria: 'Comida',
-            sucursal: 'Norte',
-            precio: '$95.00',
-            iniciales: 'SC',
-            colorCategoria: 'comida'
-        },
-        {
-            id: 5,
-            nombre: 'Jugo Natural',
-            descripcion: 'Naranja fresca',
-            categoria: 'Bebidas',
-            sucursal: 'Centro',
-            precio: '$40.00',
-            iniciales: 'JN',
-            colorCategoria: 'bebidas'
-        },
-        {
-            id: 6,
-            nombre: 'Pastel de Chocolate',
-            descripcion: 'Rebanada generosa',
-            categoria: 'Postres',
-            sucursal: 'Sur',
-            precio: '$55.00',
-            iniciales: 'PC',
-            colorCategoria: 'postres'
-        }
-    ];
+  //[CAMBIOS NUEVOS]
 
-    const handleFiltrar = () => {
-        console.log('Filtrando productos...', { busqueda, categoria, estado, sucursal });
-    };
+  const { get, del } = useAPI("http://localhost:3000/api/"); //Se pasas la URL base como parametro
+  const [productos, setProductos] = useState([]); //Estado para almacenar los productos
+  const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } =
+    useShowContent();
 
-    return (
-        <main className={`main-content ${!isOpen ? 'sidebar-closed' : ''}`}>
-            <div className="productos-container">
-                <Sidebar />
-                <div className="productos-header">
-                    <div className="productos-header-left">
-                        <h1 className="productos-titulo">Catálogo de Productos</h1>
-                        <p className="productos-breadcrumb">Clientes | Productos</p>
-                    </div>
-                    <button className="btn-nuevo-producto">
-                        <span className="btn-icono">+</span>
-                        Nuevo Producto
-                    </button>
-                </div>
+  useEffect(() => {
+    loadProductos();
+  }, []);
 
-                {/* Filtros */}
-                <div className="productos-filtros">
-                    <div className="filtros-grid">
-                        <div className="filtro-group">
-                            <label>Buscar</label>
-                            <input
-                                type="text"
-                                value={busqueda}
-                                onChange={(e) => setBusqueda(e.target.value)}
-                                className="filtro-input"
-                            />
-                        </div>
+  const loadProductos = () => {
+    get("productos").then((res) => {
+      setProductos(res.data); //Asumiendo que la respuesta tiene una estructura {data: [...]}
+    });
+  };
 
-                        <div className="filtro-group">
-                            <label>Categoría</label>
-                            <select
-                                value={categoria}
-                                onChange={(e) => setCategoria(e.target.value)}
-                                className="filtro-select"
-                            >
-                                <option value=""></option>
-                                <option value="cafe">Café</option>
-                                <option value="panaderia">Panadería</option>
-                                <option value="comida">Comida</option>
-                                <option value="bebidas">Bebidas</option>
-                                <option value="postres">Postres</option>
-                            </select>
-                        </div>
+  const handleFiltrar = () => {
+    console.log("Filtrando productos...", {
+      busqueda,
+      categoria,
+      estado,
+      sucursal,
+    });
+  };
 
-                        <div className="filtro-group">
-                            <label>Estado</label>
-                            <select
-                                value={estado}
-                                onChange={(e) => setEstado(e.target.value)}
-                                className="filtro-select"
-                            >
-                                <option value=""></option>
-                                <option value="disponible">Disponible</option>
-                                <option value="agotado">Agotado</option>
-                                <option value="descontinuado">Descontinuado</option>
-                            </select>
-                        </div>
+  const handleDelete = async (id) => {
+    if (window.confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+      const result = await del(`productos/${id}`);
+      if (result) {
+        loadProductos(); // Recargar la lista después de eliminar
+      }
+    }
+  };
 
-                        <div className="filtro-group">
-                            <label>Sucursal</label>
-                            <select
-                                value={sucursal}
-                                onChange={(e) => setSucursal(e.target.value)}
-                                className="filtro-select"
-                            >
-                                <option value=""></option>
-                                <option value="todas">Todas</option>
-                                <option value="centro">Centro</option>
-                                <option value="norte">Norte</option>
-                                <option value="sur">Sur</option>
-                            </select>
-                        </div>
-                    </div>
+  const handleEditClick = (producto) => {
+    handleEdit(producto);
+  };
 
-                    <button onClick={handleFiltrar} className="btn-filtrar">
-                        Filtrar
-                    </button>
-                </div>
+  const handleFormClose = () => {
+    handleCloseForm();
+    loadProductos(); // Recargar la lista después de cerrar el formulario
+  };
 
-                {/* Lista de Productos */}
-                <div className="productos-lista">
-                    <div className="lista-header">
-                        <h2 className="lista-titulo">Lista de Productos</h2>
-                        <p className="lista-subtitulo">Total: {productos.length} productos</p>
-                    </div>
+  return (
+    <main className={`main-content ${!isOpen ? "sidebar-closed" : ""}`}>
+      <div className="productos-container">
+        <Sidebar />
+        <div className="productos-header">
+          <div className="productos-header-left">
+            <h1 className="productos-titulo">Catálogo de Productos</h1>
+            <p className="productos-breadcrumb">Clientes | Productos</p>
+          </div>
+          <button onClick={showForm? handleFormClose: handleAdd} className="btn-nuevo-producto">
+            <span className="btn-icono">+</span>
+            Nuevo Producto
+          </button>
+        </div>
 
-                    <div className="tabla-container">
-                        <table className="productos-tabla">
-                            <thead>
-                                <tr>
-                                    <th>PRODUCTO</th>
-                                    <th>CATEGORÍA</th>
-                                    <th>SUCURSAL</th>
-                                    <th>PRECIO</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {productos.map((producto) => (
-                                    <tr key={producto.id}>
-                                        <td>
-                                            <div className="producto-info">
-                                                <div className="producto-avatar">
-                                                    {producto.iniciales}
-                                                </div>
-                                                <div className="producto-datos">
-                                                    <p className="producto-nombre">{producto.nombre}</p>
-                                                    <p className="producto-descripcion">{producto.descripcion}</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span className={`categoria-badge categoria-${producto.colorCategoria}`}>
-                                                {producto.categoria}
-                                            </span>
-                                        </td>
-                                        <td className="producto-sucursal">{producto.sucursal}</td>
-                                        <td className="producto-precio">{producto.precio}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        {showForm && (
+          <FormProductos initialData={objEdit} onClose={handleFormClose} />
+        )}
+
+        {/* Filtros */}
+        <div className="productos-filtros">
+          <div className="filtros-grid">
+            <div className="filtro-group">
+              <label>Buscar</label>
+              <input
+                type="text"
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+                className="filtro-input"
+              />
             </div>
-        </main>
-    );
-}
+
+            <div className="filtro-group">
+              <label>Categoría</label>
+              <select
+                value={categoria}
+                onChange={(e) => setCategoria(e.target.value)}
+                className="filtro-select"
+              >
+                <option value=""></option>
+                <option value="cafe">Café</option>
+                <option value="panaderia">Panadería</option>
+                <option value="comida">Comida</option>
+                <option value="bebidas">Bebidas</option>
+                <option value="postres">Postres</option>
+              </select>
+            </div>
+
+            <div className="filtro-group">
+              <label>Estado</label>
+              <select
+                value={estado}
+                onChange={(e) => setEstado(e.target.value)}
+                className="filtro-select"
+              >
+                <option value=""></option>
+                <option value="disponible">Disponible</option>
+                <option value="agotado">Agotado</option>
+                <option value="descontinuado">Descontinuado</option>
+              </select>
+            </div>
+
+            <div className="filtro-group">
+              <label>Sucursal</label>
+              <select
+                value={sucursal}
+                onChange={(e) => setSucursal(e.target.value)}
+                className="filtro-select"
+              >
+                <option value=""></option>
+                <option value="todas">Todas</option>
+                <option value="centro">Centro</option>
+                <option value="norte">Norte</option>
+                <option value="sur">Sur</option>
+              </select>
+            </div>
+          </div>
+
+          <button onClick={handleFiltrar} className="btn-filtrar">
+            Filtrar
+          </button>
+        </div>
+
+        {productos.length === 0 ? (
+          <p className="sin-productos">No hay productos disponibles.</p>
+        ) : (
+          <div className="productos-lista">
+            <div className="lista-header">
+              <h2 className="lista-titulo">Lista de Productos</h2>
+              <p className="lista-subtitulo">
+                Total: {productos.length} productos
+              </p>
+            </div>
+
+            <div className="tabla-container">
+              <table className="productos-tabla">
+                <thead>
+                  <tr>
+                    <th>NOMBRE</th>
+                    <th>CATEGORÍA</th>
+                    <th>PRECIO</th>
+                    <th>ACCIONES</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {productos.map((producto) => (
+                    <tr key={producto.id}>
+                      <td>
+                        <div className="producto-info">
+                          <div className="producto-avatar">
+                            {producto.nombre.charAt(0) +
+                              producto.nombre.charAt(1)}
+                          </div>
+                          <div className="producto-datos">
+                            <p className="producto-nombre">{producto.nombre}</p>
+                            <p className="producto-descripcion">
+                              {producto.descripcion}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span
+                          className={`categoria-badge categoria-${producto.categoria_id}`}
+                        >
+                          {producto.categoria_id}
+                        </span>
+                      </td>
+                      <td className="producto-precio">${producto.precio}</td>
+                      <td>
+                        <div className="acciones-container">
+                          <button
+                            onClick={() => handleEditClick(producto)}
+                            className="btn-accion btn-editar"
+                            title="Editar producto"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => handleDelete(producto.id)}
+                            className="btn-accion btn-eliminar"
+                            title="Eliminar producto"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <polyline points="3 6 5 6 21 6"></polyline>
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                              <line x1="10" y1="11" x2="10" y2="17"></line>
+                              <line x1="14" y1="11" x2="14" y2="17"></line>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+    </main>
+  );
+};
