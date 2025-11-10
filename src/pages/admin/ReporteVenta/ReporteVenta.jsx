@@ -168,7 +168,7 @@ export const ReporteVenta = () => {
                 <div className="reporte-header">
                     <div className="reporte-title-section">
                         <h1 className="reporte-title">Reporte de Ventas</h1>
-                        <p className="reporte-subtitle">Análisis | Consultas</p>
+                        <p className="reporte-subtitle">General | Consultas</p>
                     </div>
                     <div className="reporte-actions">
                         <button

@@ -110,7 +110,7 @@ export const SegmentacionPromociones = () => {
                 <div className="segmentacion-header">
                     <div className="segmentacion-header-left">
                         <h1 className="segmentacion-titulo">Segmentación de Promociones</h1>
-                        <p className="segmentacion-breadcrumb">Marketing | Clientes Objetivo</p>
+                        <p className="segmentacion-breadcrumb">Marketing | Segmentación de promociones</p>
                     </div>
                     <button className="btn-nueva-segmentacion">
                         <Plus size={20} className="btn-icono-plus" />

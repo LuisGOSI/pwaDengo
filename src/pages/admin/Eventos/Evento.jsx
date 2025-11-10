@@ -47,7 +47,7 @@ export const Eventos = () => {
                 <div className="eventos-header">
                     <div className="eventos-header-left">
                         <h1 className="eventos-titulo">Eventos</h1>
-                        <p className="eventos-breadcrumb">Catálogos | Eventos</p>
+                        <p className="eventos-breadcrumb">Marketing | Eventos</p>
                     </div>
                     <button className="btn-nuevo-evento">
                         <span className="btn-icono">+</span>

@@ -130,7 +130,7 @@ export const CorteCaja = () => {
                 <div className="corte-header">
                     <div className="corte-title-section">
                         <h1 className="corte-title">Corte de Caja</h1>
-                        <p className="corte-subtitle">Administración | Finanzas</p>
+                        <p className="corte-subtitle">Operaciones | Corte de caja</p>
                     </div>
                     <div className="corte-actions">
                         <button className="btn-outline" onClick={handleExportarReporte}>
