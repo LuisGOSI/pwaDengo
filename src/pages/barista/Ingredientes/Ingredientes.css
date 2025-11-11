@@ -1,5 +1,5 @@
-/* Productos Container */
-.productos-container {
+/* Ingredientes Container */
+.ingredientes-container {
     padding: 24px;
     background-color: #f8f8f8;
     min-height: 100vh;
@@ -9,32 +9,32 @@
 }
 
 /* Header */
-.productos-header {
+.ingredientes-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 32px;
 }
 
-.productos-header-left {
+.ingredientes-header-left {
     display: flex;
     flex-direction: column;
 }
 
-.productos-titulo {
+.ingredientes-titulo {
     font-size: 32px;
     font-weight: 600;
     color: #2c2c2c;
     margin: 0 0 4px 0;
 }
 
-.productos-breadcrumb {
+.ingredientes-breadcrumb {
     font-size: 14px;
     color: #999;
     margin: 0;
 }
 
-.btn-nuevo-producto {
+.btn-nuevo-ingrediente {
     background-color: #7a5c3f;
     color: white;
     border: none;
@@ -50,7 +50,7 @@
     box-shadow: 0 2px 8px rgba(122, 92, 63, 0.3);
 }
 
-.btn-nuevo-producto:hover {
+.btn-nuevo-ingrediente:hover {
     background-color: #6b4d35;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(122, 92, 63, 0.4);
@@ -62,7 +62,7 @@
 }
 
 /* Filtros */
-.productos-filtros {
+.ingredientes-filtros {
     background-color: white;
     border-radius: 12px;
     padding: 24px;
@@ -127,12 +127,11 @@
     border-color: #ccc;
 }
 
-/* Lista de Productos */
-.productos-lista {
+/* Lista de Ingredientes */
+.ingredientes-lista {
     background-color: white;
     border-radius: 12px;
     padding: 24px;
-    margin-bottom: 24px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
@@ -158,16 +157,16 @@
     overflow-x: auto;
 }
 
-.productos-tabla {
+.ingredientes-tabla {
     width: 100%;
     border-collapse: collapse;
 }
 
-.productos-tabla thead {
+.ingredientes-tabla thead {
     background-color: #fafafa;
 }
 
-.productos-tabla th {
+.ingredientes-tabla th {
     padding: 14px 16px;
     text-align: left;
     font-size: 11px;
@@ -178,27 +177,27 @@
     border-bottom: 1px solid #e8e8e8;
 }
 
-.productos-tabla td {
+.ingredientes-tabla td {
     padding: 16px;
     border-bottom: 1px solid #f0f0f0;
 }
 
-.productos-tabla tbody tr {
+.ingredientes-tabla tbody tr {
     transition: background-color 0.2s ease;
 }
 
-.productos-tabla tbody tr:hover {
+.ingredientes-tabla tbody tr:hover {
     background-color: #fafafa;
 }
 
-/* Producto Info */
-.producto-info {
+/* Ingrediente Info */
+.ingrediente-info {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.producto-avatar {
+.ingrediente-avatar {
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -212,66 +211,80 @@
     flex-shrink: 0;
 }
 
-.producto-datos {
+.ingrediente-datos {
     display: flex;
     flex-direction: column;
 }
 
-.producto-nombre {
+.ingrediente-nombre {
     font-size: 14px;
     font-weight: 600;
     color: #2c2c2c;
-    margin: 0 0 2px 0;
-}
-
-.producto-tipo {
-    font-size: 12px;
-    color: #999;
     margin: 0;
 }
 
-/* Ingredientes Lista */
-.ingredientes-lista {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    max-width: 400px;
-}
-
-.ingrediente-tag {
-    display: inline-block;
-    padding: 4px 10px;
-    background-color: #f5f5f5;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    font-size: 11px;
+.ingrediente-descripcion {
+    font-size: 14px;
     color: #666;
-    font-weight: 500;
-    white-space: nowrap;
+    line-height: 1.4;
 }
 
-/* Cantidad Badges */
-.cantidad-badge {
+/* Tipo Badges */
+.tipo-badge {
     display: inline-block;
     padding: 6px 14px;
     border-radius: 16px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
 }
 
-.cantidad-alta {
-    background-color: #e8f5e9;
-    color: #2e7d32;
+.tipo-café {
+    background-color: #ffe8d6;
+    color: #e65100;
 }
 
-.cantidad-media {
+.tipo-lácteo {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.tipo-endulzante {
+    background-color: #f3e5f5;
+    color: #8e24aa;
+}
+
+.tipo-chocolate {
+    background-color: #efebe9;
+    color: #5d4037;
+}
+
+.tipo-especia {
     background-color: #fff3e0;
     color: #ef6c00;
 }
 
-.cantidad-baja {
-    background-color: #e3f2fd;
-    color: #1565c0;
+.tipo-otro {
+    background-color: #f5f5f5;
+    color: #616161;
+}
+
+/* Estado Badges */
+.estado-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.estado-activo {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.estado-inactivo {
+    background-color: #ffebee;
+    color: #c62828;
 }
 
 /* Acciones */
@@ -299,16 +312,12 @@
     transform: scale(1.1);
 }
 
-.btn-ver:hover {
+.btn-editar:hover {
     background-color: #e3f2fd;
 }
 
-.btn-editar:hover {
+.btn-toggle:hover {
     background-color: #fff3e0;
-}
-
-.btn-eliminar:hover {
-    background-color: #ffebee;
 }
 
 /* Tabla Vacía */
@@ -323,84 +332,26 @@
     font-size: 15px;
 }
 
-/* Estadísticas */
-.productos-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-}
-
-.stat-card {
-    background-color: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    transition: all 0.3s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.stat-icono {
-    width: 56px;
-    height: 56px;
-    background-color: #f5f5f5;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    flex-shrink: 0;
-}
-
-.stat-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.stat-valor {
-    font-size: 24px;
-    font-weight: 600;
-    color: #2c2c2c;
-    margin: 0 0 4px 0;
-}
-
-.stat-label {
-    font-size: 13px;
-    color: #999;
-    margin: 0;
-    font-weight: 500;
-}
-
 /* Responsive Design */
 @media (max-width: 1024px) {
     .filtros-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
-    .productos-stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 
 @media (max-width: 768px) {
-    .productos-container {
+    .ingredientes-container {
         padding: 16px;
         margin: 10px;
     }
     
-    .productos-header {
+    .ingredientes-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 16px;
     }
     
-    .btn-nuevo-producto {
+    .btn-nuevo-ingrediente {
         width: 100%;
         justify-content: center;
     }
@@ -417,54 +368,32 @@
         overflow-x: scroll;
     }
     
-    .productos-tabla {
-        min-width: 800px;
-    }
-    
-    .productos-stats {
-        grid-template-columns: 1fr;
-    }
-    
-    .ingredientes-lista {
-        max-width: 250px;
+    .ingredientes-tabla {
+        min-width: 700px;
     }
 }
 
 @media (max-width: 480px) {
-    .productos-titulo {
+    .ingredientes-titulo {
         font-size: 26px;
     }
     
-    .productos-filtros,
-    .productos-lista {
+    .ingredientes-filtros,
+    .ingredientes-lista {
         padding: 16px;
     }
     
-    .producto-avatar {
+    .ingrediente-avatar {
         width: 38px;
         height: 38px;
         font-size: 12px;
     }
     
-    .producto-nombre {
+    .ingrediente-nombre {
         font-size: 13px;
     }
     
-    .producto-tipo {
-        font-size: 11px;
-    }
-    
-    .stat-card {
-        padding: 16px;
-    }
-    
-    .stat-icono {
-        width: 48px;
-        height: 48px;
-        font-size: 24px;
-    }
-    
-    .stat-valor {
-        font-size: 20px;
+    .ingrediente-descripcion {
+        font-size: 13px;
     }
 }
