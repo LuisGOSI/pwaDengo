@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Header from "../../components/layout/Header";
 import './Galeria.css'
@@ -26,23 +27,30 @@ export const Galeria = () => {
     return (
         <div className="galeria-container">
             <Header />
+            
             {/* Hero Section */}
             <div className="galeria-hero">
-                <h1 className="galeria-titulo">Galería</h1>
-                <p className="galeria-subtitulo">Descubre nuestra experiencia visual</p>
+                <h1 className="galeria-titulo">GALERÍA</h1>
+                <p className="galeria-subtitulo">¡Momentos que inspiran!</p>
+                <p className="galeria-descripcion">
+                    Explora nuestra colección visual y descubre<br />
+                    la experiencia única que ofrecemos
+                </p>
             </div>
 
             {/* Filtros de Categorías */}
-            <div className="galeria-filtros">
-                {categorias.map((categoria) => (
-                    <button
-                        key={categoria}
-                        className={`filtro-btn ${categoriaActiva === categoria ? 'filtro-activo' : ''}`}
-                        onClick={() => setCategoriaActiva(categoria)}
-                    >
-                        {categoria}
-                    </button>
-                ))}
+            <div className="galeria-filtros-wrapper">
+                <div className="galeria-filtros">
+                    {categorias.map((categoria) => (
+                        <button
+                            key={categoria}
+                            className={`filtro-btn ${categoriaActiva === categoria ? 'filtro-activo' : ''}`}
+                            onClick={() => setCategoriaActiva(categoria)}
+                        >
+                            {categoria}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             {/* Grid de Imágenes */}
@@ -54,6 +62,7 @@ export const Galeria = () => {
                         </div>
                         <div className="galeria-overlay">
                             <p className="galeria-item-titulo">{item.titulo}</p>
+                            <span className="galeria-item-categoria">{item.categoria}</span>
                         </div>
                     </div>
                 ))}

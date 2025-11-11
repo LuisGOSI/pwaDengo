@@ -3,7 +3,8 @@ import { useState } from 'react';
 import './Inicio.css';
 import coffeInicio from "../../assets/images/coffe-inicio.png";
 import coffeSplash from "../../assets/images/coffe-splash.png";
-import Sidebar from '../../components/layout/Sidebar';
+import ButtonAndroid from '../../components/common/ButtonAndroid';
+import ButtonIOS from '../../components/common/ButtonIOS';
 
 export default function InicioPage() {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -136,14 +137,16 @@ export default function InicioPage() {
                 <p className="app-subtitle">Descárgalo ya en Android o IOS</p>
 
                 <div className="app-icons">
-                    <a href="#" className="app-link">
+                    <a className="app-link">
                         <img
                             src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg"
                             alt="Android"
                             className="app-icon"
                         />
                     </a>
-                    <a href="#" className="app-link">
+                    <ButtonAndroid />
+                    <ButtonIOS />
+                    <a className="app-link">
                         <img
                             src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
                             alt="iOS"

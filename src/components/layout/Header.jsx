@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { UserCircle } from "lucide-react";
+import { LogIn, CircleUserRound } from "lucide-react";
 import logo from "../../assets/images/icono_dengo.svg";
 
 export default function Header() {
@@ -42,19 +42,16 @@ export default function Header() {
       <header className="header">
         <div className="header-container">
 
-          <div className="header-logo">
-            <div className="header-logo-circle">
-              <span className="header-logo-icon">
-                <picture>
-                  <img src={logo} alt="Logo Dengo" className="header-logo-img" />
-                </picture>
-              </span>
+          {/* Logo Rediseñado */}
+          <a href="/" className="header-logo" onClick={closeMenu}>
+            <div className="header-logo-icon-wrapper">
+              <img src={logo} alt="Logo Dengo" className="header-logo-img" />
             </div>
             <div className="header-logo-text">
               <span className="header-logo-title">DENGO</span>
-              <span className="header-logo-subtitle">CAFETERÍA</span>
+              <span className="header-logo-subtitle">CAFETERÍA & HOSTELERÍA</span>
             </div>
-          </div>
+          </a>
 
           <button
             className={`header-menu-toggle ${isMenuOpen ? 'active' : ''}`}
@@ -124,31 +121,32 @@ export default function Header() {
                 window.location.href = '/CarteleraEventos';
               }}
             >
-              <span className="header-nav-text">Cartelera de eventos</span>
+              <span className="header-nav-text">Eventos</span>
             </a>
 
-            { /* Boton de inicio de usuario */ }
+            {/* Botón de inicio de usuario en móvil */}
             <button
-              aria-label="Perfil de usuario"
+              aria-label="Iniciar sesión"
               className="header-user-btn header-user-btn-mobile"
               onClick={() => {
                 closeMenu();
                 window.location.href = '/login';
               }}
             >
-              <UserCircle className="header-user-icon" />
-              <span className="header-nav-text">Inicio de sesión</span>
+              <LogIn className="header-user-icon" />
+              <span className="header-nav-text">Iniciar sesión</span>
             </button>
           </nav>
 
           <button
-            aria-label="Perfil de usuario"
+            aria-label="Iniciar sesión"
             className="header-user-btn header-user-btn-desktop"
             onClick={() => {
               window.location.href = '/login';
             }}
           >
-            <UserCircle className="header-user-icon" />
+            <CircleUserRound className="header-user-icon" />
+            <span className="header-user-text">Iniciar sesión</span>
           </button>
         </div>
       </header>

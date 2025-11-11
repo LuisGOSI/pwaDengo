@@ -1,44 +1,61 @@
 import { Footer } from "../../components/layout/Footer";
 import Header from "../../components/layout/Header";
+import Card from "../../components/common/Card";
 import "./Nosotros.css";
+import johanImg from "../../assets/images/team/johan.jpg";
+import armandoImg from "../../assets/images/team/armando.jpg";
+import salasImg from "../../assets/images/team/salas.jpg";
+import charlyImg from "../../assets/images/team/charly.jpg";
+import nachoImg from "../../assets/images/team/nacho.jpg";
+import local from "../../assets/images/dengo_local.jpg";
+import product from '../../assets/images/products.png';
 
 export const Nosotros = () => {
 
     const teamMembers = [
         {
+            image: johanImg,
             name: "Johan Antonio Lino Moreno",
             role: "Head Barista",
-            description: "Certificado en alta escuela de especialidad con más de 8 años de experiencia. Su pasión por el café es contagiosa."
+            description: "Hola soy Johan, Head Barista en Dengo. Apasionado por el café de especialidad y la creación de experiencias únicas para nuestros clientes. Soy una persona que busca cumplir con sus metas y sueños. Hoy estoy aqui en Dengo para compartir mi pasión por el café contigo."
         },
         {
+            image: armandoImg,
             name: "Armando Daniel Rodríguez Fajardo",
             role: "Gerente",
-            description: "Formado en alta cocina europea, combina técnicas clásicas con sabores contemporáneos mexicanos."
+            description: "Hola Papu :V yo soy Armando, Gerente en Dengo. Me apasiona brindar un servicio excepcional y crear un ambiente acogedor para nuestros clientes. Creo firmemente en el trabajo en equipo y en la importancia de cada detalle para ofrecer una experiencia inolvidable."
         },
         {
+            image: salasImg,
             name: "José Alejandro Salas Ibarra",
-            role: "Mixólogo",
-            description: "Formado en alta cocina europea, domina técnicas clásicas con sabores contemporáneos mexicanos."
+            role: "Subgerente y Mixólogo",
+            description: "Hola soy Alejandro, Subgerente y Mixólogo en Dengo. Me encanta tanto el café como me encanta One Piece que me hace amar lo que hago. Mi objetivo es asegurarme de que cada visita a Dengo sea una experiencia memorable, llena de sabor y buen ambiente."
         },
         {
+            image: charlyImg,
             name: "Carlos Alberto Ramírez Tovar",
             role: "Barista",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            description: "Hola, yo soy Carlos o Charly para las minitas. Comencé en este trabajo porque me apasiona el olor al café, preparar bebidas y ver la sonrisa en los clientes cuando prueban nuestras creaciones. En Dengo, cada taza que sirvo es una oportunidad para compartir mi amor por el café y hacer que cada visita sea especial."
         },
         {
+            image: nachoImg,
             name: "Luis Ignacio González Silva",
-            role: "Mixólogo",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            role: "Cajero y Atención a Clientes Dengo",
+            description: "Hola, soy Ignacio o Nachito para los reales. Me encanta interactuar con los clientes y asegurarme de que tengan una experiencia agradable en Dengo. Disfruto creando un ambiente amigable y acogedor, donde cada persona se sienta valorada y bien atendida."
         }
     ];
 
     return (
-        <div>
+        <div className="nosotros-container">
             <Header />
-            <div className="menu-section">
-                <h2>NOSOTROS</h2>
-                <p>
-                    Más que una cafetería convencional, somos un espacio donde convergen el buen café, la gastronomía auténtica y momentos inolvidables
+            
+            {/* Hero Section */}
+            <div className="nosotros-hero">
+                <h1 className="nosotros-titulo">NOSOTROS</h1>
+                <p className="nosotros-subtitulo">¡Pasión que inspira!</p>
+                <p className="nosotros-descripcion">
+                    Más que una cafetería convencional, somos un espacio donde convergen<br />
+                    el buen café, la gastronomía auténtica y momentos inolvidables
                 </p>
             </div>
 
@@ -46,7 +63,7 @@ export const Nosotros = () => {
             <section className="historia-section">
                 <div className="historia-content">
                     <div className="historia-image-box">
-                        
+                        <img className="historia-img" src={ local } />
                     </div>
                     <div className="historia-text">
                         <h2>NUESTRA HISTORIA</h2>
@@ -87,57 +104,51 @@ export const Nosotros = () => {
                             en la memoria de nuestros clientes.
                         </p>
                     </div>
-                    <div className="filosofia-image-box"></div>
+                    <div className="filosofia-image-box">
+                        <img className="historia-img" src={ product } alt="producto" />
+                    </div>
                 </div>
             </section>
 
             {/* Sección Visión, Misión y Valores */}
             <section className="vision-section">
-                <h2>NUESTRA VISIÓN, MISIÓN Y VALORES</h2>
+                <h2>VISIÓN, MISIÓN Y VALORES</h2>
                 <div className="vision-cards">
                     <div className="vision-card">
+                        <h3>VISIÓN</h3>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                            pariatur.
+                            Tenemos la visión de ser reconocidos como un referente en la industria de la hospitalidad,
+                            destacándonos por nuestra calidad, innovación y compromiso con la comunidad.
                         </p>
                     </div>
                     <div className="vision-card">
+                        <h3>MISIÓN</h3>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                            pariatur.
+                            Nuestra misión es ofrecer una experiencia excepcional a través de productos de alta calidad,
+                            un servicio cálido y un ambiente acogedor que invite a nuestros clientes a regresar.
                         </p>
                     </div>
                     <div className="vision-card">
+                        <h3>VALORES</h3>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                            pariatur.
+                            Calidad, Sostenibilidad, Innovación, Comunidad, Pasión por el servicio.
                         </p>
                     </div>
                 </div>
             </section>
 
-            {/* Sección Equipo */}
+            {/* Sección Equipo - AHORA USA EL COMPONENTE CARD */}
             <section className="equipo-section">
                 <h2>NUESTRO EQUIPO</h2>
                 <div className="equipo-grid">
                     {teamMembers.map((member, index) => (
-                        <div key={index} className="team-member">
-                            <div className="member-image">
-                                <div className="placeholder-image"></div>
-                            </div>
-                            <h3>{member.name}</h3>
-                            <h4>{member.role}</h4>
-                            <p>{member.description}</p>
-                        </div>
+                        <Card 
+                            key={index}
+                            name={member.name}
+                            role={member.role}
+                            description={member.description}
+                            image={member.image}
+                        />
                     ))}
                 </div>
             </section>
