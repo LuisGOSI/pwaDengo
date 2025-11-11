@@ -8,111 +8,14 @@ import { useShowContent } from "../../../utils/UseShowContent";
 import { FormProductos } from "./FormProductos";
 
 export const Productos = () => {
-    const { isOpen } = useSidebar();
-    const [busqueda, setBusqueda] = useState('');
-    const [categoria, setCategoria] = useState('');
-    const [estado, setEstado] = useState('');
-    const [sucursal, setSucursal] = useState('');
+  const { isOpen } = useSidebar();
+  const [busqueda, setBusqueda] = useState("");
+  const [categoria, setCategoria] = useState("");
+  const [estado, setEstado] = useState("");
+  const [sucursal, setSucursal] = useState("");
 
-    const productos = [
-        {
-            id: 1,
-            nombre: 'Cappuccino Especial',
-            descripcion: 'Café espresso con espuma',
-            categoria: 'Café',
-            sucursal: 'Todas',
-            precio: '$65.00',
-            iniciales: 'CE',
-            colorCategoria: 'cafe'
-        },
-        {
-            id: 2,
-            nombre: 'Croissant Francés',
-            descripcion: 'Recién horneado',
-            categoria: 'Panadería',
-            sucursal: 'Centro',
-            precio: '$45.00',
-            iniciales: 'CF',
-            colorCategoria: 'panaderia'
-        },
-        {
-            id: 3,
-            nombre: 'Espresso Doble',
-            descripcion: 'Shot doble intenso',
-            categoria: 'Café',
-            sucursal: 'Centro',
-            precio: '$50.00',
-            iniciales: 'ED',
-            colorCategoria: 'cafe'
-        },
-        {
-            id: 4,
-            nombre: 'Sandwich Club',
-            descripcion: 'Triple piso con pollo',
-            categoria: 'Comida',
-            sucursal: 'Norte',
-            precio: '$95.00',
-            iniciales: 'SC',
-            colorCategoria: 'comida'
-        },
-        {
-            id: 5,
-            nombre: 'Jugo Natural',
-            descripcion: 'Naranja fresca',
-            categoria: 'Bebidas',
-            sucursal: 'Centro',
-            precio: '$40.00',
-            iniciales: 'JN',
-            colorCategoria: 'bebidas'
-        },
-        {
-            id: 6,
-            nombre: 'Pastel de Chocolate',
-            descripcion: 'Rebanada generosa',
-            categoria: 'Postres',
-            sucursal: 'Sur',
-            precio: '$55.00',
-            iniciales: 'PC',
-            colorCategoria: 'postres'
-        }
-    ];
-
-    const handleFiltrar = () => {
-        console.log('Filtrando productos...', { busqueda, categoria, estado, sucursal });
-    };
-
-    return (
-        <main className={`main-content ${!isOpen ? 'sidebar-closed' : ''}`}>
-            <div className="productos-container">
-                <Sidebar />
-                <div className="productos-header">
-                    <div className="productos-header-left">
-                        <h1 className="productos-titulo">Catálogo de Productos</h1>
-                        <p className="productos-breadcrumb">Productos | Catálogo de Productos</p>
-                    </div>
-                    <button className="btn-nuevo-producto">
-                        <span className="btn-icono">+</span>
-                        Nuevo Producto
-                    </button>
-                </div>
-
-                {/* Filtros */}
-                <div className="productos-filtros">
-                    <div className="filtros-grid">
-                        <div className="filtro-group">
-                            <label>Buscar</label>
-                            <input
-                                type="text"
-                                value={busqueda}
-                                onChange={(e) => setBusqueda(e.target.value)}
-                                className="filtro-input"
-                            />
-                        </div>
-
-  //[CAMBIOS NUEVOS]
-
-  const { get, del } = useAPI("http://localhost:3000/api/"); //Se pasas la URL base como parametro
-  const [productos, setProductos] = useState([]); //Estado para almacenar los productos
+  const { get, del } = useAPI("http://localhost:3000/api/");
+  const [productos, setProductos] = useState([]);
   const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } =
     useShowContent();
 
@@ -122,7 +25,7 @@ export const Productos = () => {
 
   const loadProductos = () => {
     get("productos").then((res) => {
-      setProductos(res.data); //Asumiendo que la respuesta tiene una estructura {data: [...]}
+      setProductos(res.data);
     });
   };
 
@@ -138,9 +41,7 @@ export const Productos = () => {
   const handleDelete = async (id) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar este producto?")) {
       const result = await del(`productos/${id}`);
-      if (result) {
-        loadProductos(); // Recargar la lista después de eliminar
-      }
+      if (result) loadProductos();
     }
   };
 
@@ -150,24 +51,30 @@ export const Productos = () => {
 
   const handleFormClose = () => {
     handleCloseForm();
-    loadProductos(); // Recargar la lista después de cerrar el formulario
+    loadProductos();
   };
 
   return (
     <main className={`main-content ${!isOpen ? "sidebar-closed" : ""}`}>
       <div className="productos-container">
         <Sidebar />
+
+        {/* Header */}
         <div className="productos-header">
           <div className="productos-header-left">
             <h1 className="productos-titulo">Catálogo de Productos</h1>
-            <p className="productos-breadcrumb">Clientes | Productos</p>
+            <p className="productos-breadcrumb">Productos | Catálogo</p>
           </div>
-          <button onClick={showForm? handleFormClose: handleAdd} className="btn-nuevo-producto">
+          <button
+            onClick={showForm ? handleFormClose : handleAdd}
+            className="btn-nuevo-producto"
+          >
             <span className="btn-icono">+</span>
             Nuevo Producto
           </button>
         </div>
 
+        {/* Formulario */}
         {showForm && (
           <FormProductos initialData={objEdit} onClose={handleFormClose} />
         )}
@@ -236,6 +143,7 @@ export const Productos = () => {
           </button>
         </div>
 
+        {/* Lista de productos */}
         {productos.length === 0 ? (
           <p className="sin-productos">No hay productos disponibles.</p>
         ) : (
@@ -263,8 +171,8 @@ export const Productos = () => {
                       <td>
                         <div className="producto-info">
                           <div className="producto-avatar">
-                            {producto.nombre.charAt(0) +
-                              producto.nombre.charAt(1)}
+                            {producto.nombre.charAt(0).toUpperCase() +
+                              (producto.nombre.charAt(1)?.toUpperCase() || "")}
                           </div>
                           <div className="producto-datos">
                             <p className="producto-nombre">{producto.nombre}</p>
@@ -304,6 +212,7 @@ export const Productos = () => {
                               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                             </svg>
                           </button>
+
                           <button
                             onClick={() => handleDelete(producto.id)}
                             className="btn-accion btn-eliminar"
@@ -336,6 +245,8 @@ export const Productos = () => {
           </div>
         )}
       </div>
+
+      <Outlet />
     </main>
   );
 };
