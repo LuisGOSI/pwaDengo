@@ -9,6 +9,7 @@
     padding: 1rem;
     position: relative;
     overflow: hidden;
+    margin-top: 80px;
 }
 
 .login-content {
