@@ -18,8 +18,7 @@ export const Productos = () => {
 
   const { get, del } = useAPI("http://localhost:3000/api/"); //Se pasas la URL base como parametro
   const [productos, setProductos] = useState([]); //Estado para almacenar los productos
-  const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } =
-    useShowContent();
+  const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } = useShowContent();
 
   useEffect(() => {
     loadProductos();
@@ -27,7 +26,7 @@ export const Productos = () => {
 
   const loadProductos = () => {
     get("productos").then((res) => {
-      setProductos(res.data); //Asumiendo que la respuesta tiene una estructura {data: [...]}
+      setProductos(res.data);
     });
   };
 
