@@ -1,100 +1,79 @@
-import React, { useState } from 'react';
-import './Ingredientes.css';
-import Sidebar from '../../../components/layout/Sidebar';
-import { useSidebar } from '../../../context/SidebarContext';
-import { Outlet } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import "./Ingredientes.css";
+import Sidebar from "../../../components/layout/Sidebar";
+import { useSidebar } from "../../../context/SidebarContext";
+import { Outlet } from "react-router-dom";
+import { useAPI } from "../../../utils/UseAPI";
+import { useShowContent } from "../../../utils/UseShowContent";
+import { FormIngredientes } from "./FormIngredientes";
 
 export const Ingredientes = () => {
   const { isOpen } = useSidebar();
-  const [ingredientes, setIngredientes] = useState([
-    {
-      id: 1,
-      nombre: 'Café Arábica',
-      descripcion: 'Granos de café premium de origen colombiano',
-      tipo: 'Café',
-      activo: true
-    },
-    {
-      id: 2,
-      nombre: 'Leche Entera',
-      descripcion: 'Leche fresca pasteurizada para bebidas',
-      tipo: 'Lácteo',
-      activo: true
-    },
-    {
-      id: 3,
-      nombre: 'Jarabe de Vainilla',
-      descripcion: 'Jarabe natural de vainilla Madagascar',
-      tipo: 'Endulzante',
-      activo: true
-    },
-    {
-      id: 4,
-      nombre: 'Chocolate en Polvo',
-      descripcion: 'Cacao puro en polvo sin azúcar añadido',
-      tipo: 'Chocolate',
-      activo: false
-    },
-    {
-      id: 5,
-      nombre: 'Crema Batida',
-      descripcion: 'Crema para batir 35% grasa',
-      tipo: 'Lácteo',
-      activo: true
-    },
-    {
-      id: 6,
-      nombre: 'Canela en Polvo',
-      descripcion: 'Canela molida de Ceilán',
-      tipo: 'Especia',
-      activo: true
-    }
-  ]);
+  const [ingredientes, setIngredientes] = useState([]);
+  const { get, error, loading } = useAPI("http://localhost:3000/api/");
+  const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } =
+    useShowContent();
+
+  useEffect(() => {
+    loadIngredientes();
+  }, []);
+
+  const loadIngredientes = () => {
+    get("ingredientes").then((res) => {
+      setIngredientes(res.data);
+    });
+  };
 
   const [filtros, setFiltros] = useState({
-    busqueda: '',
-    tipo: '',
-    estado: ''
+    busqueda: "",
+    tipo: "",
+    estado: "",
   });
 
-  const tipos = ['Café', 'Lácteo', 'Endulzante', 'Chocolate', 'Especia', 'Otro'];
+  const tipos = [
+    "Base",
+    "Endulzante",
+    "Lacteo",
+  ];
 
   const handleFiltroChange = (e) => {
     const { name, value } = e.target;
-    setFiltros(prev => ({
+    setFiltros((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
-  const ingredientesFiltrados = ingredientes.filter(ing => {
-    const matchBusqueda = ing.nombre.toLowerCase().includes(filtros.busqueda.toLowerCase()) ||
+  const ingredientesFiltrados = ingredientes.filter((ing) => {
+    const matchBusqueda =
+      ing.nombre.toLowerCase().includes(filtros.busqueda.toLowerCase()) ||
       ing.descripcion.toLowerCase().includes(filtros.busqueda.toLowerCase());
     const matchTipo = !filtros.tipo || ing.tipo === filtros.tipo;
-    const matchEstado = !filtros.estado ||
-      (filtros.estado === 'activo' && ing.activo) ||
-      (filtros.estado === 'inactivo' && !ing.activo);
+    const matchEstado =
+      !filtros.estado ||
+      (filtros.estado === "activo" && ing.activo) ||
+      (filtros.estado === "inactivo" && !ing.activo);
 
     return matchBusqueda && matchTipo && matchEstado;
   });
 
   const toggleActivo = (id) => {
-    setIngredientes(prev => prev.map(ing =>
-      ing.id === id ? { ...ing, activo: !ing.activo } : ing
-    ));
+    setIngredientes((prev) =>
+      prev.map((ing) => (ing.id === id ? { ...ing, activo: !ing.activo } : ing))
+    );
   };
 
   const getIniciales = (nombre) => {
     return nombre
-      .split(' ')
-      .map(word => word[0])
-      .join('')
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
       .toUpperCase()
       .substring(0, 2);
   };
 
   return (
-    <main className={`main-content ${!isOpen ? 'sidebar-closed' : ''}`}>
+    <main className={`main-content ${!isOpen ? "sidebar-closed" : ""}`}>
       <div className="ingredientes-container">
         <Sidebar />
         <div className="ingredientes-header">
@@ -102,11 +81,18 @@ export const Ingredientes = () => {
             <h1 className="ingredientes-titulo">Ingredientes</h1>
             <p className="ingredientes-breadcrumb">Productos / Ingredientes</p>
           </div>
-          <button className="btn-nuevo-ingrediente">
+          <button
+            className="btn-nuevo-ingrediente"
+            onClick={showForm ? handleCloseForm : handleAdd}
+          >
             <span className="btn-icono">+</span>
             Nuevo Ingrediente
           </button>
         </div>
+
+        {showForm && (
+          <FormIngredientes initialData={objEdit} onClose={handleCloseForm} />
+        )}
 
         {/* Filtros */}
         <div className="ingredientes-filtros">
@@ -132,8 +118,10 @@ export const Ingredientes = () => {
                 onChange={handleFiltroChange}
               >
                 <option value="">Todos los tipos</option>
-                {tipos.map(tipo => (
-                  <option key={tipo} value={tipo}>{tipo}</option>
+                {tipos.map((tipo) => (
+                  <option key={tipo} value={tipo}>
+                    {tipo}
+                  </option>
                 ))}
               </select>
             </div>
@@ -152,10 +140,12 @@ export const Ingredientes = () => {
               </select>
             </div>
 
-            <div className="filtro-group" style={{ alignSelf: 'flex-end' }}>
+            <div className="filtro-group" style={{ alignSelf: "flex-end" }}>
               <button
                 className="btn-filtrar"
-                onClick={() => setFiltros({ busqueda: '', tipo: '', estado: '' })}
+                onClick={() =>
+                  setFiltros({ busqueda: "", tipo: "", estado: "" })
+                }
               >
                 Limpiar filtros
               </button>
@@ -168,7 +158,8 @@ export const Ingredientes = () => {
           <div className="lista-header">
             <h2 className="lista-titulo">Lista de Ingredientes</h2>
             <p className="lista-subtitulo">
-              Mostrando {ingredientesFiltrados.length} de {ingredientes.length} ingredientes
+              Mostrando {ingredientesFiltrados.length} de {ingredientes.length}{" "}
+              ingredientes
             </p>
           </div>
 
@@ -184,7 +175,7 @@ export const Ingredientes = () => {
                 </tr>
               </thead>
               <tbody>
-                {ingredientesFiltrados.map(ingrediente => (
+                {ingredientesFiltrados.map((ingrediente) => (
                   <tr key={ingrediente.id}>
                     <td>
                       <div className="ingrediente-info">
@@ -192,7 +183,9 @@ export const Ingredientes = () => {
                           {getIniciales(ingrediente.nombre)}
                         </div>
                         <div className="ingrediente-datos">
-                          <p className="ingrediente-nombre">{ingrediente.nombre}</p>
+                          <p className="ingrediente-nombre">
+                            {ingrediente.nombre}
+                          </p>
                         </div>
                       </div>
                     </td>
@@ -202,29 +195,66 @@ export const Ingredientes = () => {
                       </span>
                     </td>
                     <td>
-                      <span className={`tipo-badge tipo-${ingrediente.tipo.toLowerCase()}`}>
+                      <span
+                        className={`tipo-badge tipo-${ingrediente.tipo.toLowerCase()}`}
+                      >
                         {ingrediente.tipo}
                       </span>
                     </td>
                     <td>
-                      <span className={`estado-badge ${ingrediente.activo ? 'estado-activo' : 'estado-inactivo'}`}>
-                        {ingrediente.activo ? 'Activo' : 'Inactivo'}
+                      <span
+                        className={`estado-badge ${
+                          ingrediente.activo
+                            ? "estado-activo"
+                            : "estado-inactivo"
+                        }`}
+                      >
+                        {ingrediente.activo ? "Activo" : "Inactivo"}
                       </span>
                     </td>
                     <td>
                       <div className="acciones-container">
                         <button
+                          onClick={() => handleEdit(ingrediente)}
                           className="btn-accion btn-editar"
-                          title="Editar"
+                          title="Editar producto"
                         >
-                          ✏️
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                          </svg>
                         </button>
                         <button
-                          className="btn-accion btn-toggle"
-                          onClick={() => toggleActivo(ingrediente.id)}
-                          title={ingrediente.activo ? 'Desactivar' : 'Activar'}
+                          onClick={() => handleDelete(ingrediente.id)}
+                          className="btn-accion btn-eliminar"
+                          title="Eliminar producto"
                         >
-                          {ingrediente.activo ? '🔓' : '🔒'}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                          </svg>
                         </button>
                       </div>
                     </td>
@@ -245,5 +275,3 @@ export const Ingredientes = () => {
     </main>
   );
 };
-
-

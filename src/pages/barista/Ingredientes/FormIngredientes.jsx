@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import { useAPI } from "../../../utils/UseAPI";
 import { useForm } from "../../../utils/UseForm";
-import "./Productos.css";
 
-export const FormProductos = ({ initialData, onClose }) => {
+export const FormIngredientes = ({ initialData, onClose }) => {
   const { formData, handleInputChange, resetForm, setFormData } = useForm({
     nombre: "",
     descripcion: "",
-    precio: 0,
-    url_imagen: "",
-    categoria_id: 0,
+    tipo: "",
+    activo: "",
     creado_por: "b46d3602-5244-49b5-a0d6-d17233e28aa4",
   });
 
@@ -20,10 +18,10 @@ export const FormProductos = ({ initialData, onClose }) => {
 
     // Si hay initialData → EDITAR
     if (initialData) {
-      result = await put(`productos/${initialData.id}`, formData);
+      result = await put(`ingredientes/${initialData.id}`, formData);
     } else {
       // Si no → AGREGAR
-      result = await post("productos", formData);
+      result = await post("ingredientes", formData);
     }
 
     if (result) {
@@ -50,7 +48,7 @@ export const FormProductos = ({ initialData, onClose }) => {
       <div  className="form">
         <div className="formGrid">
           <div>
-            <label className="label">Nombre del Producto *</label>
+            <label className="label">Nombre del ingrediente *</label>
             <input
               type="text"
               name="nombre"
@@ -74,71 +72,17 @@ export const FormProductos = ({ initialData, onClose }) => {
             />
           </div>
 
-          <div>
-            <label className="label">Precio</label>
-            <input
-              type="number"
-              name="precio"
-              value={formData.precio}
-              onChange={handleInputChange}
-              placeholder="0.00"
-              step="0.01"
-              min="0"
-              required
-              className="input"
-            />
-          </div>
+
 
           <div>
-            <label className="label">URL Imagen *</label>
-            <input
-              type="text"
-              name="url_imagen"
-              value={formData.url_imagen}
-              onChange={handleInputChange}
-              placeholder="0.00"
-              required
-              className="input"
-            />
-          </div>
-
-          <div>
-            <label className="label">Categoria</label>
-            <input
-              type="number"
-              name="categoria_id"
-              value={formData.categoria_id}
-              onChange={handleInputChange}
-              placeholder="0.00"
-              step="1"
-              min="0"
-              required
-              className="input"
-            />
-          </div>
-
-          <div>
-            <label className="label">Categoría *</label>
-            <select name="categoria" className="select">
+            <label className="label">Tipo *</label>
+            <select name="tipo" className="select" value={formData.tipo} onChange={handleInputChange}>
               <option value="">Selecciona una categoría</option>
-              <option value="Bebidas">Bebidas</option>
-              <option value="Postres">Postres</option>
-              <option value="Comida">Comida</option>
-              <option value="Panadería">Panadería</option>
+              <option value="Base">Base</option>
+              <option value="Endulzante">Endulzante</option>
+              <option value="Lacteo">Lacteo</option>
             </select>
           </div>
-        </div>
-
-        <div className="checkboxContainer">
-          <input
-            type="checkbox"
-            name="disponible"
-            className="checkbox"
-            id="disponible"
-          />
-          <label htmlFor="disponible" className="checkboxLabel">
-            Producto disponible
-          </label>
         </div>
 
         {/* Submit Buttons */}
@@ -147,7 +91,7 @@ export const FormProductos = ({ initialData, onClose }) => {
             Cancelar
           </button>
           <button type="submit" onClick={handleSubmit} className="submitButton">
-            Guardar Producto
+            Guardar ingrediente
           </button>
         </div>
       </div>
