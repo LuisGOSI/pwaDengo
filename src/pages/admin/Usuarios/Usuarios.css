@@ -331,4 +331,102 @@
     }
 }
 
+/* Estado Switch */
+.estado-switch {
+    display: inline-flex;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 4px;
+    gap: 4px;
+    border: 1px solid #e0e0e0;
+}
 
+.switch-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.switch-btn:hover:not(:disabled) {
+    color: #2c2c2c;
+    background-color: rgba(122, 92, 63, 0.08);
+}
+
+.switch-btn.active {
+    background-color: #7a5c3f;
+    color: white;
+    box-shadow: 0 2px 4px rgba(122, 92, 63, 0.2);
+}
+
+.switch-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Label de Total */
+.total-label {
+    font-size: 13px;
+    color: #999;
+    margin-top: 8px;
+    font-weight: 400;
+}
+
+.total-label strong {
+    color: #2c2c2c;
+    font-weight: 600;
+}
+
+/* Variante con label integrado */
+.filtro-group-estado {
+    display: flex;
+    flex-direction: column;
+}
+
+.filtro-group-estado > label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 8px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.label-total {
+    font-size: 11px;
+    color: #999;
+    font-weight: 400;
+}
+
+.label-total .numero {
+    color: #7a5c3f;
+    font-weight: 600;
+}
+
+/* Responsive para Switch */
+@media (max-width: 768px) {
+    .estado-switch {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .switch-btn {
+        flex: 1;
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .switch-btn {
+        padding: 8px 8px;
+        font-size: 11px;
+    }
+}
