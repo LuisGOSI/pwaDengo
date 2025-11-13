@@ -8,113 +8,17 @@ import { useShowContent } from "../../../utils/UseShowContent";
 import { FormProductos } from "./FormProductos";
 
 export const Productos = () => {
-    const { isOpen } = useSidebar();
-    const [busqueda, setBusqueda] = useState('');
-    const [categoria, setCategoria] = useState('');
-    const [estado, setEstado] = useState('');
-    const [sucursal, setSucursal] = useState('');
-
-    const productos = [
-        {
-            id: 1,
-            nombre: 'Cappuccino Especial',
-            descripcion: 'Café espresso con espuma',
-            categoria: 'Café',
-            sucursal: 'Todas',
-            precio: '$65.00',
-            iniciales: 'CE',
-            colorCategoria: 'cafe'
-        },
-        {
-            id: 2,
-            nombre: 'Croissant Francés',
-            descripcion: 'Recién horneado',
-            categoria: 'Panadería',
-            sucursal: 'Centro',
-            precio: '$45.00',
-            iniciales: 'CF',
-            colorCategoria: 'panaderia'
-        },
-        {
-            id: 3,
-            nombre: 'Espresso Doble',
-            descripcion: 'Shot doble intenso',
-            categoria: 'Café',
-            sucursal: 'Centro',
-            precio: '$50.00',
-            iniciales: 'ED',
-            colorCategoria: 'cafe'
-        },
-        {
-            id: 4,
-            nombre: 'Sandwich Club',
-            descripcion: 'Triple piso con pollo',
-            categoria: 'Comida',
-            sucursal: 'Norte',
-            precio: '$95.00',
-            iniciales: 'SC',
-            colorCategoria: 'comida'
-        },
-        {
-            id: 5,
-            nombre: 'Jugo Natural',
-            descripcion: 'Naranja fresca',
-            categoria: 'Bebidas',
-            sucursal: 'Centro',
-            precio: '$40.00',
-            iniciales: 'JN',
-            colorCategoria: 'bebidas'
-        },
-        {
-            id: 6,
-            nombre: 'Pastel de Chocolate',
-            descripcion: 'Rebanada generosa',
-            categoria: 'Postres',
-            sucursal: 'Sur',
-            precio: '$55.00',
-            iniciales: 'PC',
-            colorCategoria: 'postres'
-        }
-    ];
-
-    const handleFiltrar = () => {
-        console.log('Filtrando productos...', { busqueda, categoria, estado, sucursal });
-    };
-
-    return (
-        <main className={`main-content ${!isOpen ? 'sidebar-closed' : ''}`}>
-            <div className="productos-container">
-                <Sidebar />
-                <div className="productos-header">
-                    <div className="productos-header-left">
-                        <h1 className="productos-titulo">Catálogo de Productos</h1>
-                        <p className="productos-breadcrumb">Productos | Catálogo de Productos</p>
-                    </div>
-                    <button className="btn-nuevo-producto">
-                        <span className="btn-icono">+</span>
-                        Nuevo Producto
-                    </button>
-                </div>
-
-                {/* Filtros */}
-                <div className="productos-filtros">
-                    <div className="filtros-grid">
-                        <div className="filtro-group">
-                            <label>Buscar</label>
-                            <input
-                                type="text"
-                                value={busqueda}
-                                onChange={(e) => setBusqueda(e.target.value)}
-                                className="filtro-input"
-                            />
-                        </div>
+  const { isOpen } = useSidebar();
+  const [busqueda, setBusqueda] = useState("");
+  const [categoria, setCategoria] = useState("");
+  const [estado, setEstado] = useState("");
+  const [sucursal, setSucursal] = useState("");
 
   //[CAMBIOS NUEVOS]
 
   const { get, del } = useAPI("http://localhost:3000/api/"); //Se pasas la URL base como parametro
   const [productos, setProductos] = useState([]); //Estado para almacenar los productos
-  const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } =
-    useShowContent();
+  const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } = useShowContent();
 
   useEffect(() => {
     loadProductos();
@@ -122,7 +26,7 @@ export const Productos = () => {
 
   const loadProductos = () => {
     get("productos").then((res) => {
-      setProductos(res.data); //Asumiendo que la respuesta tiene una estructura {data: [...]}
+      setProductos(res.data);
     });
   };
 
