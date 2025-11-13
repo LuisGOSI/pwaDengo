@@ -14,10 +14,11 @@ export const Productos = () => {
   const [estado, setEstado] = useState("");
   const [sucursal, setSucursal] = useState("");
 
-  const { get, del } = useAPI("http://localhost:3000/api/");
-  const [productos, setProductos] = useState([]);
-  const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } =
-    useShowContent();
+  //[CAMBIOS NUEVOS]
+
+  const { get, del } = useAPI("http://localhost:3000/api/"); //Se pasas la URL base como parametro
+  const [productos, setProductos] = useState([]); //Estado para almacenar los productos
+  const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } = useShowContent();
 
   useEffect(() => {
     loadProductos();
