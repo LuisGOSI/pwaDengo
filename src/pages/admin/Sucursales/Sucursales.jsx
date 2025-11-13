@@ -7,6 +7,7 @@ import { Outlet } from 'react-router-dom';
 
 export const Sucursales = () => {
     const { isOpen } = useSidebar();
+
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
     const [editando, setEditando] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -166,8 +167,8 @@ export const Sucursales = () => {
     return (
         <main className={`main-content ${!isOpen ? 'sidebar-closed' : ''}`}>
             <div>
-                <Sidebar />
                 <div className="sucursales-container">
+                    <Sidebar />
                     <div className="sucursales-header">
                         <div className="sucursales-header-left">
                             <h1 className="sucursales-titulo">Catálogo de Sucursales</h1>
