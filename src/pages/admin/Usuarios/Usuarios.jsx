@@ -34,6 +34,7 @@ export const Usuarios = () => {
   const [busqueda, setBusqueda] = useState('');
   const [rolFiltro, setRolFiltro] = useState('');
   const [sucursalFiltro, setSucursalFiltro] = useState('');
+  const [estadoFiltro, setEstadoFiltro] = useState('activos'); // 'activos', 'inactivos', 'todos'
   const [formData, setFormData] = useState(ESTADO_INICIAL_FORM);
   const [usuarios, setUsuarios] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -83,7 +84,7 @@ export const Usuarios = () => {
       { id: 1, nombre: 'Admin' },
       { id: 2, nombre: 'Gerente' },
       { id: 3, nombre: 'Barista' },
-      { id: 4, nombre: 'Caja' }
+      { id: 4, nombre: 'Cajero' }
     ]);
   };
 
@@ -169,9 +170,10 @@ export const Usuarios = () => {
       const method = editando ? 'PUT' : 'POST';
 
       const userData = {
-        nombre: formData.nombre || null,
-        apellidos: formData.apellidos || null,
+        nombre: formData.nombre,
+        apellidos: formData.apellidos,
         email: formData.email,
+        password: formData.password || undefined, // Enviar solo si existe
         fecha_nacimiento: formData.fecha_nacimiento || null,
         genero: formData.genero || null,
         telefono: formData.telefono || null,
@@ -179,12 +181,12 @@ export const Usuarios = () => {
         sucursal_personal_id: parseInt(formData.sucursal_personal_id)
       };
 
-      // Solo incluir password si hay uno nuevo
-      if (formData.password) {
-        userData.password = formData.password;
+      // Si estamos editando y no hay password, eliminar el campo
+      if (editando && !formData.password) {
+        delete userData.password;
       }
 
-      if (editando) userData.id = editando; // Usar el ID original del estado
+      console.log('Enviando datos:', { url, method, userData });
 
       const response = await fetch(url, {
         method,
@@ -192,7 +194,9 @@ export const Usuarios = () => {
         body: JSON.stringify(userData)
       });
 
+      console.log('Status de respuesta:', response.status);
       const result = await response.json();
+      console.log('Resultado:', result);
 
       if (result.success) {
         await cargarUsuarios();
@@ -243,14 +247,24 @@ export const Usuarios = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+      console.log('Eliminando usuario con ID:', id);
+      const url = `${API_URL}/${id}`;
+      console.log('URL de eliminación:', url);
+      
+      const response = await fetch(url, { 
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      console.log('Status de respuesta DELETE:', response.status);
       const result = await response.json();
+      console.log('Resultado DELETE:', result);
 
       if (result.success) {
         await cargarUsuarios();
         showToast('success', 'Usuario Eliminado', 'El usuario ha sido eliminado permanentemente');
       } else {
-        showToast('error', 'Error al Eliminar', 'No se pudo eliminar el usuario');
+        showToast('error', 'Error al Eliminar', result.message || 'No se pudo eliminar el usuario');
       }
     } catch (err) {
       console.error('Error al eliminar usuario:', err);
@@ -291,6 +305,7 @@ export const Usuarios = () => {
     setBusqueda('');
     setRolFiltro('');
     setSucursalFiltro('');
+    setEstadoFiltro('activos');
   };
 
   // ========== UTILIDADES ==========
@@ -309,6 +324,7 @@ export const Usuarios = () => {
     };
     return colores[rolNombre?.toLowerCase()] || 'default';
   };
+
   // ========== DATOS CALCULADOS ==========
   const filteredUsuarios = usuarios.filter(usuario => {
     const matchesSearch = 
@@ -319,8 +335,20 @@ export const Usuarios = () => {
     const matchesRol = !rolFiltro || usuario.rol_id === parseInt(rolFiltro);
     const matchesSucursal = !sucursalFiltro || usuario.sucursal_personal_id === parseInt(sucursalFiltro);
     
-    return matchesSearch && matchesRol && matchesSucursal;
+    // Filtro de estado (activo/inactivo)
+    let matchesEstado = true;
+    if (estadoFiltro === 'activos') {
+      matchesEstado = usuario.activo === true;
+    } else if (estadoFiltro === 'inactivos') {
+      matchesEstado = usuario.activo === false;
+    }
+    // Si es 'todos', matchesEstado permanece true
+    
+    return matchesSearch && matchesRol && matchesSucursal && matchesEstado;
   });
+
+  const usuariosActivos = usuarios.filter(u => u.activo).length;
+  const usuariosInactivos = usuarios.filter(u => !u.activo).length;
 
   // ========== COMPONENTE LOADER ==========
   const Loader = () => (
@@ -598,6 +626,33 @@ export const Usuarios = () => {
                 ))}
               </select>
             </div>
+
+            <div className="filtro-group">
+              <label>Estado</label>
+              <div className="estado-switch">
+                <button
+                  className={`switch-btn ${estadoFiltro === 'activos' ? 'active' : ''}`}
+                  onClick={() => setEstadoFiltro('activos')}
+                  disabled={loading}
+                >
+                  Activos ({usuariosActivos})
+                </button>
+                <button
+                  className={`switch-btn ${estadoFiltro === 'inactivos' ? 'active' : ''}`}
+                  onClick={() => setEstadoFiltro('inactivos')}
+                  disabled={loading}
+                >
+                  Inactivos ({usuariosInactivos})
+                </button>
+                <button
+                  className={`switch-btn ${estadoFiltro === 'todos' ? 'active' : ''}`}
+                  onClick={() => setEstadoFiltro('todos')}
+                  disabled={loading}
+                >
+                  Todos ({usuarios.length})
+                </button>
+              </div>
+            </div>
           </div>
 
           <button 
@@ -655,6 +710,9 @@ export const Usuarios = () => {
                       <td className="usuario-telefono">{usuario.telefono || 'N/A'}</td>
                       <td>
                         <div className="acciones-tabla">
+                          <span className={`estado-badge ${usuario.activo ? 'estado-activo' : 'estado-inactivo'}`}>
+                            {usuario.activo ? '● Activo' : '● Inactivo'}
+                          </span>
                           <button
                             className="btn-accion-tabla btn-editar-tabla"
                             onClick={() => handleEditar(usuario)}
