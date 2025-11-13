@@ -46,7 +46,7 @@ export const Eventos = () => {
       hasCargadoInicial.current = true;
       cargarDatosIniciales();
     }
-  }, []);
+  });
 
   // ========== API CALLS ==========
   const cargarDatosIniciales = async () => {
