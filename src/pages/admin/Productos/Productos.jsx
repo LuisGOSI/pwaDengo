@@ -42,9 +42,7 @@ export const Productos = () => {
   const handleDelete = async (id) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar este producto?")) {
       const result = await del(`productos/${id}`);
-      if (result) {
-        loadProductos(); // Recargar la lista después de eliminar
-      }
+      if (result) loadProductos();
     }
   };
 
@@ -54,24 +52,30 @@ export const Productos = () => {
 
   const handleFormClose = () => {
     handleCloseForm();
-    loadProductos(); // Recargar la lista después de cerrar el formulario
+    loadProductos();
   };
 
   return (
     <main className={`main-content ${!isOpen ? "sidebar-closed" : ""}`}>
       <div className="productos-container">
         <Sidebar />
+
+        {/* Header */}
         <div className="productos-header">
           <div className="productos-header-left">
             <h1 className="productos-titulo">Catálogo de Productos</h1>
-            <p className="productos-breadcrumb">Clientes | Productos</p>
+            <p className="productos-breadcrumb">Productos | Catálogo</p>
           </div>
-          <button onClick={showForm? handleFormClose: handleAdd} className="btn-nuevo-producto">
+          <button
+            onClick={showForm ? handleFormClose : handleAdd}
+            className="btn-nuevo-producto"
+          >
             <span className="btn-icono">+</span>
             Nuevo Producto
           </button>
         </div>
 
+        {/* Formulario */}
         {showForm && (
           <FormProductos initialData={objEdit} onClose={handleFormClose} />
         )}
@@ -140,6 +144,7 @@ export const Productos = () => {
           </button>
         </div>
 
+        {/* Lista de productos */}
         {productos.length === 0 ? (
           <p className="sin-productos">No hay productos disponibles.</p>
         ) : (
@@ -167,8 +172,8 @@ export const Productos = () => {
                       <td>
                         <div className="producto-info">
                           <div className="producto-avatar">
-                            {producto.nombre.charAt(0) +
-                              producto.nombre.charAt(1)}
+                            {producto.nombre.charAt(0).toUpperCase() +
+                              (producto.nombre.charAt(1)?.toUpperCase() || "")}
                           </div>
                           <div className="producto-datos">
                             <p className="producto-nombre">{producto.nombre}</p>
@@ -208,6 +213,7 @@ export const Productos = () => {
                               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                             </svg>
                           </button>
+
                           <button
                             onClick={() => handleDelete(producto.id)}
                             className="btn-accion btn-eliminar"
@@ -240,6 +246,8 @@ export const Productos = () => {
           </div>
         )}
       </div>
+
+      <Outlet />
     </main>
   );
 };

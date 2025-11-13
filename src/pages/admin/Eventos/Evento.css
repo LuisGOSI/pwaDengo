@@ -61,6 +61,261 @@
     font-weight: 300;
 }
 
+/* Formulario Container con Animación */
+.formulario-container {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 32px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(122, 92, 63, 0.1);
+    position: relative;
+    overflow: hidden;
+    
+    /* Animación de entrada */
+    animation: slideDown 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: top;
+}
+
+/* Efecto de brillo sutil en el fondo */
+.formulario-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(122, 92, 63, 0.03) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+        max-height: 0;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        max-height: 2000px;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+.formulario-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2c2c2c;
+    margin: 0 0 24px 0;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.formulario-title::before {
+    content: '';
+    width: 4px;
+    height: 28px;
+    background: linear-gradient(180deg, #7a5c3f 0%, #6b4d35 100%);
+    border-radius: 2px;
+    animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Formulario Evento */
+.formulario-evento {
+    position: relative;
+    z-index: 1;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.form-group:nth-child(1) { animation-delay: 0.1s; }
+.form-group:nth-child(2) { animation-delay: 0.15s; }
+.form-group:nth-child(3) { animation-delay: 0.2s; }
+.form-group:nth-child(4) { animation-delay: 0.25s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 8px;
+    transition: color 0.2s ease;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 12px 16px;
+    border: 2px solid #e8e8e8;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    background-color: white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #7a5c3f;
+    background-color: #fffbf5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(122, 92, 63, 0.15);
+}
+
+.form-group input:focus + label,
+.form-group select:focus + label,
+.form-group textarea:focus + label {
+    color: #7a5c3f;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 12px 16px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s backwards;
+}
+
+.checkbox-label:hover {
+    background-color: #f8f9fa;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #7a5c3f;
+}
+
+.checkbox-label span {
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #e8e8e8;
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.35s backwards;
+}
+
+.btn-cancelar,
+.btn-guardar {
+    padding: 12px 32px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-cancelar {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+.btn-cancelar:hover {
+    background-color: #e8e8e8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-guardar {
+    background: linear-gradient(135deg, #7a5c3f 0%, #6b4d35 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(122, 92, 63, 0.3);
+}
+
+.btn-guardar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(122, 92, 63, 0.4);
+}
+
+.btn-guardar::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-guardar:active::before {
+    width: 300px;
+    height: 300px;
+}
+
 /* Stats Cards */
 .eventos-stats {
     display: grid;
@@ -294,6 +549,37 @@
     background-color: #ffcdd2;
 }
 
+.btn-desactivar {
+    background-color: #fff3e0;
+    color: #e65100;
+    border-color: #e65100;
+}
+
+.btn-desactivar:hover {
+    background-color: #ffe0b2;
+}
+
+.btn-activar {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border-color: #2e7d32;
+}
+
+.btn-activar:hover {
+    background-color: #c8e6c9;
+}
+
+/* No Results */
+.no-results {
+    text-align: center;
+    padding: 48px 24px;
+    color: #999;
+    font-size: 16px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
     .eventos-stats {
@@ -336,6 +622,19 @@
     .eventos-lista {
         grid-template-columns: 1fr;
     }
+    
+    .formulario-container {
+        padding: 20px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn-cancelar,
+    .btn-guardar {
+        width: 100%;
+    }
 }
 
 @media (max-width: 480px) {
@@ -354,4 +653,88 @@
     .evento-acciones {
         flex-direction: column;
     }
+    
+    .formulario-container {
+        padding: 16px;
+    }
+}
+
+/* Loader Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+}
+
+/* Loading Animation */
+.loading {
+  --speed-of-animation: 0.9s;
+  --gap: 6px;
+  --first-color: #4c86f9;
+  --second-color: #49a84c;
+  --third-color: #f6bb02;
+  --fourth-color: #f6bb02;
+  --fifth-color: #2196f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.loading span {
+  width: 8px;
+  height: 80px;
+  background: var(--first-color);
+  animation: scale var(--speed-of-animation) ease-in-out infinite;
+}
+
+.loading span:nth-child(2) {
+  background: var(--second-color);
+  animation-delay: -0.8s;
+}
+
+.loading span:nth-child(3) {
+  background: var(--third-color);
+  animation-delay: -0.7s;
+}
+
+.loading span:nth-child(4) {
+  background: var(--fourth-color);
+  animation-delay: -0.6s;
+}
+
+.loading span:nth-child(5) {
+  background: var(--fifth-color);
+  animation-delay: -0.5s;
+}
+
+@keyframes scale {
+  0%, 40%, 100% {
+    transform: scaleY(0.05);
+  }
+  20% {
+    transform: scaleY(1);
+  }
+}
+
+/* Botones deshabilitados durante carga */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background-color: #f5f5f5;
 }
