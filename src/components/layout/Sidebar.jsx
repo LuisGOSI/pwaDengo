@@ -28,7 +28,7 @@ import { useAuth } from "../../services/AuthContext";
 
 export default function Sidebar() {
 	const { isOpen, toggleSidebar } = useSidebar();
-	const { signOut, role, user } = useAuth();
+	const { signOut, role, user, userData } = useAuth();
 	const navigate = useNavigate();
 	const location = useLocation();
 	const navRef = useRef(null);
@@ -363,17 +363,9 @@ export default function Sidebar() {
 						<div className="sidebar-user-avatar">{initials}</div>
 						{isOpen && (
 							<div className="sidebar-user-info">
-								<p className="sidebar-user-name">{user.email}</p>
+								<p className="sidebar-user-name">{userData.nombre} {userData?.apellidos}</p>
 								<p className="sidebar-user-role">
-									{role === 1
-										? "Administrador"
-										: role === 2
-										? "Gerente"
-										: role === 3
-										? "Barista"
-										: role === 4
-										? "Cajero"
-										: "Usuario"}
+									{user.email}
 								</p>
 							</div>
 						)}

@@ -27,21 +27,21 @@ export const Usuarios = () => {
   const { isOpen } = useSidebar();
   const { showToast } = useToast();
   const { showConfirm } = useConfirm();
-  
+
   // Estados
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [editando, setEditando] = useState(null);
   const [busqueda, setBusqueda] = useState('');
   const [rolFiltro, setRolFiltro] = useState('');
   const [sucursalFiltro, setSucursalFiltro] = useState('');
-  const [estadoFiltro, setEstadoFiltro] = useState('activos'); // 'activos', 'inactivos', 'todos'
+  const [estadoFiltro, setEstadoFiltro] = useState('activos');
   const [formData, setFormData] = useState(ESTADO_INICIAL_FORM);
   const [usuarios, setUsuarios] = useState([]);
   const [roles, setRoles] = useState([]);
   const [sucursales, setSucursales] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingInicial, setLoadingInicial] = useState(true);
-  
+
   // Refs
   const hasCargadoInicial = useRef(false);
 
@@ -65,7 +65,7 @@ export const Usuarios = () => {
     try {
       const response = await fetch(API_URL);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      
+
       const result = await response.json();
       if (result.success) {
         setUsuarios(result.data);
@@ -92,7 +92,7 @@ export const Usuarios = () => {
     try {
       const response = await fetch(SUCURSALES_API_URL);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      
+
       const result = await response.json();
       if (result.success) {
         setSucursales(result.data.filter(s => s.activa));
@@ -154,11 +154,21 @@ export const Usuarios = () => {
   // ========== HANDLERS ==========
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+
+    let newValue = value;
+
+    // Validación para el campo teléfono
+    if (name === "telefono") {
+      newValue = newValue.replace(/\D/g, "");
+      newValue = newValue.slice(0, 10);
+    }
+
+    setFormData({
+      ...formData,
+      [name]: newValue,
+    });
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -172,16 +182,15 @@ export const Usuarios = () => {
       const userData = {
         nombre: formData.nombre,
         apellidos: formData.apellidos,
+        password: formData.password || undefined,
         email: formData.email,
-        password: formData.password || undefined, // Enviar solo si existe
         fecha_nacimiento: formData.fecha_nacimiento || null,
         genero: formData.genero || null,
         telefono: formData.telefono || null,
         rol_id: parseInt(formData.rol_id),
         sucursal_personal_id: parseInt(formData.sucursal_personal_id)
       };
-
-      // Si estamos editando y no hay password, eliminar el campo
+      console.log(userData);
       if (editando && !formData.password) {
         delete userData.password;
       }
@@ -224,7 +233,7 @@ export const Usuarios = () => {
       nombre: usuario.nombre || '',
       apellidos: usuario.apellidos || '',
       email: usuario.email || '',
-      password: '', // No mostramos la contraseña
+      password: '',
       fecha_nacimiento: usuario.fecha_nacimiento ? usuario.fecha_nacimiento.slice(0, 10) : '',
       genero: usuario.genero || '',
       telefono: usuario.telefono || '',
@@ -250,12 +259,12 @@ export const Usuarios = () => {
       console.log('Eliminando usuario con ID:', id);
       const url = `${API_URL}/${id}`;
       console.log('URL de eliminación:', url);
-      
-      const response = await fetch(url, { 
+
+      const response = await fetch(url, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' }
       });
-      
+
       console.log('Status de respuesta DELETE:', response.status);
       const result = await response.json();
       console.log('Resultado DELETE:', result);
@@ -320,21 +329,21 @@ export const Usuarios = () => {
       'admin': 'administrador',
       'gerente': 'gerente',
       'barista': 'barista',
-      'caja': 'caja'
+      'cajero': 'cajero'
     };
     return colores[rolNombre?.toLowerCase()] || 'default';
   };
 
   // ========== DATOS CALCULADOS ==========
   const filteredUsuarios = usuarios.filter(usuario => {
-    const matchesSearch = 
+    const matchesSearch =
       (usuario.nombre?.toLowerCase() || '').includes(busqueda.toLowerCase()) ||
       (usuario.apellidos?.toLowerCase() || '').includes(busqueda.toLowerCase()) ||
       (usuario.email?.toLowerCase() || '').includes(busqueda.toLowerCase());
-    
+
     const matchesRol = !rolFiltro || usuario.rol_id === parseInt(rolFiltro);
     const matchesSucursal = !sucursalFiltro || usuario.sucursal_personal_id === parseInt(sucursalFiltro);
-    
+
     // Filtro de estado (activo/inactivo)
     let matchesEstado = true;
     if (estadoFiltro === 'activos') {
@@ -343,7 +352,7 @@ export const Usuarios = () => {
       matchesEstado = usuario.activo === false;
     }
     // Si es 'todos', matchesEstado permanece true
-    
+
     return matchesSearch && matchesRol && matchesSucursal && matchesEstado;
   });
 
@@ -378,17 +387,17 @@ export const Usuarios = () => {
     <main className={`main-content ${!isOpen ? 'sidebar-closed' : ''}`}>
       <div className="usuarios-container">
         <Sidebar />
-        
+
         {/* Overlay de carga para operaciones */}
         {loading && <Loader />}
-        
+
         {/* Header */}
         <div className="usuarios-header">
           <div className="usuarios-header-left">
             <h1 className="usuarios-titulo">Catálogo de Usuarios</h1>
             <p className="usuarios-breadcrumb">Clientes | Usuarios</p>
           </div>
-          <button 
+          <button
             className="btn-nuevo-usuario"
             onClick={() => {
               if (!mostrarFormulario) resetForm();
@@ -494,10 +503,9 @@ export const Usuarios = () => {
                     disabled={loading}
                   >
                     <option value="">Selecciona un género</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                    <option value="Otro">Otro</option>
-                    <option value="Prefiero no decir">Prefiero no decir</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="femenino">Femenino</option>
+                    <option value="otro">Otro</option>
                   </select>
                 </div>
 
@@ -558,16 +566,16 @@ export const Usuarios = () => {
               </div>
 
               <div className="form-actions">
-                <button 
-                  type="button" 
-                  className="btn-cancelar" 
+                <button
+                  type="button"
+                  className="btn-cancelar"
                   onClick={handleCancelar}
                   disabled={loading}
                 >
                   Cancelar
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="btn-guardar"
                   disabled={loading}
                 >
@@ -655,8 +663,8 @@ export const Usuarios = () => {
             </div>
           </div>
 
-          <button 
-            onClick={limpiarFiltros} 
+          <button
+            onClick={limpiarFiltros}
             className="btn-filtrar"
             disabled={loading}
           >
