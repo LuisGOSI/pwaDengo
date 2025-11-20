@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 .login-container {
+    
     min-height: 100vh;
     background: linear-gradient(135deg, #f5f1ed 0%, #e8ddd3 100%);
     display: flex;
@@ -9,7 +10,6 @@
     padding: 1rem;
     position: relative;
     overflow: hidden;
-    margin-top: 80px;
 }
 
 .login-content {

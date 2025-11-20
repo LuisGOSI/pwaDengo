@@ -7,7 +7,7 @@ function App() {
 	return (
 		<ToastProvider>
 			<ConfirmProvider>
-				<AppRouter />;
+				<AppRouter />
 			</ConfirmProvider>
 		</ToastProvider>
 	);

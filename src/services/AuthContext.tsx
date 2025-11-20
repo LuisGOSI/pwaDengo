@@ -7,6 +7,7 @@ type AuthContextType = {
     user: User | null;
     role: number | null;
     loading: boolean;
+    userData: any | null;
     signOut: () => Promise<void>;
 };
 
@@ -15,6 +16,7 @@ const AuthContext = createContext<AuthContextType>({
     user: null,
     role: null,
     loading: true,
+    userData: null,
     signOut: async () => { },
 });
 
@@ -29,6 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [role, setRole] = useState<number | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const [userData, setUserData] = useState<any>(null);
 
     // Obtener sesión y usuario de Supabase
     useEffect(() => {
@@ -60,7 +63,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
             const { data, error } = await supabase
                 .from("usuarios")
-                .select("rol_id")
+                .select("rol_id, nombre, apellidos")
                 .eq("id", user.id)
                 .single();
 
@@ -69,6 +72,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 setRole(null);
             } else {
                 setRole(Number(data.rol_id));
+                setUserData(data);
             }
         };
 
@@ -81,7 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ session, user, role, loading, signOut }}>
+        <AuthContext.Provider value={{ session, user, role, loading, userData, signOut }}>
             {children}
         </AuthContext.Provider>
     );

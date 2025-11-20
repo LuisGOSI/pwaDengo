@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import supabase from "../../services/supabase";
 import { useAuth } from "../../services/AuthContext";
 import "./Login.css";
 
 export default function Login() {
-	const navigate = useNavigate();
 	const location = useLocation();
 	const { session, loading, role } = useAuth();
 
@@ -33,17 +32,10 @@ export default function Login() {
 
 	// Obtener la ruta a la que intentaba acceder el usuario
 
-	useEffect(() => {
-		console.log("Rol:" + role);
-		
-		if (session && role > 0) {
-			const from = location.state?.from?.pathname || "/admin";
-			navigate(from, { replace: true });
-		}
-		else {
-			navigate("/");
-		}
-	}, [session, role, navigate, location]);
+	if (role > 0) {
+		const from = location.state?.from?.pathname || "/admin";
+		window.location.href = from;
+	}
 
 	const handleAuth = async (e) => {
 		e.preventDefault();
