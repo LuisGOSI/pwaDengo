@@ -23,7 +23,7 @@ export const Sucursales = () => {
 
     const [sucursales, setSucursales] = useState([]);
 
-    const API_URL = 'http://localhost:3000/api/sucursales';
+    const API_URL = 'https://dengo-back.onrender.com/api/sucursales';
 
     useEffect(() => {
         cargarSucursales();
