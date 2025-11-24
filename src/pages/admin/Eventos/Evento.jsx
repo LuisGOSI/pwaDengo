@@ -7,8 +7,8 @@ import { useConfirm } from '../../../components/common/Mensaje/ConfirmModal';
 import Sidebar from '../../../components/layout/Sidebar';
 
 // Constantes
-const API_URL = 'http://localhost:3000/api/eventos';
-const SUCURSALES_API_URL = 'http://localhost:3000/api/sucursales';
+const API_URL = 'https://dengo-back.onrender.com/api/eventos';
+const SUCURSALES_API_URL = 'https://dengo-back.onrender.comcls/api/sucursales';
 const COLORES_CARDS = ['#FF6B35', '#4ECDC4', '#95E1D3', '#F38181', '#FFB6C1', '#9B59B6'];
 
 const ESTADO_INICIAL_FORM = {

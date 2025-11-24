@@ -7,8 +7,8 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from '../../../components/layout/Sidebar';
 
 // Constantes
-const API_URL = 'http://localhost:3000/api/usuarios';
-const SUCURSALES_API_URL = 'http://localhost:3000/api/sucursales';
+const API_URL = 'https://dengo-back.onrender.com/api/usuarios';
+const SUCURSALES_API_URL = 'https://dengo-back.onrender.com/api/sucursales';
 
 const ESTADO_INICIAL_FORM = {
   id: 0,
