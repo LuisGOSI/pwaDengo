@@ -260,3 +260,28 @@
         font-size: 16px;
     }
 }
+
+.card-info {
+    flex: 1;
+}
+
+.card-content {
+    width: 100%;
+    justify-content: space-between; 
+}
+
+.item-descripcion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.item-imagen {
+    width: 200px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
