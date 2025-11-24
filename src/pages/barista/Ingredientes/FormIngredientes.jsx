@@ -11,7 +11,7 @@ export const FormIngredientes = ({ initialData, onClose }) => {
     creado_por: "b46d3602-5244-49b5-a0d6-d17233e28aa4",
   });
 
-  const { post, put, loading, error } = useAPI("http://localhost:3000/api/");
+  const { post, put, loading, error } = useAPI("https://dengo-back.onrender.com/api/");
 
   const handleSubmit = async () => {
     let result;

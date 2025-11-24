@@ -8,7 +8,7 @@ import Sidebar from '../../../components/layout/Sidebar';
 
 // Constantes
 const API_URL = 'https://dengo-back.onrender.com/api/eventos';
-const SUCURSALES_API_URL = 'https://dengo-back.onrender.comcls/api/sucursales';
+const SUCURSALES_API_URL = 'https://dengo-back.onrender.com/api/sucursales';
 const COLORES_CARDS = ['#FF6B35', '#4ECDC4', '#95E1D3', '#F38181', '#FFB6C1', '#9B59B6'];
 
 const ESTADO_INICIAL_FORM = {
@@ -206,44 +206,6 @@ export const Eventos = () => {
     } catch (err) {
       console.error('Error al eliminar evento:', err);
       showToast('error', 'Error del Servidor', 'No se pudo eliminar el evento');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleToggleActivo = async (id, activoActual) => {
-    const nuevoEstado = !activoActual;
-    const accion = nuevoEstado ? 'activar' : 'desactivar';
-
-    const confirmed = await showConfirm({
-      title: `¿${nuevoEstado ? 'Activar' : 'Desactivar'} evento?`,
-      message: `El evento será ${accion}do y ${nuevoEstado ? 'estará visible' : 'quedará oculto'}.`,
-      confirmText: `Sí, ${accion}`,
-      cancelText: 'Cancelar',
-      type: nuevoEstado ? 'info' : 'warning'
-    });
-
-    if (!confirmed) return;
-
-    setLoading(true);
-    try {
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ activo: nuevoEstado })
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        await cargarEventos();
-        showToast('success', 'Estado Actualizado', `El evento ha sido ${accion}do correctamente`);
-      } else {
-        showToast('error', 'Error al Cambiar Estado', 'No se pudo actualizar el estado');
-      }
-    } catch (err) {
-      console.error('Error al cambiar estado:', err);
-      showToast('error', 'Error del Servidor', 'Ocurrió un problema al cambiar el estado');
     } finally {
       setLoading(false);
     }
@@ -576,13 +538,6 @@ export const Eventos = () => {
                       disabled={loading}
                     >
                       Editar
-                    </button>
-                    <button
-                      className={`btn-accion ${evento.activo ? 'btn-desactivar' : 'btn-activar'}`}
-                      onClick={() => handleToggleActivo(evento.id, evento.activo)}
-                      disabled={loading}
-                    >
-                      {evento.activo ? 'Desactivar' : 'Activar'}
                     </button>
                     <button
                       className="btn-accion btn-eliminar"

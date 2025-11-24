@@ -61,6 +61,113 @@
     font-weight: 300;
 }
 
+/* Formulario */
+.formulario-container {
+    background-color: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    position: relative;
+    z-index: 10;
+}
+
+.formulario-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c2c2c;
+    margin: 0 0 20px 0;
+}
+
+.formulario-promocion {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #f5f5f5;
+    transition: all 0.2s ease;
+    color: #2c2c2c;
+    pointer-events: auto;
+    position: relative;
+    z-index: 1;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #7a5c3f;
+    background-color: white;
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.btn-cancelar,
+.btn-guardar {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-cancelar {
+    background-color: white;
+    color: #666;
+    border: 1px solid #e0e0e0;
+}
+
+.btn-cancelar:hover {
+    background-color: #f5f5f5;
+    border-color: #ccc;
+}
+
+.btn-guardar {
+    background-color: #7a5c3f;
+    color: white;
+}
+
+.btn-guardar:hover {
+    background-color: #6b4d35;
+}
+
 /* Filtros */
 .promociones-filtros {
     background-color: white;
@@ -72,7 +179,7 @@
 
 .filtros-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr;
     gap: 16px;
     margin-bottom: 20px;
 }
@@ -89,8 +196,7 @@
     font-weight: 500;
 }
 
-.filtro-input,
-.filtro-select {
+.filtro-input {
     padding: 10px 14px;
     border: 1px solid #e0e0e0;
     border-radius: 6px;
@@ -100,8 +206,7 @@
     color: #2c2c2c;
 }
 
-.filtro-input:focus,
-.filtro-select:focus {
+.filtro-input:focus {
     outline: none;
     border-color: #7a5c3f;
     background-color: white;
@@ -239,7 +344,12 @@
     font-weight: 500;
 }
 
-.tipo-descuento {
+.tipo-descuento_porcentaje {
+    background-color: #dce9ff;
+    color: #1976d2;
+}
+
+.tipo-descuento_fijo {
     background-color: #dce9ff;
     color: #1976d2;
 }
@@ -259,8 +369,8 @@
     color: #2e7d32;
 }
 
-/* Sucursal, Descuento y Vigencia */
-.promocion-sucursal {
+/* Nivel, Descuento y Vigencia */
+.promocion-nivel {
     font-size: 14px;
     color: #666;
 }
@@ -276,10 +386,81 @@
     color: #666;
 }
 
+/* Estado Badges */
+.estado-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.estado-activo {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.estado-inactivo {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Acciones */
+.promocion-acciones {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.btn-accion {
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+}
+
+.btn-editar {
+    color: #2563eb;
+}
+
+.btn-editar:hover {
+    background-color: #dbeafe;
+}
+
+.btn-desactivar {
+    color: #dc2626;
+}
+
+.btn-desactivar:hover {
+    background-color: #fee2e2;
+}
+
+.btn-activar {
+    color: #16a34a;
+}
+
+.btn-activar:hover {
+    background-color: #dcfce7;
+}
+
+/* No Results */
+.no-results {
+    text-align: center;
+    padding: 48px 0;
+    color: #999;
+    font-size: 14px;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
-    .filtros-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .form-row {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -299,12 +480,9 @@
         justify-content: center;
     }
 
-    .filtros-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .btn-filtrar {
-        width: 100%;
+    .promociones-filtros,
+    .promociones-lista {
+        padding: 16px;
     }
 
     .tabla-container {
@@ -312,7 +490,7 @@
     }
 
     .promociones-tabla {
-        min-width: 700px;
+        min-width: 900px;
     }
 }
 
