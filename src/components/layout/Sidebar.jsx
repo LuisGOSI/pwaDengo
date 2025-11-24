@@ -46,7 +46,6 @@ export default function Sidebar() {
 		if (path.includes("/admin/usuarios")) return "usuarios";
 		if (path.includes("/admin/productos")) return "productos";
 		if (path.includes("/admin/eventos")) return "eventos";
-		if (path.includes("/admin/CatalogoCategorias")) return "categorias";
 		if (path.includes("/admin/promociones")) return "promociones";
 		if (path.includes("/admin/SegmentacionPromociones")) return "segmentacion";
 		if (path.includes("/admin/CobranzaDigital")) return "cobranza";
@@ -58,7 +57,6 @@ export default function Sidebar() {
 		if (path.includes("/admin/ingredientes")) return "ingredientes";
 		if (path.includes("/admin/ProductosComunidad"))
 			return "productos-comunidad";
-		if (path.includes("/admin/cartelera")) return "cartelera";
 		if (path.includes("/admin/configuracion")) return "configuracion";
 		return "inicio";
 	};
@@ -165,13 +163,6 @@ export default function Sidebar() {
 					roles: [1, 2, 3],
 				},
 				{
-					id: "categorias",
-					label: "Categorías",
-					icon: Grid,
-					path: "/admin/CatalogoCategorias",
-					roles: [1, 2, 3, 4],
-				},
-				{
 					id: "productos-comunidad",
 					label: "Productos comunidad",
 					icon: Users,
@@ -196,14 +187,7 @@ export default function Sidebar() {
 					icon: Megaphone,
 					path: "/admin/eventos",
 					roles: [1, 2, 3, 4],
-				},
-				{
-					id: "cartelera",
-					label: "Cartelera",
-					icon: Calendar,
-					path: "/admin/cartelera",
-					roles: [1, 2],
-				},
+				}
 			],
 		},
 		{

@@ -16,7 +16,7 @@ export const Productos = () => {
 
   //[CAMBIOS NUEVOS]
 
-  const { get, del } = useAPI("http://localhost:3000/api/"); //Se pasas la URL base como parametro
+  const { get, del } = useAPI("https://dengo-back.onrender.com/api/"); //Se pasas la URL base como parametro
   const [productos, setProductos] = useState([]); //Estado para almacenar los productos
   const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } = useShowContent();
 

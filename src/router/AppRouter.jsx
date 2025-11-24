@@ -12,7 +12,6 @@ import { Contacto } from "../pages/Contacto/Contacto.jsx";
 import { Eventos } from "../pages/admin/Eventos/Evento.jsx";
 import { Usuarios } from "../pages/admin/Usuarios/Usuarios.jsx";
 import { Promociones } from "../pages/admin/Promociones/Promociones.jsx";
-import { CatalogoCategorias } from "../pages/admin/CatalogoCategoria/CatalagoCategoria.jsx";
 import { SegmentacionPromociones } from "../pages/admin/SegmentacionPromociones/SegmentacionPromociones.jsx";
 import { CobranzaDigital } from "../pages/caja/CobranzaDigital/CobranzaDigital.jsx";
 import { CorteCaja } from "../pages/caja/CorteCaja/CorteCaja.jsx";
@@ -99,14 +98,6 @@ export const AppRouter = () => {
 					</SidebarProvider>
 				</ProtectedRoute>
 			} />
-			{/* Ruta a Gestión de  categorias */}
-			<Route path="/admin/CatalogoCategorias" element={
-				<ProtectedRoute allowedRoles={[1, 2, 3, 4]}>
-					<SidebarProvider>
-						<CatalogoCategorias />
-					</SidebarProvider>
-				</ProtectedRoute>
-			} />
 			{/*Ruta a Productos de la comunidad*/}
 			<Route path="/admin/ProductosComunidad" element={
 				<ProtectedRoute allowedRoles={[1, 2, 3, 4]}>
@@ -128,15 +119,6 @@ export const AppRouter = () => {
 				<ProtectedRoute allowedRoles={[1, 2, 3, 4]}>
 					<SidebarProvider>
 						<Eventos />
-					</SidebarProvider>
-				</ProtectedRoute>
-			} />
-
-			{/*Ruta a Gestión de Cartelera*/}
-			<Route path="/admin/cartelera" element={
-				<ProtectedRoute allowedRoles={[1, 2]}>
-					<SidebarProvider>
-						<Cartelera />
 					</SidebarProvider>
 				</ProtectedRoute>
 			} />

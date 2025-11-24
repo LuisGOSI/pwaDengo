@@ -29,7 +29,7 @@ export const Promociones = () => {
 
     const [promociones, setPromociones] = useState([]);
 
-    const API_URL = 'http://localhost:3000/api/promociones';
+    const API_URL = 'https://dengo-back.onrender.com/api/promociones';
 
     // Función para obtener el ID del usuario autenticado
     const getUserId = () => {
