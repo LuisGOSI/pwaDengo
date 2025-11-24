@@ -10,13 +10,13 @@ import { FormIngredientes } from "./FormIngredientes";
 export const Ingredientes = () => {
   const { isOpen } = useSidebar();
   const [ingredientes, setIngredientes] = useState([]);
-  const { get, } = useAPI("https://dengo-back.onrender.com/api/");
+  const { get, error, loading } = useAPI("https://dengo-back.onrender.com/api/");
   const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } =
     useShowContent();
 
   useEffect(() => {
     loadIngredientes();
-  });
+  }, []);
 
   const loadIngredientes = () => {
     get("ingredientes").then((res) => {
@@ -56,6 +56,12 @@ export const Ingredientes = () => {
 
     return matchBusqueda && matchTipo && matchEstado;
   });
+
+  const toggleActivo = (id) => {
+    setIngredientes((prev) =>
+      prev.map((ing) => (ing.id === id ? { ...ing, activo: !ing.activo } : ing))
+    );
+  };
 
   const getIniciales = (nombre) => {
     return nombre

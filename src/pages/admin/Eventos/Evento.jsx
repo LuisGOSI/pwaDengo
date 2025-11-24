@@ -269,7 +269,6 @@ export const Eventos = () => {
     return matchesSearch;
   });
 
-  const eventosActivos = eventos.filter(e => e.activo).length;
   const proximosEventos = eventos.filter(e => new Date(e.inicia_en) > new Date()).length;
 
   // ========== COMPONENTE LOADER ==========
@@ -462,10 +461,6 @@ export const Eventos = () => {
           <div className="stat-card">
             <p className="stat-label">Total de eventos</p>
             <p className="stat-value">{eventos.length}</p>
-          </div>
-          <div className="stat-card">
-            <p className="stat-label">Eventos activos</p>
-            <p className="stat-value">{eventosActivos}</p>
           </div>
           <div className="stat-card">
             <p className="stat-label">Próximos</p>
