@@ -22,7 +22,7 @@ export const Productos = () => {
 
   useEffect(() => {
     loadProductos();
-  });
+  }, []);
 
   const loadProductos = () => {
     get("productos").then((res) => {
