@@ -8,7 +8,7 @@ import Sidebar from '../../../components/layout/Sidebar';
 
 // Constantes
 const API_URL = 'https://dengo-back.onrender.com/api/eventos';
-const SUCURSALES_API_URL = 'http://localhost:3000/api/sucursales';
+const SUCURSALES_API_URL = 'https://dengo-back.onrender.com/api/sucursales';
 const COLORES_CARDS = ['#FF6B35', '#4ECDC4', '#95E1D3', '#F38181', '#FFB6C1', '#9B59B6'];
 
 const ESTADO_INICIAL_FORM = {
@@ -19,14 +19,15 @@ const ESTADO_INICIAL_FORM = {
   inicia_en: '',
   termina_en: '',
   capacidad: 0,
-  activo: true
+  activo: true,
+  img: ''
 };
 
 export const Eventos = () => {
   const { isOpen } = useSidebar();
   const { showToast } = useToast();
   const { showConfirm } = useConfirm();
-  
+
   // Estados
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [editando, setEditando] = useState(null);
@@ -36,7 +37,7 @@ export const Eventos = () => {
   const [sucursales, setSucursales] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingInicial, setLoadingInicial] = useState(true);
-  
+
   // Refs
   const hasCargadoInicial = useRef(false);
 
@@ -59,7 +60,7 @@ export const Eventos = () => {
     try {
       const response = await fetch(API_URL);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      
+
       const result = await response.json();
       if (result.success) {
         setEventos(result.data);
@@ -76,7 +77,7 @@ export const Eventos = () => {
     try {
       const response = await fetch(SUCURSALES_API_URL);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      
+
       const result = await response.json();
       if (result.success) {
         setSucursales(result.data.filter(s => s.activa));
@@ -134,7 +135,8 @@ export const Eventos = () => {
         inicia_en: formData.inicia_en,
         termina_en: formData.termina_en,
         capacidad: parseInt(formData.capacidad),
-        activo: formData.activo
+        activo: formData.activo,
+        img: formData.img
       };
 
       if (editando) eventData.id = parseInt(formData.id);
@@ -176,7 +178,8 @@ export const Eventos = () => {
       inicia_en: evento.inicia_en ? evento.inicia_en.slice(0, 16) : '',
       termina_en: evento.termina_en ? evento.termina_en.slice(0, 16) : '',
       capacidad: evento.capacidad || 0,
-      activo: evento.activo
+      activo: evento.activo,
+      img: evento.img || ''
     });
     setMostrarFormulario(true);
   };
@@ -206,44 +209,6 @@ export const Eventos = () => {
     } catch (err) {
       console.error('Error al eliminar evento:', err);
       showToast('error', 'Error del Servidor', 'No se pudo eliminar el evento');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleToggleActivo = async (id, activoActual) => {
-    const nuevoEstado = !activoActual;
-    const accion = nuevoEstado ? 'activar' : 'desactivar';
-
-    const confirmed = await showConfirm({
-      title: `¿${nuevoEstado ? 'Activar' : 'Desactivar'} evento?`,
-      message: `El evento será ${accion}do y ${nuevoEstado ? 'estará visible' : 'quedará oculto'}.`,
-      confirmText: `Sí, ${accion}`,
-      cancelText: 'Cancelar',
-      type: nuevoEstado ? 'info' : 'warning'
-    });
-
-    if (!confirmed) return;
-
-    setLoading(true);
-    try {
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ activo: nuevoEstado })
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        await cargarEventos();
-        showToast('success', 'Estado Actualizado', `El evento ha sido ${accion}do correctamente`);
-      } else {
-        showToast('error', 'Error al Cambiar Estado', 'No se pudo actualizar el estado');
-      }
-    } catch (err) {
-      console.error('Error al cambiar estado:', err);
-      showToast('error', 'Error del Servidor', 'Ocurrió un problema al cambiar el estado');
     } finally {
       setLoading(false);
     }
@@ -290,13 +255,19 @@ export const Eventos = () => {
     });
   };
 
-  const formatearHora = (fecha) => {
-    if (!fecha) return '';
-    return new Date(fecha).toLocaleTimeString('es-MX', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+  const formatearHora = (fechaUTC) => {
+    const hora = fechaUTC.substring(11, 16); // "13:00"
+
+    let [hh, mm] = hora.split(':');
+    hh = parseInt(hh);
+
+    const sufijo = hh >= 12 ? 'pm' : 'am';
+    const hora12 = hh % 12 === 0 ? 12 : hh % 12;
+
+    return `${hora12}:${mm} ${sufijo}`;
   };
+
+
 
   const getColorForIndex = (index) => COLORES_CARDS[index % COLORES_CARDS.length];
 
@@ -307,7 +278,6 @@ export const Eventos = () => {
     return matchesSearch;
   });
 
-  const eventosActivos = eventos.filter(e => e.activo).length;
   const proximosEventos = eventos.filter(e => new Date(e.inicia_en) > new Date()).length;
 
   // ========== COMPONENTE LOADER ==========
@@ -333,23 +303,22 @@ export const Eventos = () => {
     );
   }
 
-  // ========== RENDER ==========
   return (
     <main className={`main-content ${!isOpen ? 'sidebar-closed' : ''}`}>
       <div className="eventos-container">
         <Sidebar />
-        
+
         {/* Overlay de carga para operaciones */}
         {loading && <Loader />}
-        
+
         {/* Header */}
         <div className="eventos-header">
           <div className="eventos-header-left">
             <h1 className="eventos-titulo">Eventos</h1>
             <p className="eventos-breadcrumb">Marketing | Eventos</p>
           </div>
-          <button 
-            className="btn-nuevo-evento" 
+          <button
+            className="btn-nuevo-evento"
             onClick={() => {
               if (!mostrarFormulario) resetForm();
               setMostrarFormulario(!mostrarFormulario);
@@ -401,6 +370,33 @@ export const Eventos = () => {
                       </option>
                     ))}
                   </select>
+                </div>
+                
+              </div>
+
+              <div className="form-row">
+                <div className="form-group" style={{ width: '100%' }}>
+                  <label htmlFor="img">URL de la Imagen</label>
+                  <input
+                    type="url"
+                    id="img"
+                    name="img"
+                    value={formData.img}
+                    onChange={handleInputChange}
+                    placeholder="https://ejemplo.com/imagen.jpg"
+                    disabled={loading}
+                  />
+
+                  {formData.img && (
+                    <div style={{ marginTop: '10px' }}>
+                      <img
+                        src={formData.img}
+                        alt="Vista previa"
+                        style={{ height: '100px', objectFit: 'cover', borderRadius: '8px' }}
+                        onError={(e) => e.target.style.display = 'none'}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -475,16 +471,16 @@ export const Eventos = () => {
               </div>
 
               <div className="form-actions">
-                <button 
-                  type="button" 
-                  className="btn-cancelar" 
+                <button
+                  type="button"
+                  className="btn-cancelar"
                   onClick={handleCancelar}
                   disabled={loading}
                 >
                   Cancelar
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="btn-guardar"
                   disabled={loading}
                 >
@@ -500,10 +496,6 @@ export const Eventos = () => {
           <div className="stat-card">
             <p className="stat-label">Total de eventos</p>
             <p className="stat-value">{eventos.length}</p>
-          </div>
-          <div className="stat-card">
-            <p className="stat-label">Eventos activos</p>
-            <p className="stat-value">{eventosActivos}</p>
           </div>
           <div className="stat-card">
             <p className="stat-label">Próximos</p>
@@ -527,8 +519,8 @@ export const Eventos = () => {
             </div>
           </div>
 
-          <button 
-            className="btn-filtrar" 
+          <button
+            className="btn-filtrar"
             onClick={limpiarFiltros}
             disabled={loading}
           >
@@ -543,12 +535,31 @@ export const Eventos = () => {
               <div key={evento.id} className="evento-card">
                 <div
                   className="evento-imagen"
-                  style={{ backgroundColor: getColorForIndex(index) }}
+                  style={{
+                    backgroundColor: getColorForIndex(index),
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
                 >
-                  <span className="evento-badge">
-                    {evento.activo ? 'Activo' : 'Inactivo'}
-                  </span>
+                  {evento.img ? (
+                    <img
+                      src={evento.img}
+                      alt={evento.titulo}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0
+                      }}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  ) : null}
                 </div>
+
                 <div className="evento-contenido">
                   <h3 className="evento-titulo-card">{evento.titulo}</h3>
                   <p className="evento-descripcion">{evento.descripcion}</p>
@@ -576,13 +587,6 @@ export const Eventos = () => {
                       disabled={loading}
                     >
                       Editar
-                    </button>
-                    <button
-                      className={`btn-accion ${evento.activo ? 'btn-desactivar' : 'btn-activar'}`}
-                      onClick={() => handleToggleActivo(evento.id, evento.activo)}
-                      disabled={loading}
-                    >
-                      {evento.activo ? 'Desactivar' : 'Activar'}
                     </button>
                     <button
                       className="btn-accion btn-eliminar"

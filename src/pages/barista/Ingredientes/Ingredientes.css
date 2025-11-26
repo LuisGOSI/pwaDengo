@@ -128,12 +128,6 @@
 }
 
 /* Lista de Ingredientes */
-.ingredientes-lista {
-    background-color: white;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
 
 .lista-header {
     margin-bottom: 24px;
@@ -154,6 +148,10 @@
 
 /* Tabla */
 .tabla-container {
+    background-color: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     overflow-x: auto;
 }
 
@@ -175,11 +173,13 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     border-bottom: 1px solid #e8e8e8;
+    white-space: nowrap;
 }
 
 .ingredientes-tabla td {
     padding: 16px;
     border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
 }
 
 .ingredientes-tabla tbody tr {
@@ -221,6 +221,7 @@
     font-weight: 600;
     color: #2c2c2c;
     margin: 0;
+    white-space: nowrap;
 }
 
 .ingrediente-descripcion {
@@ -236,16 +237,12 @@
     border-radius: 16px;
     font-size: 12px;
     font-weight: 500;
+    white-space: nowrap;
 }
 
-.tipo-café {
+.tipo-base {
     background-color: #ffe8d6;
     color: #e65100;
-}
-
-.tipo-lácteo {
-    background-color: #e3f2fd;
-    color: #1565c0;
 }
 
 .tipo-endulzante {
@@ -253,19 +250,9 @@
     color: #8e24aa;
 }
 
-.tipo-chocolate {
-    background-color: #efebe9;
-    color: #5d4037;
-}
-
-.tipo-especia {
-    background-color: #fff3e0;
-    color: #ef6c00;
-}
-
-.tipo-otro {
-    background-color: #f5f5f5;
-    color: #616161;
+.tipo-lacteo {
+    background-color: #e3f2fd;
+    color: #1565c0;
 }
 
 /* Estado Badges */
@@ -275,6 +262,7 @@
     border-radius: 16px;
     font-size: 12px;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .estado-activo {
@@ -295,35 +283,41 @@
 }
 
 .btn-accion {
-    background-color: transparent;
-    border: none;
     padding: 8px;
+    border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 16px;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
-.btn-accion:hover {
-    background-color: #f5f5f5;
-    transform: scale(1.1);
+.btn-editar {
+    background-color: #e3f2fd;
+    color: #1565c0;
 }
 
 .btn-editar:hover {
-    background-color: #e3f2fd;
+    background-color: #bbdefb;
+    transform: scale(1.05);
 }
 
-.btn-toggle:hover {
-    background-color: #fff3e0;
+.btn-eliminar {
+    background-color: #ffebee;
+    color: #c62828;
 }
 
-/* Tabla Vacía */
+.btn-eliminar:hover {
+    background-color: #ffcdd2;
+    transform: scale(1.05);
+}
+
+/* Tabla vacía */
 .tabla-vacia {
+    padding: 40px;
     text-align: center;
-    padding: 48px 24px;
     color: #999;
 }
 
@@ -369,7 +363,7 @@
     }
     
     .ingredientes-tabla {
-        min-width: 700px;
+        min-width: 800px;
     }
 }
 
@@ -395,5 +389,9 @@
     
     .ingrediente-descripcion {
         font-size: 13px;
+    }
+    
+    .ingredientes-tabla {
+        min-width: 900px;
     }
 }

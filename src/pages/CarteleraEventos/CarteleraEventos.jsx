@@ -1,281 +1,381 @@
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, MapPin, X, Calendar, Clock, Tag, Info } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { ChevronLeft, ChevronRight, ChevronDown, MapPin, Calendar, Tag, Info } from 'lucide-react';
 import './CarteleraEventos.css';
 import Header from '../../components/layout/Header';
+import { useNavigate } from 'react-router-dom';
+
+const EVENTOS_API_URL = 'https://dengo-back.onrender.com/api/eventos';
+const SUCURSALES_API_URL = 'https://dengo-back.onrender.com/api/sucursales';
 
 export const CarteleraEventos = () => {
-    const [diaSeleccionado, setDiaSeleccionado] = useState(0);
-    const [categoriaActiva, setCategoriaActiva] = useState('todos');
+    const navigate = useNavigate();
+    // --------------------------
+    // TEMAS PARA CARRUSEL
+    // --------------------------
+    const coffeeThemes = [
+        { name: 'Espresso Intenso', gradient: 'linear-gradient(135deg, #1a0f0c 0%, #3c2a21 100%)', accent: '#d4a373' },
+        { name: 'Moca Suave', gradient: 'linear-gradient(135deg, #3e2723 0%, #5d4037 100%)', accent: '#e6c9a8' },
+        { name: 'Ambiente Nocturno', gradient: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', accent: '#38bdf8' }, // Para eventos de noche
+        { name: 'Caramelo & Crema', gradient: 'linear-gradient(135deg, #432818 0%, #6f4e37 100%)', accent: '#faedcd' },
+    ];
+
+    // --------------------------
+    // ESTADOS
+    // --------------------------
+    const [categoriaActiva] = useState('todos');
     const [bannerActivo, setBannerActivo] = useState(0);
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
-    // Días de la semana
-    const dias = [
-        { dia: 'Hoy', fecha: '5 NOV' },
-        { dia: 'Mañana', fecha: '6 NOV' },
-        { dia: 'Viernes', fecha: '7 NOV' },
-        { dia: 'Sábado', fecha: '8 NOV' },
-        { dia: 'Domingo', fecha: '9 NOV' },
-        { dia: 'Lunes', fecha: '10 NOV' },
-        { dia: 'Martes', fecha: '11 NOV' },
-        { dia: 'Miércoles', fecha: '12 NOV' },
-    ];
+    const [sucursales, setSucursales] = useState([]);
+    const [sucursalSeleccionada, setSucursalSeleccionada] = useState(null);
 
-    // Banners destacados
-    const banners = [
-        {
-            id: 1,
-            titulo: 'Festival del Café Artesanal',
-            subtitulo: 'El evento más esperado del año',
-            descripcion: 'Únete a la celebración con baristas de renombre mundial, catas exclusivas y premios increíbles',
-            imagen: '☕',
-            color: '#2C1810',
-            gradiente: 'linear-gradient(135deg, #2C1810 0%, #5D3A1A 100%)'
-        },
-        {
-            id: 2,
-            titulo: 'Gran Inauguración Sucursal Plaza',
-            subtitulo: 'Nueva experiencia te espera',
-            descripcion: 'Celebra con nosotros la apertura de nuestra sucursal más grande con promociones especiales',
-            imagen: '🎉',
-            color: '#1A237E',
-            gradiente: 'linear-gradient(135deg, #1A237E 0%, #3949AB 100%)'
-        },
-        {
-            id: 3,
-            titulo: 'Noche de Jazz y Café',
-            subtitulo: 'Música en vivo todos los viernes',
-            descripcion: 'Disfruta de los mejores músicos locales mientras saboreas nuestros cafés premium',
-            imagen: '🎵',
-            color: '#4A148C',
-            gradiente: 'linear-gradient(135deg, #4A148C 0%, #7B1FA2 100%)'
+    const [eventos, setEventos] = useState([]);
+    const [eventosFiltrados, setEventosFiltrados] = useState([]);
+
+    const [loading, setLoading] = useState(true);
+    const [tabActiva, setTabActiva] = useState("cartelera");
+
+    const [modalAbierto, setModalAbierto] = useState(false);
+    const [eventoSeleccionado, setEventoSeleccionado] = useState(null);
+
+
+    // --------------------------
+    // PETICIÓN SUCURSALES
+    // --------------------------
+    useEffect(() => {
+        const cargarSucursales = async () => {
+            try {
+                const response = await fetch(SUCURSALES_API_URL);
+                const data = await response.json();
+                const lista = Array.isArray(data.data) ? data.data : [];
+
+                const listaActivas = lista.filter(s =>
+                    s.activa === true || s.activa === 'true' || Number(s.activa) === 1
+                );
+
+                setSucursales(listaActivas);
+                setSucursalSeleccionada(listaActivas[0] || null);
+            } catch (error) {
+                console.error("Error al cargar sucursales:", error);
+                setSucursales([]);
+            }
+        };
+
+        cargarSucursales();
+    }, []);
+
+    // --------------------------
+    // PETICIÓN EVENTOS
+    // --------------------------
+    useEffect(() => {
+        const cargarEventos = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch(EVENTOS_API_URL);
+                const data = await response.json();
+
+                const eventosArray = Array.isArray(data.data) ? data.data : [];
+
+                setEventos(eventosArray);
+                setEventosFiltrados(eventosArray);
+            } catch (error) {
+                console.error("Error al cargar eventos:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        cargarEventos();
+    }, []);
+
+    // --------------------------
+    // FILTROS (Categoría, Sucursal, Día, Validez)
+    // --------------------------
+    useEffect(() => {
+        // Filtramos primero por Activo y Fecha actual
+        let filtrados = eventos.filter(evento => {
+            const fechaFin = new Date(evento.termina_en);
+            const hoy = new Date();
+            // El evento debe estar activo Y su fecha de fin debe ser mayor a hoy
+            return evento.activo === true && fechaFin > hoy;
+        });
+
+        // Filtro de Categoría
+        if (categoriaActiva !== "todos") {
+            filtrados = filtrados.filter(e => e.categoria === categoriaActiva);
         }
-    ];
 
-    // Eventos
-    const eventos = [
-        {
-            id: 1,
-            titulo: 'Lanzamiento Café de Otoño',
-            descripcion: 'Nueva línea de cafés especiales con sabores únicos de temporada',
-            duracion: '89 min',
-            clasificacion: 'A',
-            categoria: 'lanzamiento',
-            imagen: '☕',
-            color: '#8B4513',
-            disponibilidad: 'En Cartelera',
-            sucursales: ['Centro', 'Norte', 'Sur']
-        },
-        {
-            id: 2,
-            titulo: 'Promoción 2x1 Bebidas',
-            descripcion: 'Disfruta el doble por el mismo precio en todas nuestras bebidas',
-            duracion: '114 min',
-            clasificacion: 'B15',
-            categoria: 'promocion',
-            imagen: '🎁',
-            color: '#E65100',
-            disponibilidad: 'En Cartelera',
-            sucursales: ['Todas']
-        },
-        {
-            id: 3,
-            titulo: 'Taller de Arte Latte',
-            descripcion: 'Aprende a crear arte increíble en tu café con expertos',
-            duracion: '106 min',
-            clasificacion: 'A',
-            categoria: 'evento',
-            imagen: '🎨',
-            color: '#66BB6A',
-            disponibilidad: 'En Cartelera',
-            sucursales: ['Centro']
-        },
-        {
-            id: 4,
-            titulo: 'Menú Vegano Premium',
-            descripcion: 'Nuevas opciones 100% veganas en nuestro menú permanente',
-            duracion: '116 min',
-            clasificacion: 'B',
-            categoria: 'lanzamiento',
-            imagen: '🌱',
-            color: '#26A69A',
-            disponibilidad: 'En Cartelera',
-            sucursales: ['Todas']
-        },
-        {
-            id: 5,
-            titulo: 'Combo Desayuno Especial',
-            descripcion: 'Ahorra 30% en nuestros combos hasta las 11am',
-            duracion: '98 min',
-            clasificacion: 'B',
-            categoria: 'promocion',
-            imagen: '🥐',
-            color: '#EF5350',
-            disponibilidad: 'Estreno',
-            sucursales: ['Centro', 'Norte']
+        // Filtro de Sucursal
+        if (sucursalSeleccionada) {
+            filtrados = filtrados.filter(e =>
+                e.sucursal_id === sucursalSeleccionada.id
+            );
         }
-    ];
+        setEventosFiltrados(filtrados);
+    }, [categoriaActiva, sucursalSeleccionada, eventos]);
 
-    const eventosFiltrados = categoriaActiva === 'todos' 
-        ? eventos 
-        : eventos.filter(e => e.categoria === categoriaActiva);
+    // --------------------------
+    // CAROUSEL CON ANIMACIONES
+    // --------------------------
+    const eventosVisibles = eventos.filter(evento => {
+        const fechaFin = new Date(evento.termina_en);
+        const hoy = new Date();
 
-    const siguienteBanner = () => {
-        setBannerActivo((prev) => (prev + 1) % banners.length);
-    };
+        return evento.activo === true && fechaFin > hoy;
+    });
 
-    const anteriorBanner = () => {
-        setBannerActivo((prev) => (prev - 1 + banners.length) % banners.length);
-    };
+    const siguienteBanner = useCallback(() => {
+        if (!isTransitioning && eventosVisibles.length > 0) {
+            setIsTransitioning(true);
+            setBannerActivo((prev) => (prev + 1) % eventosVisibles.length);
+            setTimeout(() => setIsTransitioning(false), 600);
+        }
+    }, [isTransitioning, eventosVisibles.length]);
 
-    const scrollDias = (direccion) => {
-        const container = document.querySelector('.dias-scroll');
-        const scrollAmount = 200;
-        container.scrollLeft += direccion === 'next' ? scrollAmount : -scrollAmount;
+    const anteriorBanner = useCallback(() => {
+        if (!isTransitioning && eventosVisibles.length > 0) {
+            setIsTransitioning(true);
+            setBannerActivo((prev) => (prev - 1 + eventosVisibles.length) % eventosVisibles.length);
+            setTimeout(() => setIsTransitioning(false), 600);
+        }
+    }, [isTransitioning, eventosVisibles.length]);
+
+    // Auto-avance
+    useEffect(() => {
+        // Si no hay eventos que cumplan la condición, no iniciamos el timer
+        if (eventosVisibles.length === 0) return;
+
+        const interval = setInterval(() => {
+            siguienteBanner();
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [siguienteBanner, eventosVisibles.length]);
+
+    // PROTECCIÓN DE ÍNDICE
+    // Si el banner activo actual se sale del rango (ej. se borró un evento), volvemos al 0
+    if (bannerActivo >= eventosVisibles.length && eventosVisibles.length > 0) {
+        setBannerActivo(0);
+    }
+
+    // ========== UTILIDADES ==========
+    const formatearFecha = (fecha) => {
+        if (!fecha) return '';
+        return new Date(fecha).toLocaleDateString('es-MX', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        });
     };
 
     return (
         <div className="cartelera-eventos-container">
             <Header />
-            {/* Header con selección de cine/sucursal */}
+
+            {/* Hero Section */}
+            <div className="menu-hero">
+                <h1 className="menu-titulo">Cartelera de Eventos</h1>
+                <p className="menu-subtitulo">¡Disfruta de los mejores eventos en Dengo!</p>
+                <p className="menu-descripcion">
+                    Explora nuestra cartelera de eventos para vivir la mejor experiencia con la familia Dengo<br />
+                    y descubre de las actividades que tenemos para tí.
+                </p>
+            </div>
+
+            {/* SELECT DE SUCURSAL */}
             <div className="cartelera-header">
-                <div className="sucursal-selector">
-                    <div className="sucursal-info">
-                        <MapPin size={20} />
-                        <span className="sucursal-nombre">Centro Comercial Altacia</span>
-                        <span className="vip-badge">VIP</span>
+                <div className="sucursal-card">
+                    <div className="icon-wrapper">
+                        <MapPin size={18} strokeWidth={2} />
                     </div>
-                    <button className="btn-cerrar">
-                        <X size={20} />
-                    </button>
-                </div>
-            </div>
 
-            {/* Banner Hero con Carousel */}
-            <div className="hero-banner" style={{ background: banners[bannerActivo].gradiente }}>
-                <button className="banner-nav-btn prev" onClick={anteriorBanner}>
-                    <ChevronLeft size={32} />
-                </button>
+                    <div className="selector-content">
+                        <span className="label-sucursal">Ubicación actual</span>
 
-                <div className="banner-content">
-                    <div className="banner-imagen">
-                        <div className="imagen-evento">
-                            <span className="emoji-evento">{banners[bannerActivo].imagen}</span>
+                        <div className="select-wrapper">
+                            <select
+                                className="selector-sucursal"
+                                value={sucursalSeleccionada?.id || ""}
+                                onChange={(e) => {
+                                    const suc = sucursales.find(s => s.id === parseInt(e.target.value));
+                                    setSucursalSeleccionada(suc);
+                                }}
+                            >
+                                {sucursales.map(s => (
+                                    <option key={s.id} value={s.id}>{s.nombre}</option>
+                                ))}
+                            </select>
+                            <ChevronDown size={16} className="chevron-icon" />
                         </div>
                     </div>
-                    <div className="banner-info">
-                        <h1 className="banner-titulo">{banners[bannerActivo].titulo}</h1>
-                        <p className="banner-subtitulo">{banners[bannerActivo].subtitulo}</p>
-                        <p className="banner-descripcion">{banners[bannerActivo].descripcion}</p>
-                        <button className="btn-obtener-tickets">Obtener tickets</button>
-                    </div>
-                </div>
-
-                <button className="banner-nav-btn next" onClick={siguienteBanner}>
-                    <ChevronRight size={32} />
-                </button>
-
-                <div className="banner-indicators">
-                    {banners.map((_, index) => (
-                        <button
-                            key={index}
-                            className={`indicator ${index === bannerActivo ? 'active' : ''}`}
-                            onClick={() => setBannerActivo(index)}
-                        />
-                    ))}
                 </div>
             </div>
 
-            {/* Tabs Cartelera/Horarios */}
-            <div className="tabs-container">
-                <button className="tab active">Cartelera</button>
-                <button className="tab">Horarios</button>
-            </div>
+            {/* CARRUSEL - Solo se muestra si hay eventos vigentes */}
+            {eventosVisibles.length > 0 && (
+                <div
+                    className="hero-banner"
+                    style={{
+                        // Usamos el módulo para que los colores se repitan cíclicamente
+                        background: coffeeThemes[bannerActivo % coffeeThemes.length].gradient,
+                        '--accent-color': coffeeThemes[bannerActivo % coffeeThemes.length].accent
+                    }}
+                >
+                    <div className="noise-overlay"></div>
 
-            {/* Selector de días */}
-            <div className="dias-selector-container">
-                <button className="scroll-btn prev" onClick={() => scrollDias('prev')}>
-                    <ChevronLeft size={20} />
-                </button>
-                
-                <div className="dias-scroll">
-                    {dias.map((dia, index) => (
-                        <button
-                            key={index}
-                            className={`dia-btn ${diaSeleccionado === index ? 'active' : ''}`}
-                            onClick={() => setDiaSeleccionado(index)}
-                        >
-                            <span className="dia-nombre">{dia.dia}</span>
-                            <span className="dia-fecha">{dia.fecha}</span>
-                        </button>
-                    ))}
-                </div>
-
-                <button className="scroll-btn next" onClick={() => scrollDias('next')}>
-                    <ChevronRight size={20} />
-                </button>
-
-                <div className="acciones-extra">
-                    <button className="btn-accion">
-                        <Calendar size={20} />
-                        <span>Fecha</span>
+                    <button className="banner-nav-btn prev" onClick={anteriorBanner}>
+                        <ChevronLeft size={32} />
                     </button>
-                    <button className="btn-accion">
-                        <Tag size={20} />
-                        <span>Filtros</span>
-                    </button>
-                </div>
-            </div>
 
-            {/* Filtros de categoría */}
-            <div className="categorias-tabs">
-                <button
-                    className={`categoria-tab ${categoriaActiva === 'todos' ? 'active' : ''}`}
-                    onClick={() => setCategoriaActiva('todos')}
-                >
-                    Todos
-                </button>
-                <button
-                    className={`categoria-tab ${categoriaActiva === 'promocion' ? 'active' : ''}`}
-                    onClick={() => setCategoriaActiva('promocion')}
-                >
-                    Promociones
-                </button>
-                <button
-                    className={`categoria-tab ${categoriaActiva === 'lanzamiento' ? 'active' : ''}`}
-                    onClick={() => setCategoriaActiva('lanzamiento')}
-                >
-                    Lanzamientos
-                </button>
-                <button
-                    className={`categoria-tab ${categoriaActiva === 'evento' ? 'active' : ''}`}
-                    onClick={() => setCategoriaActiva('evento')}
-                >
-                    Eventos
-                </button>
-            </div>
-
-            {/* Grid de eventos tipo cartelera de cine */}
-            <div className="eventos-cartelera-grid">
-                {eventosFiltrados.map((evento) => (
-                    <div key={evento.id} className="evento-pelicula-card">
-                        <div className="pelicula-poster" style={{ backgroundColor: evento.color }}>
-                            <span className="poster-emoji">{evento.imagen}</span>
-                            <div className="clasificacion-badge">{evento.clasificacion}</div>
-                        </div>
-                        <div className="pelicula-info">
-                            <div className="info-superior">
-                                <span className="duracion">{evento.duracion}</span>
-                                <button className="btn-disponibilidad">{evento.disponibilidad}</button>
+                    <div className="banner-content">
+                        {/* Contenedor Imagen */}
+                        <div className={`banner-imagen ${isTransitioning ? 'transitioning' : ''}`}>
+                            <div className="imagen-wrapper">
+                                {/* AQUI: Usamos eventosVisibles */}
+                                <img
+                                    src={eventosVisibles[bannerActivo].img}
+                                    alt={eventosVisibles[bannerActivo].titulo}
+                                    className="banner-img"
+                                />
+                                <div className="shine-effect"></div>
                             </div>
-                            <h3 className="pelicula-titulo">{evento.titulo}</h3>
-                            <button className="btn-ver-detalle">
-                                <span>Ver detalle</span>
-                                <Info size={16} />
+                        </div>
+
+                        {/* Contenedor Info */}
+                        <div className={`banner-info ${isTransitioning ? 'transitioning' : ''}`}>
+                            <span className="banner-tag">Evento Especial</span>
+                            {/* AQUI: Usamos eventosVisibles */}
+                            <h1 className="banner-titulo">{eventosVisibles[bannerActivo].titulo}</h1>
+                            <div className="separador-elegante"></div>
+                            <p className="banner-descripcion">{eventosVisibles[bannerActivo].descripcion}</p>
+
+                            <button
+                                className="btn-reservar"
+                                onClick={() => navigate('/login')}
+                            >
+                                <span>Reservar Lugar</span>
                             </button>
                         </div>
                     </div>
-                ))}
+
+                    <button className="banner-nav-btn next" onClick={siguienteBanner}>
+                        <ChevronRight size={32} />
+                    </button>
+
+                    {/* Indicadores de progreso */}
+                    <div className="slide-counter">
+                        0{bannerActivo + 1} <span className="line"></span> 0{eventosVisibles.length}
+                    </div>
+                </div>
+            )}
+
+            {/* TABS */}
+            <div className="tabs-container">
+                <button
+                    className={`tab ${tabActiva === "cartelera" ? "active" : ""}`}
+                    onClick={() => setTabActiva("cartelera")}
+                >
+                    Cartelera
+                </button>
             </div>
+
+            {/* GRID */}
+            <div className="eventos-cartelera-grid">
+                {loading ? (
+                    <p>Cargando eventos...</p>
+                ) : eventosFiltrados.length === 0 ? (
+                    <p>No hay eventos disponibles.</p>
+                ) : (
+                    eventosFiltrados.map((evento) => (
+                        <div key={evento.id} className="evento-pelicula-card">
+                            <div className="pelicula-poster" style={{ backgroundColor: evento.color }}>
+                                <img src={evento.img} alt={evento.titulo} className="poster-img" />
+                            </div>
+                            <div className="pelicula-info">
+                                <div className="info-superior">
+                                    <span className="btn-disponibilidad">{formatearFecha(evento.inicia_en)}</span>
+                                </div>
+                                <h3 className="pelicula-titulo">{evento.titulo}</h3>
+                                <button
+                                    className="btn-ver-detalle"
+                                    onClick={() => {
+                                        setEventoSeleccionado(evento);
+                                        setModalAbierto(true);
+                                    }}
+                                >
+                                    <span>Ver detalle</span>
+                                    <Info size={16} />
+                                </button>
+
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
+
+            {/* MODAL DE DETALLE DE EVENTO */}
+            {modalAbierto && eventoSeleccionado && (
+                <div className="modal-overlay" onClick={() => setModalAbierto(false)}>
+                    <div
+                        className="modal-content"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Botón Flotante */}
+                        <button
+                            className="modal-close"
+                            onClick={() => setModalAbierto(false)}
+                            aria-label="Cerrar modal"
+                        >
+                            ✕
+                        </button>
+
+                        {/* Imagen Hero (Full Width) */}
+                        <div className="modal-hero">
+                            <img
+                                src={eventoSeleccionado.img}
+                                alt={eventoSeleccionado.titulo}
+                                className="modal-img"
+                            />
+                        </div>
+
+                        {/* Contenido de Texto */}
+                        <div className="modal-body">
+                            <h2 className="modal-title">
+                                {eventoSeleccionado.titulo}
+                            </h2>
+
+                            <p className="modal-desc">
+                                {eventoSeleccionado.descripcion}
+                            </p>
+
+                            {/* Grid de Información Detallada */}
+                            <div className="modal-info-grid">
+                                <div className="info-item">
+                                    <label>Inicio</label>
+                                    <span>{new Date(eventoSeleccionado.inicia_en).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
+                                </div>
+                                <div className="info-item">
+                                    <label>Fin</label>
+                                    <span>{new Date(eventoSeleccionado.termina_en).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</span>
+                                </div>
+                                <div className="info-item">
+                                    <label>Capacidad</label>
+                                    <span>{eventoSeleccionado.capacidad} personas</span>
+                                </div>
+                            </div>
+
+                            {/* Sección de Ubicación */}
+                            <div className="modal-sucursal">
+                                <h3>Ubicación</h3>
+                                <p><strong>{eventoSeleccionado.sucursales.nombre}</strong></p>
+                                <p style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                    📍 {eventoSeleccionado.sucursales.direccion}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
