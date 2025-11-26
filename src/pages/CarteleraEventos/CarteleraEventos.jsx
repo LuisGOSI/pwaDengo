@@ -182,7 +182,7 @@ export const CarteleraEventos = () => {
                 </p>
             </div>
 
-            {/* SELECTOR DE SUCURSAL */}
+            {/* SELECT DE SUCURSAL */}
             <div className="cartelera-header">
                 <div className="sucursal-card">
                     <div className="icon-wrapper">
