@@ -7,8 +7,8 @@ import { useConfirm } from '../../../components/common/Mensaje/ConfirmModal';
 import Sidebar from '../../../components/layout/Sidebar';
 
 // Constantes
-const API_URL = 'http://localhost:3000/api/eventos';
-const SUCURSALES_API_URL = 'http://localhost:3000/api/sucursales';
+const API_URL = 'https://dengo-back.onrender.com/api/eventos';
+const SUCURSALES_API_URL = 'https://dengo-back.onrender.com/api/sucursales';
 const COLORES_CARDS = ['#FF6B35', '#4ECDC4', '#95E1D3', '#F38181', '#FFB6C1', '#9B59B6'];
 
 const ESTADO_INICIAL_FORM = {
@@ -255,13 +255,19 @@ export const Eventos = () => {
     });
   };
 
-  const formatearHora = (fecha) => {
-    if (!fecha) return '';
-    return new Date(fecha).toLocaleTimeString('es-MX', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+  const formatearHora = (fechaUTC) => {
+    const hora = fechaUTC.substring(11, 16); // "13:00"
+
+    let [hh, mm] = hora.split(':');
+    hh = parseInt(hh);
+
+    const sufijo = hh >= 12 ? 'pm' : 'am';
+    const hora12 = hh % 12 === 0 ? 12 : hh % 12;
+
+    return `${hora12}:${mm} ${sufijo}`;
   };
+
+
 
   const getColorForIndex = (index) => COLORES_CARDS[index % COLORES_CARDS.length];
 
@@ -297,7 +303,6 @@ export const Eventos = () => {
     );
   }
 
-  // ========== RENDER ==========
   return (
     <main className={`main-content ${!isOpen ? 'sidebar-closed' : ''}`}>
       <div className="eventos-container">
@@ -366,6 +371,7 @@ export const Eventos = () => {
                     ))}
                   </select>
                 </div>
+                
               </div>
 
               <div className="form-row">
@@ -380,7 +386,7 @@ export const Eventos = () => {
                     placeholder="https://ejemplo.com/imagen.jpg"
                     disabled={loading}
                   />
-                  {/* Previsualización pequeña si hay URL */}
+
                   {formData.img && (
                     <div style={{ marginTop: '10px' }}>
                       <img
@@ -535,7 +541,6 @@ export const Eventos = () => {
                     overflow: 'hidden'
                   }}
                 >
-                  {/* SI HAY IMAGEN, LA MOSTRAMOS */}
                   {evento.img ? (
                     <img
                       src={evento.img}
@@ -553,10 +558,6 @@ export const Eventos = () => {
                       }}
                     />
                   ) : null}
-                  {/* Tu badge existente */}
-                  <span className="evento-badge">
-                    {evento.activo ? 'Activo' : 'Inactivo'}
-                  </span>
                 </div>
 
                 <div className="evento-contenido">
