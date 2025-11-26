@@ -1,131 +1,63 @@
 import "./Ordenes.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Outlet } from 'react-router-dom';
 import Sidebar from "../../../components/layout/Sidebar";
 import { useSidebar } from "../../../context/SidebarContext";
 
 export const Ordenes = () => {
   const { isOpen } = useSidebar();
-  const [orders, setOrders] = useState([
-    {
-      id: "1",
-      numero_pedido: "PED-1730000001-abc123def",
-      estado: "recibido",
-      items_pedido: [
-        {
-          id: "1a",
-          nombre_item: "Hamburguesa doble",
-          cantidad: 2,
-          precio_unitario: 8.5,
-        },
-        {
-          id: "1b",
-          nombre_item: "Papas fritas",
-          cantidad: 2,
-          precio_unitario: 3.0,
-        },
-      ],
-      usuario: { nombre: "Juan", apellidos: "Pérez" },
-      sucursal: { nombre: "Sucursal Centro" },
-      creado_en: "2025-11-06T17:32:00Z",
-    },
-    {
-      id: "2",
-      numero_pedido: "PED-1730000002-xyz789abc",
-      estado: "preparando",
-      items_pedido: [
-        {
-          id: "2a",
-          nombre_item: "Pechuga a la plancha",
-          cantidad: 1,
-          precio_unitario: 12.0,
-        },
-        {
-          id: "2b",
-          nombre_item: "Ensalada verde",
-          cantidad: 1,
-          precio_unitario: 5.5,
-        },
-      ],
-      usuario: { nombre: "María", apellidos: "González" },
-      sucursal: { nombre: "Sucursal Centro" },
-      creado_en: "2025-11-06T17:28:00Z",
-    },
-    {
-      id: "3",
-      numero_pedido: "PED-1730000003-def456ghi",
-      estado: "listo",
-      items_pedido: [
-        {
-          id: "3a",
-          nombre_item: "Pizza Margarita Grande",
-          cantidad: 1,
-          precio_unitario: 15.0,
-        },
-        {
-          id: "3b",
-          nombre_item: "Bebida gaseosa",
-          cantidad: 1,
-          precio_unitario: 2.5,
-        },
-      ],
-      usuario: { nombre: "Carlos", apellidos: "Martínez" },
-      sucursal: { nombre: "Sucursal Centro" },
-      creado_en: "2025-11-06T17:15:00Z",
-      notas: "Sin cebolla en la pizza",
-    },
-    {
-      id: "4",
-      numero_pedido: "PED-1730000004-jkl234mno",
-      estado: "recibido",
-      items_pedido: [
-        {
-          id: "4a",
-          nombre_item: "Tacos al pastor",
-          cantidad: 3,
-          precio_unitario: 2.5,
-        },
-        {
-          id: "4b",
-          nombre_item: "Guacamole",
-          cantidad: 1,
-          precio_unitario: 3.0,
-        },
-      ],
-      usuario: { nombre: "Laura", apellidos: "Rodríguez" },
-      sucursal: { nombre: "Sucursal Centro" },
-      creado_en: "2025-11-06T17:45:00Z",
-    },
-    {
-      id: "5",
-      numero_pedido: "PED-1730000005-pqr567stu",
-      estado: "preparando",
-      items_pedido: [
-        {
-          id: "5a",
-          nombre_item: "Ceviche",
-          cantidad: 1,
-          precio_unitario: 14.0,
-        },
-        {
-          id: "5b",
-          nombre_item: "Pan tostado",
-          cantidad: 2,
-          precio_unitario: 1.5,
-        },
-      ],
-      usuario: { nombre: "Roberto", apellidos: "López" },
-      sucursal: { nombre: "Sucursal Centro" },
-      creado_en: "2025-11-06T17:40:00Z",
-    },
-  ]);
+  const [orders, setOrders] = useState([]);
 
-  const updateOrderStatus = (id, newStatus) => {
-    setOrders(
-      orders.map((order) =>
-        order.id === id ? { ...order, estado: newStatus } : order
-      )
-    );
+  const API_URL = 'https://dengo-back.onrender.com/api';
+
+  useEffect(() => {
+    cargarPedidos();
+  }, []);
+
+  const cargarPedidos = async () => {
+    try {
+      const response = await fetch(`${API_URL}/pedidos`);
+      const result = await response.json();
+      
+      if (result.pedidos) {
+        const pedidosArray = Array.isArray(result.pedidos) ? result.pedidos : [result.pedidos];
+        // Filtrar solo pedidos que NO estén entregados ni cancelados
+        const pedidosActivos = pedidosArray.filter(p => 
+          p.estado !== 'entregado' && p.estado !== 'cancelado'
+        );
+        setOrders(pedidosActivos);
+      }
+    } catch (error) {
+      console.error('Error al cargar pedidos:', error);
+      setOrders([]);
+    }
+  };
+
+  const updateOrderStatus = async (id, newStatus) => {
+    try {
+      const response = await fetch(`${API_URL}/pedidos/${id}/estado`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ estado: newStatus })
+      });
+      
+      const result = await response.json();
+      console.log('Response:', result);
+      
+      if (response.ok) {
+        setOrders(
+          orders.map((order) =>
+            order.id === id ? { ...order, estado: newStatus } : order
+          )
+        );
+      } else {
+        console.error('Error del servidor:', result);
+      }
+    } catch (error) {
+      console.error('Error al actualizar estado:', error);
+    }
   };
 
   const removeOrder = (id) => {
@@ -263,15 +195,15 @@ function OrderCard({ order, onStatusChange }) {
 
       <div className="order-customer">
         <span className="customer-name">
-          {order.usuario?.nombre} {order.usuario?.apellidos}
+          {order.usuarios?.nombre} {order.usuarios?.apellidos}
         </span>
-        <span className="customer-branch">{order.sucursal?.nombre}</span>
+        <span className="customer-branch">{order.sucursales?.nombre}</span>
       </div>
 
       <div className="order-items">
         <h3 className="items-title">Artículos:</h3>
         <ul className="items-list">
-          {order.items_pedido.map((item) => (
+          {order.items_pedido?.map((item) => (
             <li key={item.id} className="item">
               <span className="item-quantity">{item.cantidad}x</span>
               <span className="item-name">{item.nombre_item}</span>
