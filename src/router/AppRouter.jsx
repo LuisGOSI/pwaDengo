@@ -26,6 +26,7 @@ import { Ingredientes } from "../pages/barista/Ingredientes/Ingredientes.jsx";
 import { ProductosComunidad } from "../pages/admin/ProductosComunidad/ProductosComunidad.jsx";
 import { Configuracion } from "../pages/admin/Configuracion/Configuracion.jsx";
 import { Cartelera } from "../pages/admin/Cartelera/Cartelera.jsx";
+import { Venta } from "../pages/caja/Venta/Venta.jsx";
 
 export const AppRouter = () => {
 	return (
@@ -73,11 +74,11 @@ export const AppRouter = () => {
 					</SidebarProvider>
 				</ProtectedRoute>
 			} />
-			{/* Ruta a Cobranza digital */}
-			<Route path="/caja/CobranzaDigital" element={
+			{/* Ruta a Ventas */}
+			<Route path="/caja/Venta" element={
 				<ProtectedRoute allowedRoles={[1, 2, 4]}>
 					<SidebarProvider>
-						<CobranzaDigital />
+						<Venta/>
 					</SidebarProvider>
 				</ProtectedRoute>
 			} />
