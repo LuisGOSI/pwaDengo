@@ -1,19 +1,35 @@
 import { useState } from "react";
 
-export const useForm = (initialForm = {}) =>{
-    const [formData, setFormData] = useState(initialForm);
+export const useForm = (initialForm = {}) => {
+  const [formData, setFormData] = useState(initialForm);
 
-    const handleInputChange = (e) =>{
-        const {name,value,type,checked} = e.target;
+  const handleInputChange = (e) => {
+    const { name, value, type, checked, files } = e.target;
 
-        setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? checked: value
-        });
+    let newValue = value;
+
+    // Manejo de checkbox
+    if (type === "checkbox") {
+      newValue = checked;
     }
 
-    const resetForm = ()=> setFormData(initialForm);
+    // Manejo de number
+    if (type === "number") {
+      newValue = value === "" ? "" : Number(value);
+    }
 
-    return {formData,handleInputChange,resetForm,setFormData};
+    // Manejo de archivos
+    if (type === "file") {
+      newValue = files.length === 1 ? files[0] : files;
+    }
 
-}
+    setFormData({
+      ...formData,
+      [name]: newValue,
+    });
+  };
+
+  const resetForm = () => setFormData(initialForm);
+
+  return { formData, handleInputChange, resetForm, setFormData };
+};
