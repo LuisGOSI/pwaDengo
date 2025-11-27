@@ -3,33 +3,47 @@ import { useState, useEffect } from "react";
 import { Outlet } from 'react-router-dom';
 import Sidebar from "../../../components/layout/Sidebar";
 import { useSidebar } from "../../../context/SidebarContext";
+import { useAuth } from "../../../services/AuthContext";
 
 export const Ordenes = () => {
   const { isOpen } = useSidebar();
   const [orders, setOrders] = useState([]);
+  const { userData } = useAuth();
 
   const API_URL = 'https://dengo-back.onrender.com/api';
 
   useEffect(() => {
     cargarPedidos();
+    // Establecer el "Polling": Preguntar cada 30 segundos
+    const intervalId = setInterval(() => {
+      cargarPedidos(true); // Pasamos true para indicar que es una actualización silenciosa
+    }, 30000);
+
+    // Limpieza al desmontar el componente
+    return () => clearInterval(intervalId);
   }, []);
 
-  const cargarPedidos = async () => {
+  const cargarPedidos = async (isPolling = false) => {
     try {
-      const response = await fetch(`${API_URL}/pedidos`);
+      const response = await fetch(`${API_URL}/pedidos/?por_pagina=50&sucursal_id=${userData.sucursal_personal_id}`);
+      if (!response.ok) {
+        if (!isPolling) console.error("Error respuesta servidor");
+        return;
+      }
+
       const result = await response.json();
-      
+
       if (result.pedidos) {
         const pedidosArray = Array.isArray(result.pedidos) ? result.pedidos : [result.pedidos];
-        // Filtrar solo pedidos que NO estén entregados ni cancelados
-        const pedidosActivos = pedidosArray.filter(p => 
+
+        const pedidosActivos = pedidosArray.filter(p =>
           p.estado !== 'entregado' && p.estado !== 'cancelado'
         );
         setOrders(pedidosActivos);
       }
     } catch (error) {
       console.error('Error al cargar pedidos:', error);
-      setOrders([]);
+      if (!isPolling) setOrders([]);
     }
   };
 
@@ -42,16 +56,18 @@ export const Ordenes = () => {
         },
         body: JSON.stringify({ estado: newStatus })
       });
-      
+
       const result = await response.json();
       console.log('Response:', result);
-      
+
       if (response.ok) {
-        setOrders(
-          orders.map((order) =>
+        setOrders(prevOrders =>
+          prevOrders.map((order) =>
             order.id === id ? { ...order, estado: newStatus } : order
           )
         );
+        // Opcional: Recargar inmediatamente para asegurar sincronización
+        cargarPedidos();
       } else {
         console.error('Error del servidor:', result);
       }
