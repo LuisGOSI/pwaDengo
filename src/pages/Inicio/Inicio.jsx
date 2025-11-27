@@ -2,11 +2,13 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 import './Inicio.css';
 import coffeInicio from "../../assets/images/coffe-inicio.png";
-import coffeSplash from "../../assets/images/coffe-splash.png";
+import coffeSplash from "../../assets/images/granos-splash.png";
 import ButtonAndroid from '../../components/common/ButtonAndroid';
 import ButtonIOS from '../../components/common/ButtonIOS';
+import { useNavigate } from 'react-router-dom';
 
 export default function InicioPage() {
+    const navigate = useNavigate();
     const [currentSlide, setCurrentSlide] = useState(0);
 
     const coffeeItems = [
@@ -36,54 +38,73 @@ export default function InicioPage() {
         <div className="inicio-page">
             {/* Hero Section */}
             <section className="hero-section">
-                <div className="hero-content">
-                    <div className="hero-text">
-                        <h1 className="hero-title">DESCUBRE EL ARTE DE UN CAFÉ EXCEPCIONAL</h1>
+                <section className="hero-section">
+                    {/* Elementos de fondo decorativos */}
+                    <div className="bg-gradient-orb"></div>
+                    <div className="bg-grid-lines"></div>
 
-                        <p className="hero-description">
-                            Porque cada día merece un comienzo extraordinario. Sumérgete en la experiencia de un café preparado con pasión,
-                            donde la calidad de cada grano se une a la precisión de una receta perfecta.
-                            No es solo una bebida, es un ritual que despierta tus sentidos y te conecta con lo que realmente importa.
-                        </p>
+                    <div className="hero-container">
 
-                        <p className="hero-description">
-                            Desde el primer aroma hasta el último sorbo, cada detalle ha sido pensado para ofrecerte un momento de calma,
-                            inspiración y energía. Ya sea que empieces tu día en la oficina, trabajes desde casa o busques un descanso entre reuniones,
-                            nuestra app te acerca al placer de disfrutar un café con estilo, sin complicaciones.
-                        </p>
+                        {/* COLUMNA DE CONTENIDO */}
+                        <div className="hero-content-wrapper">
+                            <div className="brand-badge">EST. 2024 — PREMIUM SELECTION</div>
 
-                        <p className="hero-description">
-                            Descarga la app y vive la experiencia de pedir, personalizar y disfrutar tu café favorito donde quieras, cuando quieras.
-                            Porque el café perfecto no se encuentra por casualidad — se elige, se crea y se saborea.
-                        </p>
+                            {/* TU TÍTULO ORIGINAL */}
+                            <h1 className="hero-title">DESCUBRE EL ARTE DE UN CAFÉ EXCEPCIONAL</h1>
 
-                        <button className="hero-btn">
-                            ORDENA AHORA
-                        </button>
-                    </div>
+                            <div className="hero-divider"></div>
 
-                    <div className="hero-image">
-                        <div className="image-container coffee-container">
-                            <img src={coffeInicio}
-                                alt="Café splash"
-                                className="coffee-splash"
-                            />
+                            <p className="hero-subtitle">
+                                No es solo cafeína, es artesanía. Experimenta la fusión perfecta entre
+                                granos de origen único y una preparación meticulosa diseñada para
+                                los paladares más exigentes.
+                            </p>
+
+                            <div className="cta-group">
+                                <button className="btn-primary" onClick={() => navigate('/menu')}>
+                                    Ver Menú
+                                </button>
+                                <button className="btn-link" onClick={() => navigate('/locations')}>
+                                    Encuéntranos
+                                </button>
+                            </div>
+
+                            <div className="stats-row">
+                                <div className="stat-item">
+                                    <span className="stat-number">100%</span>
+                                    <span className="stat-label">Mexicano</span>
+                                </div>
+                                <div className="stat-item">
+                                    <span className="stat-number">24h</span>
+                                    <span className="stat-label">Completamente fresco</span>
+                                </div>
+                            </div>
                         </div>
-                        <div className="image-container liquid-container">
-                            <img
-                                src={coffeSplash}
-                                alt="Salpicadura de café"
-                                className="coffee-liquid"
-                            />
+
+                        {/* COLUMNA VISUAL */}
+                        <div className="hero-visual-wrapper">
+                            <div className="visual-circle-backdrop"></div>
+                            <div className="floating-composition">
+                                {/* Ajusta el z-index para que el splash quede detrás o delante según tu imagen */}
+                                <img src={coffeSplash} alt="Aroma y textura" className="img-splash" />
+                                <img src={coffeInicio} alt="Nuestra taza insignia" className="img-cup" />
+                            </div>
                         </div>
+
                     </div>
-                </div>
+                </section>
+                );
             </section>
 
             {/* Menu CTA */}
             <section className="menu-cta">
                 <p className="menu-cta-text">¡Revisa nuestro menú para deleitarte de finitas sabores!</p>
-                <button className="menu-cta-btn">IR A MENÚ</button>
+                <button
+                    className="menu-cta-btn"
+                    onClick={() => navigate('/menu')}
+                >
+                    <span>IR A MENÚ</span>
+                </button>
             </section>
 
             {/* Services Section */}
