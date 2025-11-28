@@ -93,7 +93,7 @@ const Toast = ({ type, title, message, onClose }) => {
                     ✕
                 </button>
             </div>
-            <div className={`toast-progress toast-progress-${type}`} />
+            <div className={`toast-progress toast-progress-${type}`} style={{animationDuration: '4s'}} />
         </div>
     );
 };
