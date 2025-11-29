@@ -319,7 +319,7 @@
 /* Stats Cards */
 .eventos-stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
     margin-bottom: 32px;
 }
@@ -583,7 +583,7 @@
 /* Responsive Design */
 @media (max-width: 1024px) {
     .eventos-stats {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
     
     .filtros-row {
