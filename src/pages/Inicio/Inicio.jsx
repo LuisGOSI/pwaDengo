@@ -47,7 +47,7 @@ export default function InicioPage() {
 
                         {/* COLUMNA DE CONTENIDO */}
                         <div className="hero-content-wrapper">
-                            <div className="brand-badge">EST. 2024 — PREMIUM SELECTION</div>
+                            <div className="brand-badge">EST. 2025 — SELECCIÓN PREMIER DE CAFÉ</div>
 
                             {/* TU TÍTULO ORIGINAL */}
                             <h1 className="hero-title">DESCUBRE EL ARTE DE UN CAFÉ EXCEPCIONAL</h1>
@@ -64,7 +64,7 @@ export default function InicioPage() {
                                 <button className="btn-primary" onClick={() => navigate('/menu')}>
                                     Ver Menú
                                 </button>
-                                <button className="btn-link" onClick={() => navigate('/locations')}>
+                                <button className="btn-link" onClick={() => navigate('/contacto')}>
                                     Encuéntranos
                                 </button>
                             </div>
@@ -97,7 +97,7 @@ export default function InicioPage() {
             </section>
 
             {/* Menu CTA */}
-            <section className="menu-cta">
+            {/* <section className="menu-cta">
                 <p className="menu-cta-text">¡Revisa nuestro menú para deleitarte de finitas sabores!</p>
                 <button
                     className="menu-cta-btn"
@@ -105,7 +105,7 @@ export default function InicioPage() {
                 >
                     <span>IR A MENÚ</span>
                 </button>
-            </section>
+            </section> */}
 
             {/* Services Section */}
             <section className="services-section">

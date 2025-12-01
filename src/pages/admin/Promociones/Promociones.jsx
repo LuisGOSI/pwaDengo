@@ -4,13 +4,18 @@ import './Promociones.css';
 import Sidebar from '../../../components/layout/Sidebar';
 import { useSidebar } from '../../../context/SidebarContext';
 import { Outlet } from 'react-router-dom';
+import { useToast } from '../../../context/MensajeContext';
+import { useConfirm } from '../../../components/common/Mensaje/ConfirmModal';
 
 export const Promociones = () => {
     const { isOpen } = useSidebar();
+    const { showToast } = useToast();
+    const { showConfirm } = useConfirm();
 
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
     const [editando, setEditando] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [setLoading] = useState(false);
     const [filtros, setFiltros] = useState({
         tipo: '',
         estado: '',
@@ -71,8 +76,92 @@ export const Promociones = () => {
         });
     };
 
+    const validarPromocion = () => {
+        // Título
+        if (!formData.titulo.trim()) {
+            showToast("warning", "Campo requerido", "El título de la promoción es obligatorio.");
+            return false;
+        }
+
+        // Descripción
+        if (!formData.descripcion.trim()) {
+            showToast("warning", "Campo requerido", "La descripción es obligatoria.");
+            return false;
+        }
+
+        // Tipo de promoción
+        if (!formData.tipo_promocion.trim()) {
+            showToast("warning", "Campo requerido", "Debes seleccionar un tipo de promoción.");
+            return false;
+        }
+
+        // Validación de descuentos
+        const tienePorcentaje = formData.porcentaje_descuento !== "";
+        const tieneMonto = formData.monto_descuento !== "";
+
+        // Debe tener al menos uno
+        if (!tienePorcentaje && !tieneMonto) {
+            showToast(
+                "warning",
+                "Descuento requerido",
+                "Debes ingresar porcentaje de descuento o monto fijo."
+            );
+            return false;
+        }
+
+        // Si tiene porcentaje debe ser válido
+        if (tienePorcentaje) {
+            const porcentaje = parseFloat(formData.porcentaje_descuento);
+            if (isNaN(porcentaje) || porcentaje <= 0 || porcentaje > 100) {
+                showToast(
+                    "warning",
+                    "Porcentaje inválido",
+                    "El porcentaje debe ser mayor a 0 y máximo 100."
+                );
+                return false;
+            }
+        }
+
+        // Si tiene monto debe ser válido
+        if (tieneMonto) {
+            const monto = parseFloat(formData.monto_descuento);
+            if (isNaN(monto) || monto <= 0) {
+                showToast(
+                    "warning",
+                    "Monto inválido",
+                    "El monto fijo debe ser mayor a 0."
+                );
+                return false;
+            }
+        }
+
+        // Fechas
+        if (!formData.inicia_en || !formData.termina_en) {
+            showToast(
+                "warning",
+                "Fechas requeridas",
+                "Debes seleccionar fecha de inicio y fecha de fin."
+            );
+            return false;
+        }
+
+        if (formData.inicia_en >= formData.termina_en) {
+            showToast(
+                "warning",
+                "Rango de fechas inválido",
+                "La fecha de inicio debe ser menor a la fecha de fin."
+            );
+            return false;
+        }
+
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validaciones
+        if (!validarPromocion()) return;
 
         try {
             const url = editando ? `${API_URL}/${editando}` : API_URL;
@@ -80,13 +169,13 @@ export const Promociones = () => {
 
             const userId = getUserId();
             if (!userId) {
-                alert('No se pudo obtener la información del usuario. Por favor, inicia sesión nuevamente.');
+                showToast("error", "Usuario no autenticado", "Debes iniciar sesión nuevamente.");
                 return;
             }
 
             const payload = {
-                titulo: formData.titulo,
-                descripcion: formData.descripcion,
+                titulo: formData.titulo.trim(),
+                descripcion: formData.descripcion.trim(),
                 tipo_promocion: formData.tipo_promocion,
                 inicia_en: formData.inicia_en,
                 termina_en: formData.termina_en,
@@ -114,13 +203,20 @@ export const Promociones = () => {
             if (result.success) {
                 await cargarPromociones();
                 resetForm();
-                alert(editando ? 'Promoción actualizada correctamente' : 'Promoción creada correctamente');
+
+                showToast(
+                    "success",
+                    editando ? "Promoción Actualizada" : "Promoción Registrada",
+                    editando
+                        ? "Los cambios se han guardado correctamente."
+                        : "La promoción ha sido creada exitosamente."
+                );
             } else {
-                alert('Error al guardar la promoción: ' + (result.message || 'Error desconocido'));
+                showToast("error", "Error al Guardar", result.message || "Ocurrió un error inesperado.");
             }
         } catch (err) {
-            console.error('Error al guardar promoción:', err);
-            alert('Error al guardar la promoción. Por favor, intenta nuevamente.');
+            console.error("Error al guardar promoción:", err);
+            showToast("error", "Error del Servidor", "Hubo un problema al guardar la promoción.");
         }
     };
 
@@ -140,6 +236,17 @@ export const Promociones = () => {
     };
 
     const handleToggleActiva = async (id, activaActual) => {
+        const confirmed = await showConfirm({
+            title: '¿Desactivar esta promoción?',
+            message: 'Esta acción no se puede deshacer. La promoción se desactivará.',
+            confirmText: 'Sí, desactivar',
+            cancelText: 'Cancelar',
+            type: 'danger'
+        });
+
+        if (!confirmed) return;
+        setLoading(true);
+
         try {
             const method = activaActual ? 'DELETE' : 'PATCH';
             const url = activaActual ? `${API_URL}/${id}` : `${API_URL}/${id}/habilitar`;
@@ -149,11 +256,20 @@ export const Promociones = () => {
 
             if (result.success) {
                 await cargarPromociones();
-                alert(activaActual ? 'Promoción desactivada' : 'Promoción activada');
+
+                showToast(
+                    "success",
+                    activaActual ? "Promoción Desactivada" : "Promoción Activada",
+                    activaActual
+                        ? "La promoción ahora está inactiva."
+                        : "La promoción ha sido activada."
+                );
             }
         } catch (err) {
-            console.error('Error al cambiar estado:', err);
-            alert('Error al cambiar el estado de la promoción.');
+            console.error("Error al cambiar estado:", err);
+            showToast("error", "Error al cambiar estado", "No se pudo actualizar la promoción.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -172,8 +288,25 @@ export const Promociones = () => {
         setEditando(null);
     };
 
-    const handleCancelar = () => {
-        resetForm();
+    const handleCancelar = async () => {
+        const hayDatos = formData.titulo || formData.descripcion || formData.sucursal_id;
+
+        if (hayDatos) {
+            const confirmed = await showConfirm({
+                title: '¿Descartar cambios?',
+                message: 'Los datos que ingresaste se perderán si no los guardas.',
+                confirmText: 'Sí, descartar',
+                cancelText: 'Continuar editando',
+                type: 'warning'
+            });
+
+            if (confirmed) {
+                resetForm();
+                showToast('warning', 'Acción Cancelada', 'Se han descartado los cambios');
+            }
+        } else {
+            resetForm();
+        }
     };
 
     const handleFiltroChange = (e) => {
@@ -196,14 +329,14 @@ export const Promociones = () => {
     const filteredPromociones = promociones.filter(promocion => {
         const matchesSearch = promocion.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
             (promocion.descripcion && promocion.descripcion.toLowerCase().includes(searchTerm.toLowerCase()));
-        
+
         const matchesTipo = !filtros.tipo || promocion.tipo_promocion === filtros.tipo;
-        
-        const matchesEstado = !filtros.estado || 
+
+        const matchesEstado = !filtros.estado ||
             (filtros.estado === 'activa' && promocion.activa) ||
             (filtros.estado === 'inactiva' && !promocion.activa);
-        
-        const matchesNivel = !filtros.nivel || 
+
+        const matchesNivel = !filtros.nivel ||
             (filtros.nivel === 'todos' && !promocion.nivel_objetivo_id) ||
             promocion.nivel_objetivo_id?.toString() === filtros.nivel;
 
@@ -390,7 +523,7 @@ export const Promociones = () => {
                         </div>
                         <div className="filtro-group">
                             <label>Tipo</label>
-                            <select 
+                            <select
                                 className="filtro-select"
                                 name="tipo"
                                 value={filtros.tipo}
@@ -405,7 +538,7 @@ export const Promociones = () => {
                         </div>
                         <div className="filtro-group">
                             <label>Estado</label>
-                            <select 
+                            <select
                                 className="filtro-select"
                                 name="estado"
                                 value={filtros.estado}
@@ -418,7 +551,7 @@ export const Promociones = () => {
                         </div>
                         <div className="filtro-group">
                             <label>Nivel</label>
-                            <select 
+                            <select
                                 className="filtro-select"
                                 name="nivel"
                                 value={filtros.nivel}

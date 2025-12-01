@@ -52,7 +52,6 @@ export default function Sidebar() {
 		if (path.includes("/admin/CorteCaja")) return "corte-caja";
 		if (path.includes("/admin/ReporteVenta")) return "reportes";
 		if (path.includes("/admin/Sucursal")) return "sucursales";
-		if (path.includes("/admin/resenias")) return "resenas";
 		if (path.includes("/admin/ordenes")) return "pedidos";
 		if (path.includes("/admin/ingredientes")) return "ingredientes";
 		if (path.includes("/admin/ProductosComunidad"))
@@ -103,13 +102,6 @@ export default function Sidebar() {
 					path: "/admin",
 					roles: [1, 2, 3, 4],
 				},
-				{
-					id: "reportes",
-					label: "Reportes",
-					icon: FileText,
-					path: "/admin/ReporteVenta",
-					roles: [1, 2],
-				},
 			],
 		},
 		{
@@ -130,10 +122,10 @@ export default function Sidebar() {
 					roles: [1, 2, 4],
 				},
 				{
-					id: "cobranza",
-					label: "Cobranza",
+					id: "venta",
+					label: "Venta",
 					icon: CreditCard,
-					path: "/caja/CobranzaDigital",
+					path: "/caja/Venta",
 					roles: [1, 2, 4],
 				},
 				{
@@ -200,20 +192,13 @@ export default function Sidebar() {
 					path: "/admin/usuarios",
 					roles: [1, 2],
 				},
-				{
-					id: "resenas",
-					label: "Reseñas",
-					icon: Star,
-					path: "/admin/resenias",
-					roles: [1, 2, 3],
-				},
-				{
-					id: "segmentacion",
-					label: "Segmentación",
-					icon: PieChart,
-					path: "/admin/SegmentacionPromociones",
-					roles: [1, 2],
-				},
+				// {
+				// 	id: "segmentacion",
+				// 	label: "Segmentación",
+				// 	icon: PieChart,
+				// 	path: "/admin/SegmentacionPromociones",
+				// 	roles: [1, 2],
+				// },
 			],
 		},
 		{
