@@ -82,6 +82,7 @@ export const Productos = () => {
 
         {/* Filtros */}
         <div className="productos-filtros">
+          <h1 className="productos-titulo">Filtros de búsqueda</h1>
           <div className="filtros-grid">
             <div className="filtro-group">
               <label>Buscar</label>
