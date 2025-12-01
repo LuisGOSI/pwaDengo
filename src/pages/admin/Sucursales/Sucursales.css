@@ -1,4 +1,6 @@
-/* Sucursales Container */
+/* ===================================
+   CONTENEDOR PRINCIPAL
+   =================================== */
 .sucursales-container {
     padding: 24px;
     background-color: #f8f8f8;
@@ -7,7 +9,9 @@
     border-radius: 15px;
 }
 
-/* Header */
+/* ===================================
+   HEADER
+   =================================== */
 .sucursales-header {
     display: flex;
     justify-content: space-between;
@@ -34,6 +38,9 @@
     margin: 0;
 }
 
+/* ===================================
+   BOTONES
+   =================================== */
 .btn-nueva-sucursal {
     background-color: #7a5c3f;
     color: white;
@@ -61,7 +68,76 @@
     font-weight: 300;
 }
 
-/* Formulario */
+.btn-cancelar,
+.btn-guardar {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-cancelar {
+    background-color: white;
+    color: #666;
+    border: 1px solid #e0e0e0;
+}
+
+.btn-cancelar:hover {
+    background-color: #f5f5f5;
+    border-color: #ccc;
+}
+
+.btn-guardar {
+    background-color: #7a5c3f;
+    color: white;
+}
+
+.btn-guardar:hover {
+    background-color: #6b4d35;
+}
+
+.btn-accion {
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+}
+
+.btn-editar {
+    color: #2563eb;
+}
+
+.btn-editar:hover {
+    background-color: #dbeafe;
+}
+
+.btn-desactivar {
+    color: #dc2626;
+}
+
+.btn-desactivar:hover {
+    background-color: #fee2e2;
+}
+
+.btn-activar {
+    color: #16a34a;
+}
+
+.btn-activar:hover {
+    background-color: #dcfce7;
+}
+
+/* ===================================
+   FORMULARIO
+   =================================== */
 .formulario-container {
     background-color: white;
     border-radius: 12px;
@@ -125,38 +201,9 @@
     margin-top: 8px;
 }
 
-.btn-cancelar,
-.btn-guardar {
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
-}
-
-.btn-cancelar {
-    background-color: white;
-    color: #666;
-    border: 1px solid #e0e0e0;
-}
-
-.btn-cancelar:hover {
-    background-color: #f5f5f5;
-    border-color: #ccc;
-}
-
-.btn-guardar {
-    background-color: #7a5c3f;
-    color: white;
-}
-
-.btn-guardar:hover {
-    background-color: #6b4d35;
-}
-
-/* Filtros */
+/* ===================================
+   FILTROS
+   =================================== */
 .sucursales-filtros {
     background-color: white;
     border-radius: 12px;
@@ -199,7 +246,9 @@
     background-color: white;
 }
 
-/* Lista de Sucursales */
+/* ===================================
+   LISTA DE SUCURSALES
+   =================================== */
 .sucursales-lista {
     background-color: white;
     border-radius: 12px;
@@ -224,7 +273,9 @@
     margin: 0;
 }
 
-/* Tabla */
+/* ===================================
+   TABLA
+   =================================== */
 .tabla-container {
     overflow-x: auto;
 }
@@ -262,7 +313,9 @@
     background-color: #fafafa;
 }
 
-/* Sucursal Info */
+/* ===================================
+   SUCURSAL INFO
+   =================================== */
 .sucursal-info {
     display: flex;
     align-items: center;
@@ -295,7 +348,30 @@
     font-family: "Open Sans", sans-serif;
 }
 
-/* Dirección */
+.sucursal-direccion {
+    font-size: 14px;
+    color: #666;
+}
+
+.sucursal-coordenadas {
+    font-size: 14px;
+    color: #666;
+}
+
+.sucursal-telefono {
+    font-size: 14px;
+    color: #666;
+}
+
+.sucursal-horario {
+    font-size: 14px;
+    color: #2c2c2c;
+    font-weight: 500;
+}
+
+/* ===================================
+   ICONOS Y CONTENEDORES
+   =================================== */
 .direccion-container {
     display: flex;
     align-items: center;
@@ -307,18 +383,6 @@
     flex-shrink: 0;
 }
 
-.sucursal-direccion {
-    font-size: 14px;
-    color: #666;
-}
-
-/* Coordenadas */
-.sucursal-coordenadas {
-    font-size: 14px;
-    color: #666;
-}
-
-/* Teléfono */
 .telefono-container {
     display: flex;
     align-items: center;
@@ -330,19 +394,9 @@
     flex-shrink: 0;
 }
 
-.sucursal-telefono {
-    font-size: 14px;
-    color: #666;
-}
-
-/* Horario */
-.sucursal-horario {
-    font-size: 14px;
-    color: #2c2c2c;
-    font-weight: 500;
-}
-
-/* Estado Badges */
+/* ===================================
+   ESTADO BADGES
+   =================================== */
 .estado-badge {
     display: inline-block;
     padding: 6px 14px;
@@ -361,7 +415,9 @@
     color: #991b1b;
 }
 
-/* Acciones */
+/* ===================================
+   ACCIONES
+   =================================== */
 .sucursal-acciones {
     display: flex;
     gap: 8px;
@@ -369,43 +425,9 @@
     justify-content: flex-start;
 }
 
-.btn-accion {
-    padding: 8px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: transparent;
-}
-
-.btn-editar {
-    color: #2563eb;
-}
-
-.btn-editar:hover {
-    background-color: #dbeafe;
-}
-
-.btn-desactivar {
-    color: #dc2626;
-}
-
-.btn-desactivar:hover {
-    background-color: #fee2e2;
-}
-
-.btn-activar {
-    color: #16a34a;
-}
-
-.btn-activar:hover {
-    background-color: #dcfce7;
-}
-
-/* No Results */
+/* ===================================
+   ESTADOS ESPECIALES
+   =================================== */
 .no-results {
     text-align: center;
     padding: 48px 0;
@@ -413,7 +435,9 @@
     font-size: 14px;
 }
 
-/* Responsive Design */
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
 @media (max-width: 1023px) {
     .sucursales-container {
         margin-left: 0;

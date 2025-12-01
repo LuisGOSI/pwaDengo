@@ -4,9 +4,13 @@ import './Sucursales.css';
 import Sidebar from '../../../components/layout/Sidebar';
 import { useSidebar } from '../../../context/SidebarContext';
 import { Outlet } from 'react-router-dom';
+import { useToast } from '../../../context/MensajeContext';
+import { useConfirm } from '../../../components/common/Mensaje/ConfirmModal';
 
 export const Sucursales = () => {
     const { isOpen } = useSidebar();
+    const { showToast } = useToast();
+    const { showConfirm } = useConfirm();
 
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
     const [editando, setEditando] = useState(null);
@@ -38,7 +42,7 @@ export const Sucursales = () => {
                 setSucursales(result.data);
             }
         } catch (err) {
-            console.error('Error al cargar sucursales:', err);
+            showToast('Error al cargar sucursales:', err);
         }
     };
 
@@ -52,6 +56,9 @@ export const Sucursales = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validaciones
+        if (!validarFormulario()) return;
 
         try {
             const url = editando ? `${API_URL}/${editando}` : API_URL;
@@ -78,9 +85,19 @@ export const Sucursales = () => {
             if (result.success) {
                 await cargarSucursales();
                 resetForm();
+
+                showToast(
+                    "success",
+                    editando ? "Sucursal Actualizada" : "Sucursal Registrada",
+                    editando
+                        ? "Los cambios se han guardado correctamente."
+                        : "La sucursal ha sido creada exitosamente."
+                );
+            } else {
+                showToast("error", "Error al Guardar", result.message || "No se pudo completar la operación.");
             }
         } catch (err) {
-            console.error('Error al guardar sucursal:', err);
+            showToast("error", "Error del Servidor", "Ocurrió un problema al guardar la sucursal.");
         }
     };
 
@@ -100,7 +117,6 @@ export const Sucursales = () => {
 
     const handleEditar = (sucursal) => {
         setEditando(sucursal.id);
-        // Parsear el horario desde la base de datos
         const horarios = parseHorario(sucursal.horario_apertura || '');
 
         setFormData({
@@ -115,13 +131,12 @@ export const Sucursales = () => {
         setMostrarFormulario(true);
     };
 
+
     const handleToggleActiva = async (id, activaActual) => {
         try {
             const response = await fetch(`${API_URL}/activa/${id}`, {
                 method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ activa: !activaActual })
             });
 
@@ -129,9 +144,19 @@ export const Sucursales = () => {
 
             if (result.success) {
                 await cargarSucursales();
+
+                showToast(
+                    "success",
+                    activaActual ? "Sucursal Desactivada" : "Sucursal Activada",
+                    activaActual
+                        ? "La sucursal ahora está inactiva."
+                        : "La sucursal ha sido activada."
+                );
+            } else {
+                showToast("error", "Error al Actualizar", "No se pudo cambiar el estado.");
             }
         } catch (err) {
-            console.error('Error al cambiar estado:', err);
+            showToast("error", "Error del Servidor", "No se pudo actualizar la sucursal.");
         }
     };
 
@@ -149,7 +174,28 @@ export const Sucursales = () => {
         setEditando(null);
     };
 
-    const handleCancelar = () => {
+    const handleCancelar = async () => {
+        const hayDatos =
+            formData.nombre ||
+            formData.direccion ||
+            formData.telefono ||
+            formData.latitud ||
+            formData.longitud;
+
+        if (hayDatos) {
+            const confirmed = await showConfirm({
+                title: "¿Descartar cambios?",
+                message: "Los datos ingresados se perderán si no los guardas.",
+                confirmText: "Sí, descartar",
+                cancelText: "Seguir editando",
+                type: "warning"
+            });
+
+            if (!confirmed) return;
+
+            showToast("warning", "Cambios Descartados", "No se guardaron los cambios.");
+        }
+
         resetForm();
     };
 
@@ -162,6 +208,70 @@ export const Sucursales = () => {
     const getColorForIndex = (index) => {
         const colors = ['#FF6B35', '#4ECDC4', '#95E1D3', '#F38181', '#FFB6C1', '#9B59B6'];
         return colors[index % colors.length];
+    };
+
+    const validarFormulario = () => {
+        // Nombre
+        if (!formData.nombre.trim()) {
+            showToast("warning", "Campo requerido", "El nombre de la sucursal es obligatorio.");
+            return false;
+        }
+
+        // Dirección
+        if (!formData.direccion.trim()) {
+            showToast("warning", "Campo requerido", "La dirección es obligatoria.");
+            return false;
+        }
+
+        // Teléfono
+        const regexTelefono = /^[0-9()+\-\s]{7,20}$/;
+        if (!regexTelefono.test(formData.telefono.trim())) {
+            showToast(
+                "warning",
+                "Teléfono inválido",
+                "Debe ser un número válido. Ej: (477) 123-4567."
+            );
+            return false;
+        }
+
+        // Latitud
+        const lat = parseFloat(formData.latitud);
+        if (isNaN(lat) || lat < -90 || lat > 90) {
+            showToast(
+                "warning",
+                "Latitud inválida",
+                "La latitud debe estar entre -90 y 90."
+            );
+            return false;
+        }
+
+        // Longitud
+        const lng = parseFloat(formData.longitud);
+        if (isNaN(lng) || lng < -180 || lng > 180) {
+            showToast(
+                "warning",
+                "Longitud inválida",
+                "La longitud debe estar entre -180 y 180."
+            );
+            return false;
+        }
+
+        // Horarios válidos
+        if (!formData.horario_apertura || !formData.horario_clausura) {
+            showToast("warning", "Horarios incompletos", "Debes ingresar ambos horarios.");
+            return false;
+        }
+
+        if (formData.horario_apertura >= formData.horario_clausura) {
+            showToast(
+                "warning",
+                "Horario inválido",
+                "La hora de apertura debe ser menor a la hora de clausura."
+            );
+            return false;
+        }
+
+        return true;
     };
 
     return (

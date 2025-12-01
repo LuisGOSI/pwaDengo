@@ -1,8 +1,7 @@
-
-
 .kitchen-container {
   width: 100%;
   min-height: 100vh;
+  border-radius: 20px;
   background-color: #f5f3f0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
     "Droid Sans", "Helvetica Neue", sans-serif;
@@ -147,6 +146,7 @@
 .kitchen-main {
   flex: 1;
   padding: 30px 40px;
+  border-radius: 20px;
   overflow-y: auto;
   background-color: #f5f3f0;
 }
