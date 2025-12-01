@@ -372,3 +372,21 @@
         padding: 0 12px 40px;
     }
 }
+/* Estilos para validación de formulario */
+.input-error {
+    border-color: #dc2626 !important;
+    background-color: #fef2f2 !important;
+}
+
+.error-message {
+    display: block;
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+}
