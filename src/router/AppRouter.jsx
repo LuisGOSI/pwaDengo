@@ -13,7 +13,6 @@ import { Eventos } from "../pages/admin/Eventos/Evento.jsx";
 import { Usuarios } from "../pages/admin/Usuarios/Usuarios.jsx";
 import { Promociones } from "../pages/admin/Promociones/Promociones.jsx";
 import { SegmentacionPromociones } from "../pages/admin/SegmentacionPromociones/SegmentacionPromociones.jsx";
-import { CobranzaDigital } from "../pages/caja/CobranzaDigital/CobranzaDigital.jsx";
 import { CorteCaja } from "../pages/caja/CorteCaja/CorteCaja.jsx";
 import { ReporteVenta } from "../pages/admin/ReporteVenta/ReporteVenta.jsx";
 import { CarteleraEventos } from "../pages/CarteleraEventos/CarteleraEventos.jsx";
@@ -25,7 +24,6 @@ import { NotFound } from "../components/layout/NotFound.jsx";
 import { Ingredientes } from "../pages/barista/Ingredientes/Ingredientes.jsx";
 import { ProductosComunidad } from "../pages/admin/ProductosComunidad/ProductosComunidad.jsx";
 import { Configuracion } from "../pages/admin/Configuracion/Configuracion.jsx";
-import { Cartelera } from "../pages/admin/Cartelera/Cartelera.jsx";
 import { Venta } from "../pages/caja/Venta/Venta.jsx";
 
 export const AppRouter = () => {

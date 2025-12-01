@@ -8,6 +8,9 @@ import { useAuth } from "../../../services/AuthContext";
 import Modal from "../../../components/common/Modal";
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import Sidebar from '../../../components/layout/Sidebar';
+import { useSidebar } from '../../../context/SidebarContext';
+import { Outlet } from 'react-router-dom';
 
 // Inicializar Stripe
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || 'pk_test_your_key_here');
@@ -72,16 +75,16 @@ const StripePaymentForm = ({ onSuccess, onError, onCancel }) => {
     <form onSubmit={handleSubmit}>
       <PaymentElement />
       <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           disabled={!stripe || !elements || isProcessing}
           className="btn-guardar"
           style={{ flex: 1 }}
         >
           {isProcessing ? 'Procesando...' : 'Pagar'}
         </button>
-        <button 
-          type="button" 
+        <button
+          type="button"
           onClick={onCancel}
           className="btn-limpiar"
           style={{ flex: 1 }}
@@ -99,6 +102,8 @@ const StripePaymentForm = ({ onSuccess, onError, onCancel }) => {
 };
 
 export const Venta = () => {
+  const { isOpen } = useSidebar();
+
   const { get, post } = useAPI(`${conf.BACKEND_URL}/api/`);
 
   // Productos cargados desde la API
@@ -333,7 +338,7 @@ export const Venta = () => {
 
   const handleStripeSuccess = () => {
     // Procesar la venta después del pago exitoso
-    handleSubmit({ preventDefault: () => {} }, true); // true indica que el pago fue confirmado
+    handleSubmit({ preventDefault: () => { } }, true); // true indica que el pago fue confirmado
     setStripeModalOpen(false);
   };
 
@@ -367,11 +372,11 @@ export const Venta = () => {
           amount: Math.round(formData.monto_pagado * 100), // Convertir a centavos
           currency: 'mxn'
         });
-        
+
         if (!response.clientSecret) {
           throw new Error('No se recibió clientSecret del servidor');
         }
-        
+
         setClientSecret(response.clientSecret);
         setStripeOptions({
           appearance: {
@@ -387,7 +392,7 @@ export const Venta = () => {
       }
     } else {
       // Para otros métodos de pago, proceder directamente con pago confirmado
-      handleSubmit({ preventDefault: () => {} }, true);
+      handleSubmit({ preventDefault: () => { } }, true);
     }
   }
 
@@ -406,14 +411,14 @@ export const Venta = () => {
 
   const inputs = [
     new CustomInput(
-      "usuario_id", 
-      "usuario_id", 
-      "text", 
-      "ID de Usuario *", 
-      formData.usuario_id, 
-      handleClientIDChange, 
-      "USR-001", 
-      [], 
+      "usuario_id",
+      "usuario_id",
+      "text",
+      "ID de Usuario *",
+      formData.usuario_id,
+      handleClientIDChange,
+      "USR-001",
+      [],
       "formulario-input",
       {},
       false,
@@ -427,14 +432,14 @@ export const Venta = () => {
     ], "formulario-select"),
     new CustomInput("puntos_usados", "puntos_usados", "number", "Puntos Usados", formData.puntos_usados, handleInputChange, "", [], "formulario-input"),
     new CustomInput(
-      "descuento_aplicado", 
-      "descuento_aplicado", 
-      "number", 
-      "Descuento", 
-      formData.descuento_aplicado, 
-      handleDescuentoChange, 
-      "", 
-      [], 
+      "descuento_aplicado",
+      "descuento_aplicado",
+      "number",
+      "Descuento",
+      formData.descuento_aplicado,
+      handleDescuentoChange,
+      "",
+      [],
       "formulario-input",
       {},
       false,
@@ -453,145 +458,140 @@ export const Venta = () => {
   }, "btn-limpiar", {}, "button");
 
   return (
-    <div className="ventas-container">
-      <Modal title="QR Code" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div dangerouslySetInnerHTML={{ __html: htmlContent }}></div>
-      </Modal>
-      <header className="ventas-header">
-        <div className="ventas-header-left">
-          <h1 className="ventas-titulo">Módulo de Ventas</h1>
-          <p className="ventas-breadcrumb">Gestión | Registros de Ventas</p>
-        </div>
-        <button
-          className="btn-nueva-venta"
-          onClick={() =>
-            document
-              .getElementById("formulario")
-              ?.scrollIntoView({ behavior: "smooth" })
-          }
-        >
-          <span className="btn-icono">+</span>
-          Nueva Venta
-        </button>
-      </header>
+    <main className={`main-content ${!isOpen ? 'sidebar-closed' : ''}`}>
+      <div className="ventas-container">
+        <Sidebar />
 
-      <div className="ventas-layout-principal">
-        {/* ------------------- LISTA DE PRODUCTOS ------------------- */}
-        <section className="ventas-productos">
-          <div className="productos-contenedor">
-            <h2 className="productos-titulo">Seleccionar Productos</h2>
+        <Modal title="QR Code" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <div dangerouslySetInnerHTML={{ __html: htmlContent }}></div>
+        </Modal>
+        <header className="ventas-header">
+          <div className="ventas-header-left">
+            <h1 className="ventas-titulo">Módulo de Ventas</h1>
+            <p className="ventas-breadcrumb">Gestión | Registros de Ventas</p>
+          </div>
+          
+        </header>
 
-            <div className="productos-input-seccion">
-              <h3 className="input-titulo">Agregar por ID de Producto</h3>
-              <div className="producto-input-group">
-                <input
-                  type="text"
-                  value={productoIdInput}
-                  onChange={(e) => setProductoIdInput(e.target.value)}
-                  placeholder="Ej: 101"
-                  className="formulario-input"
-                  onKeyPress={(e) => e.key === "Enter" && agregarPorId()}
-                />
-                <button className="btn-agregar-id" onClick={agregarPorId}>
-                  Agregar
-                </button>
-              </div>
-            </div>
+        <div className="ventas-layout-principal">
+          {/* ------------------- LISTA DE PRODUCTOS ------------------- */}
+          <section className="ventas-productos">
+            <div className="productos-contenedor">
+              <h2 className="productos-titulo">Seleccionar Productos</h2>
 
-            <div className="productos-grid">
-              {productosDisponibles.map((producto) => (
-                <div key={producto.id} className="producto-card">
-                  <div className="producto-header">
-                    <span className="producto-categoria">
-                      {producto.categoria_id}
-                    </span>
-                    <span className="producto-precio">
-                      ${producto.precio.toFixed(2)}
-                    </span>
-                  </div>
-
-                  <h3 className="producto-nombre">{producto.nombre}</h3>
-                  <p className="producto-id">{producto.id}</p>
-
-                  <button
-                    className="btn-agregar-producto"
-                    onClick={() => agregarProductoAlCarrito(producto)}
-                  >
-                    Agregar al Carrito
+              <div className="productos-input-seccion">
+                <h3 className="input-titulo">Agregar por ID de Producto</h3>
+                <div className="producto-input-group">
+                  <input
+                    type="text"
+                    value={productoIdInput}
+                    onChange={(e) => setProductoIdInput(e.target.value)}
+                    placeholder="Ej: 101"
+                    className="formulario-input"
+                    onKeyPress={(e) => e.key === "Enter" && agregarPorId()}
+                  />
+                  <button className="btn-agregar-id" onClick={agregarPorId}>
+                    Agregar
                   </button>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
+              </div>
 
-        {/* ------------------- FORMULARIO DE VENTA ------------------- */}
-        <div className="ventas-columna-derecha">
-          <section className="ventas-formulario" id="formulario">
-            <div className="formulario-contenedor">
-              <h2 className="formulario-titulo">Registrar Nueva Venta</h2>
-              <span>Máximo de Puntos: {maxPoints}</span>
-              <Form onSubmit={handleSubmit} inputs={inputs} submitButton={submitButton} resetButton={resetButton} className="formulario-grid" />
-            </div>
-          </section>
-
-          {/* ------------------- CARRITO ------------------- */}
-          <section className="ventas-carrito">
-            <div className="carrito-contenedor">
-              <h2 className="carrito-titulo">Carrito</h2>
-
-              {carrito.length === 0 ? (
-                <p className="carrito-vacio">El carrito está vacío</p>
-              ) : (
-                <div>
-                  {carrito.map((item) => (
-                    <div key={item.timestamp} className="carrito-item">
-                      <div>
-                        <p className="carrito-item-nombre">{item.nombre}</p>
-                        <p>${item.precio}</p>
-                      </div>
-
-                      <button
-                        className="btn-eliminar-item"
-                        onClick={() => eliminarDelCarrito(item.timestamp)}
-                      >
-                        ✕
-                      </button>
+              <div className="productos-grid">
+                {productosDisponibles.map((producto) => (
+                  <div key={producto.id} className="producto-card">
+                    <div className="producto-header">
+                      <span className="producto-categoria">
+                        {producto.categoria_id}
+                      </span>
+                      <span className="producto-precio">
+                        ${producto.precio.toFixed(2)}
+                      </span>
                     </div>
-                  ))}
 
-                  <div className="carrito-total">
-                    <p>Total:</p>
-                    <p>${montoTotalCarrito.toFixed(2)}</p>
+                    <h3 className="producto-nombre">{producto.nombre}</h3>
+                    <p className="producto-id">{producto.id}</p>
+
+                    <button
+                      className="btn-agregar-producto"
+                      onClick={() => agregarProductoAlCarrito(producto)}
+                    >
+                      Agregar al Carrito
+                    </button>
                   </div>
-                </div>
-              )}
+                ))}
+              </div>
             </div>
           </section>
-        </div>
-      </div>
 
-      <Modal 
-        title="Procesamiento de Pago" 
-        isOpen={stripeModalOpen} 
-        onClose={handleStripeCancel}
-      >
-        {clientSecret && stripeOptions && (
-          <Elements 
-            stripe={stripePromise} 
-            options={{ 
-              ...stripeOptions,
-              clientSecret: clientSecret 
-            }}
-          >
-            <StripePaymentForm
-              onSuccess={handleStripeSuccess}
-              onError={handleStripeError}
-              onCancel={handleStripeCancel}
-            />
-          </Elements>
-        )}
-      </Modal>
-    </div>
+          {/* ------------------- FORMULARIO DE VENTA ------------------- */}
+          <div className="ventas-columna-derecha">
+            <section className="ventas-formulario" id="formulario">
+              <div className="formulario-contenedor">
+                <h2 className="formulario-titulo">Registrar Nueva Venta</h2>
+                <span>Máximo de Puntos: {maxPoints}</span>
+                <Form onSubmit={handleSubmit} inputs={inputs} submitButton={submitButton} resetButton={resetButton} className="formulario-grid" />
+              </div>
+            </section>
+
+            {/* ------------------- CARRITO ------------------- */}
+            <section className="ventas-carrito">
+              <div className="carrito-contenedor">
+                <h2 className="carrito-titulo">Carrito</h2>
+
+                {carrito.length === 0 ? (
+                  <p className="carrito-vacio">El carrito está vacío</p>
+                ) : (
+                  <div>
+                    {carrito.map((item) => (
+                      <div key={item.timestamp} className="carrito-item">
+                        <div>
+                          <p className="carrito-item-nombre">{item.nombre}</p>
+                          <p>${item.precio}</p>
+                        </div>
+
+                        <button
+                          className="btn-eliminar-item"
+                          onClick={() => eliminarDelCarrito(item.timestamp)}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+
+                    <div className="carrito-total">
+                      <p>Total:</p>
+                      <p>${montoTotalCarrito.toFixed(2)}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <Modal
+          title="Procesamiento de Pago"
+          isOpen={stripeModalOpen}
+          onClose={handleStripeCancel}
+        >
+          {clientSecret && stripeOptions && (
+            <Elements
+              stripe={stripePromise}
+              options={{
+                ...stripeOptions,
+                clientSecret: clientSecret
+              }}
+            >
+              <StripePaymentForm
+                onSuccess={handleStripeSuccess}
+                onError={handleStripeError}
+                onCancel={handleStripeCancel}
+              />
+            </Elements>
+          )}
+        </Modal>
+      </div>
+      <Outlet />
+    </main>
   );
 };

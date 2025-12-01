@@ -103,13 +103,6 @@ export default function Sidebar() {
 					path: "/admin",
 					roles: [1, 2, 3, 4],
 				},
-				{
-					id: "reportes",
-					label: "Reportes",
-					icon: FileText,
-					path: "/admin/ReporteVenta",
-					roles: [1, 2],
-				},
 			],
 		},
 		{
@@ -130,10 +123,10 @@ export default function Sidebar() {
 					roles: [1, 2, 4],
 				},
 				{
-					id: "cobranza",
-					label: "Cobranza",
+					id: "venta",
+					label: "Venta",
 					icon: CreditCard,
-					path: "/caja/CobranzaDigital",
+					path: "/caja/Venta",
 					roles: [1, 2, 4],
 				},
 				{

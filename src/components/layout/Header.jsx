@@ -163,8 +163,8 @@ export default function Header() {
 							<span className="header-user-text">
 								{role === 0 && "Mi perfil"}
 								{role === 1 && "Admin"}
-								{role === 2 && "Barista"}
-								{role === 3 && "Cocinero"}
+								{role === 2 && "Gerente"}
+								{role === 3 && "Barista"}
 								{role === 4 && "Cajero"}
 							</span>
 						</button>

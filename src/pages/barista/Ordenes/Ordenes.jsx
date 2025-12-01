@@ -17,7 +17,7 @@ export const Ordenes = () => {
     // Establecer el "Polling": Preguntar cada 30 segundos
     const intervalId = setInterval(() => {
       cargarPedidos(true); // Pasamos true para indicar que es una actualización silenciosa
-    }, 30000);
+    }, 5000);
 
     // Limpieza al desmontar el componente
     return () => clearInterval(intervalId);
