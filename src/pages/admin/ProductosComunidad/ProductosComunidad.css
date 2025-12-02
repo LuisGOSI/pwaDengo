@@ -468,3 +468,123 @@
         font-size: 20px;
     }
 }
+
+/* Nuevos estilos para recetas de la comunidad */
+.creador-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.creador-nombre {
+    font-weight: 500;
+    color: #2c2c2c;
+    margin: 0;
+    font-size: 14px;
+}
+
+.creador-id {
+    font-size: 12px;
+    color: #999;
+    margin: 0;
+    font-family: monospace;
+}
+
+.descripcion-receta {
+    max-width: 250px;
+}
+
+.descripcion-texto {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.fecha-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: center;
+}
+
+.fecha-creacion {
+    font-weight: 500;
+    color: #2c2c2c;
+    margin: 0;
+    font-size: 13px;
+}
+
+.hora-creacion {
+    font-size: 12px;
+    color: #999;
+    margin: 0;
+}
+
+/* Botones de acciones específicos */
+.btn-aprobar {
+    background-color: #10b981 !important;
+    color: white !important;
+    border: 1px solid #10b981 !important;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.btn-aprobar:hover:not(:disabled) {
+    background-color: #059669 !important;
+    border-color: #059669 !important;
+    transform: translateY(-1px);
+}
+
+.btn-rechazar {
+    background-color: #ef4444 !important;
+    color: white !important;
+    border: 1px solid #ef4444 !important;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.btn-rechazar:hover:not(:disabled) {
+    background-color: #dc2626 !important;
+    border-color: #dc2626 !important;
+    transform: translateY(-1px);
+}
+
+.btn-accion:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Responsive para las nuevas columnas */
+@media (max-width: 1200px) {
+    .descripcion-receta {
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 992px) {
+    .descripcion-texto {
+        font-size: 12px;
+    }
+    
+    .creador-nombre,
+    .fecha-creacion {
+        font-size: 13px;
+    }
+    
+    .creador-id,
+    .hora-creacion {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 768px) {
+    .descripcion-receta {
+        max-width: 150px;
+    }
+    
+    .fecha-info {
+        text-align: left;
+    }
+}
