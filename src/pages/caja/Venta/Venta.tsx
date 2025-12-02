@@ -10,9 +10,6 @@ import Modal from "../../../components/common/Modal";
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useToast } from "../../../context/MensajeContext";
-import Sidebar from '../../../components/layout/Sidebar';
-import { useSidebar } from '../../../context/SidebarContext';
-import { Outlet } from 'react-router-dom';
 
 interface Producto {
   id: number;
@@ -490,9 +487,7 @@ export const Venta: React.FC = () => {
   );
 
   return (
-    <main className={`main-content ${!isOpen ? 'sidebar-closed' : ''}`}>
     <div className="ventas-container">
-      <Sidebar />
       <Modal title="Resumen de Venta" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div dangerouslySetInnerHTML={{ __html: htmlContent }}></div>
       </Modal>
@@ -652,7 +647,5 @@ export const Venta: React.FC = () => {
         )}
       </Modal>
     </div>
-    <Outlet />
-    </main>
   );
 };
