@@ -115,10 +115,8 @@ export default function InicioPage() {
                 <div className="services-intro">
                     <h3 className="services-subtitle">¡De los mejores sabores para compartir!</h3>
                     <p className="services-description">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                        pariatur.
+                        En nuestra cafetería, nos enorgullece ofrecer una experiencia completa que va más allá de una simple taza de café.
+                        Disfruta de nuestro ambiente acogedor, servicio excepcional y una variedad de opciones deliciosas para acompañar tu bebida favorita.
                     </p>
                 </div>
 
