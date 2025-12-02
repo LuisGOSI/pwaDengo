@@ -1,26 +1,51 @@
 import "./Venta.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAPI } from "../../../utils/UseAPI";
 import { useForm } from "../../../utils/UseForm";
 import { conf } from "../../../conf";
-import { CustomButton, CustomInput, Form, InputOption, Label } from "../../../components/common/Form";
+import { Form, createCustomInput, createInputOption, createCustomButton, createLabel } from "../../../components/common/Form";
+import type { CustomInput, ValidationResult } from "../../../components/common/Form";
 import { useAuth } from "../../../services/AuthContext";
 import Modal from "../../../components/common/Modal";
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useToast } from "../../../context/MensajeContext";
 
-// Inicializar Stripe
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || 'pk_test_your_key_here');
+interface Producto {
+  id: number;
+  nombre: string;
+  precio: number;
+  categoria_id: string;
+  timestamp?: number;
+}
 
-// Componente de formulario de pago con Stripe
-const StripePaymentForm = ({ onSuccess, onError, onCancel }) => {
+interface ItemCarrito extends Producto {
+  timestamp: number;
+}
+
+interface VentaFormData {
+  metodo_pago: string;
+  monto_pagado: string | number;
+  puntos_usados: number;
+  descuento_aplicado: number;
+  notas: string;
+}
+
+interface StripePaymentFormProps {
+  onSuccess?: () => void;
+  onError?: (error: string) => void;
+  onCancel: () => void;
+}
+
+const stripePromise = loadStripe((import.meta as any).env?.VITE_STRIPE_PUBLIC_KEY || 'pk_test_your_key_here');
+
+const StripePaymentForm: React.FC<StripePaymentFormProps> = ({ onSuccess, onError, onCancel }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!stripe || !elements) {
@@ -34,12 +59,11 @@ const StripePaymentForm = ({ onSuccess, onError, onCancel }) => {
       // Trigger form validation and wallet collection
       const { error: submitError } = await elements.submit();
       if (submitError) {
-        setErrorMessage(submitError.message);
-        onError?.(submitError.message);
+        setErrorMessage(submitError.message || 'Error en el formulario');
+        onError?.(submitError.message || 'Error en el formulario');
         return;
       }
 
-      // Confirmar el pago usando el clientSecret que ya tenemos
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
@@ -49,12 +73,11 @@ const StripePaymentForm = ({ onSuccess, onError, onCancel }) => {
       });
 
       if (error) {
-        setErrorMessage(error.message);
-        onError?.(`Error en el pago: ${error.message}`);
+        setErrorMessage(error.message || 'Error desconocido');
+        onError?.(`Error en el pago: ${error.message || 'Error desconocido'}`);
         return;
       }
 
-      // Verificar que el pago se completó exitosamente
       if (paymentIntent && paymentIntent.status === 'succeeded') {
         onSuccess?.();
       } else {
@@ -99,22 +122,18 @@ const StripePaymentForm = ({ onSuccess, onError, onCancel }) => {
   );
 };
 
-export const Venta = () => {
+export const Venta: React.FC = () => {
   const { get, post } = useAPI(`${conf.BACKEND_URL}/api/`);
   const { showToast } = useToast();
 
-  // Productos cargados desde la API
-  const [productosDisponibles, setProductosDisponibles] = useState([]);
+  const [productosDisponibles, setProductosDisponibles] = useState<Producto[]>([]);
   const { user } = useAuth();
-  const [fetchedUser, setFetchedUser] = useState(null);
+  const [fetchedUser, setFetchedUser] = useState<any>(null);
 
-  // Carrito de venta
-  const [carrito, setCarrito] = useState([]);
+  const [carrito, setCarrito] = useState<ItemCarrito[]>([]);
 
-  // Input para agregar por ID
-  const [productoIdInput, setProductoIdInput] = useState("");
+  const [productoIdInput, setProductoIdInput] = useState<string>("");
 
-  // Hook de formulario con tu useForm
   const { formData, handleInputChange, resetForm, setFormData } = useForm({
     metodo_pago: "tarjeta",
     monto_pagado: "",
@@ -122,8 +141,9 @@ export const Venta = () => {
     descuento_aplicado: 0,
     notas: "",
   });
+  
+  const typedFormData = formData as VentaFormData;
 
-  // Cargar productos al iniciar
   const loadProductos = () => {
     get("productos").then((res) => {
       setProductosDisponibles(res.data);
@@ -144,25 +164,28 @@ export const Venta = () => {
     }
   }, [user]);
 
-  // Agregar producto al carrito
-  const agregarProductoAlCarrito = (producto) => {
-    const item = {
+  const agregarProductoAlCarrito = (producto: Producto): void => {
+    const item: ItemCarrito = {
       ...producto,
       timestamp: Date.now(),
     };
     setCarrito((prev) => [...prev, item]);
   };
 
-  // Buscar y agregar producto por ID
-  const agregarPorId = () => {
+  const agregarPorId = async () => {
     if (!productoIdInput.trim()) {
       showToast('warning', 'Campo requerido', 'Ingresa un ID de producto');
       return;
     }
 
-    const producto = productosDisponibles.find(
-      (p) => p.id.toString() === productoIdInput.trim()
-    );
+    const response = await get(`productos/${productoIdInput.trim()}`);
+
+    if (!response.success) {
+      showToast('error', 'Producto no encontrado', 'No se encontró un producto con ese ID');
+      return;
+    }
+
+    const producto = response.data as Producto;
 
     if (!producto) {
       showToast('error', 'Producto no encontrado', 'No se encontró un producto con ese ID');
@@ -174,21 +197,18 @@ export const Venta = () => {
     showToast('success', 'Producto agregado', `${producto.nombre} agregado al carrito`);
   };
 
-  // Eliminar producto del carrito
-  const eliminarDelCarrito = (timestamp) => {
+  const eliminarDelCarrito = (timestamp: number): void => {
     setCarrito(carrito.filter((item) => item.timestamp !== timestamp));
   };
 
-  // Calcular total
   const montoTotalCarrito = carrito.reduce(
     (total, item) => total + item.precio,
     0
   );
 
-  // Registrar venta en el backend
   const registrarVenta = async () => {
     const ventaData = {
-      ...formData,
+      ...typedFormData,
       items: carrito.map((p) => ({
         producto_id: p.id,
         precio_unitario: p.precio,
@@ -201,7 +221,6 @@ export const Venta = () => {
     try {
       const res = await post("ventas/registrar-venta", ventaData);
       const total = res.venta.total;
-      console.log('Venta registrada:', total);
       // Clear form and carrito
       resetForm();
       setCarrito([]);
@@ -216,7 +235,7 @@ export const Venta = () => {
               <h2 style="color: #10b981; margin-bottom: 20px;">Venta Completada</h2>
               <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
                 <p style="font-size: 18px; margin: 10px 0;"><strong>Total:</strong> $${total.toFixed(2)}</p>
-                <p style="font-size: 16px; margin: 10px 0;"><strong>Método:</strong> ${formData.metodo_pago}</p>
+                <p style="font-size: 16px; margin: 10px 0;"><strong>Método:</strong> ${typedFormData.metodo_pago}</p>
               </div>
               <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
                 <img src="${qrImage}" alt="QR Code" style="max-width: 200px; border: 2px solid #e5e7eb; border-radius: 10px;" />
@@ -233,37 +252,14 @@ export const Venta = () => {
     }
   };
 
-  // Manejar envío del formulario
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
-    // Esta función ahora solo maneja la validación y delega según el método de pago
     handleConfirmPayment();
   };
 
-  const handleDescuentoChange = (e) => {
+  const handleDescuentoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void => {
     const value = parseFloat(e.target.value) || 0;
-    if (value < 0) {
-      setInputErrors(prev => ({
-        ...prev,
-        descuento_aplicado: "El descuento no puede ser negativo"
-      }));
-      showToast('warning', 'Descuento inválido', 'El descuento no puede ser un valor negativo');
-      return;
-    }
-    if (value > montoTotalCarrito) {
-      setInputErrors(prev => ({
-        ...prev,
-        descuento_aplicado: "El descuento no puede ser mayor al total"
-      }));
-      showToast('warning', 'Descuento inválido', 'El descuento no puede ser mayor al total del carrito');
-      return;
-    }
-    // Limpiar error si el valor es válido
-    setInputErrors(prev => {
-      const newErrors = { ...prev };
-      delete newErrors.descuento_aplicado;
-      return newErrors;
-    });
+    
     setFormData((prev) => ({
       ...prev,
       descuento_aplicado: value,
@@ -271,26 +267,32 @@ export const Venta = () => {
     }));
   }
 
-  // Actualizar el monto pagado cada vez que cambie el carrito
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
-      monto_pagado: montoTotalCarrito - prev.descuento_aplicado,
+      monto_pagado: montoTotalCarrito - (prev as VentaFormData).descuento_aplicado,
     }));
   }, [carrito]);
 
   useEffect(() => {
-    handleDescuentoChange({ target: { value: formData.descuento_aplicado } });
-  }, [formData.descuento_aplicado]);
+    const descuento = Number(typedFormData.descuento_aplicado) || 0;
+    setFormData((prev) => ({
+      ...prev,
+      monto_pagado: Math.max(0, montoTotalCarrito - descuento),
+    }));
+  }, [typedFormData.descuento_aplicado, montoTotalCarrito, setFormData]);
+
+  useEffect(() => {
+    validateAllInputs();
+  }, [typedFormData, carrito, montoTotalCarrito]);
 
   const handleStripeSuccess = () => {
-    // Procesar la venta después del pago exitoso
     setStripeModalOpen(false);
     showToast('success', 'Pago aprobado', 'El pago con tarjeta fue procesado correctamente');
     registrarVenta();
   };
 
-  const handleStripeError = (error) => {
+  const handleStripeError = (error: string) => {
     console.error('Error en pago Stripe:', error);
     showToast('error', 'Error en el pago', error || 'Ocurrió un error procesando el pago con tarjeta');
   };
@@ -302,29 +304,18 @@ export const Venta = () => {
   };
 
   const handleConfirmPayment = async () => {
-    // Validaciones iniciales
-    if (carrito.length === 0) {
-      showToast('warning', 'Carrito vacío', 'Agrega productos al carrito antes de continuar');
+    if (!isFormValid || !validateAllInputs()) {
+      const errorMessages = Object.values(validationErrors);
+      showToast('error', 'Formulario inválido', errorMessages[0] || 'Corrige los errores antes de continuar');
       return;
     }
 
-    if (!formData.monto_pagado) {
-      showToast('warning', 'Camposd requeridos', 'Verifica el monto a pagar');
-      return;
-    }
-
-    if (formData.monto_pagado <= 0) {
-      showToast('error', 'Monto inválido', 'El monto a pagar debe ser mayor a cero');
-      return;
-    }
-
-    if (formData.metodo_pago === 'tarjeta') {
-      // Crear payment intent para Stripe
+    if (typedFormData.metodo_pago === 'tarjeta') {
       try {
         showToast('success', 'Iniciando pago', 'Preparando el proceso de pago con tarjeta...');
 
         const response = await post('stripe/create-payment-intent', {
-          amount: Math.round(formData.monto_pagado * 100), // Convertir a centavos
+          amount: Math.round(Number(typedFormData.monto_pagado) * 100), // Convertir a centavos
           currency: 'mxn'
         });
 
@@ -345,49 +336,155 @@ export const Venta = () => {
         return;
       }
     } else {
-      // Para efectivo y transferencia, registrar directamente
+      // For other payment methods, directly register the sale
       registrarVenta();
     }
   }
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [htmlContent, setHtmlContent] = useState('');
-  const [inputErrors, setInputErrors] = useState({});
-  const [stripeModalOpen, setStripeModalOpen] = useState(false);
-  const [clientSecret, setClientSecret] = useState(null);
-  const [stripeOptions, setStripeOptions] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [htmlContent, setHtmlContent] = useState<string>('');
+  const [inputErrors, setInputErrors] = useState<Record<string, string>>({});
+  const [stripeModalOpen, setStripeModalOpen] = useState<boolean>(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [stripeOptions, setStripeOptions] = useState<any>(null);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
-  const inputs = [
-    new CustomInput("metodo_pago", "metodo_pago", "select", "Método de Pago", formData.metodo_pago, handleInputChange, "", [
-      new InputOption("tarjeta", "Tarjeta"),
-      new InputOption("efectivo", "Efectivo"),
-    ], "formulario-select"),
-    new CustomInput("puntos_usados", "puntos_usados", "number", "Puntos Usados", formData.puntos_usados, handleInputChange, "", [], "formulario-input"),
-    new CustomInput(
-      "descuento_aplicado",
-      "descuento_aplicado",
-      "number",
-      "Descuento",
-      formData.descuento_aplicado,
-      handleDescuentoChange,
-      "",
-      [],
-      "formulario-input",
-      {},
-      false,
-      new Label(),
-      inputErrors.descuento_aplicado ? new Label(inputErrors.descuento_aplicado, "descuento_aplicado", true) : null
+  // Function to validate the entire form
+  const validateAllInputs = () => {
+    const errors: Record<string, string> = {};
+    
+    // Validate discount
+    const descuentoValidation = validateDescuento(typedFormData.descuento_aplicado);
+    if (!descuentoValidation.isValid) {
+      errors.descuento_aplicado = descuentoValidation.message;
+    }
+    
+    // Validate amount paid
+    const montoValidation = validateMontoPagado(typedFormData.monto_pagado);
+    if (!montoValidation.isValid) {
+      errors.monto_pagado = montoValidation.message;
+    }
+    
+    // Additional business validations
+    if (carrito.length === 0) {
+      errors.carrito = "Debe agregar al menos un producto al carrito";
+    }
+    
+    if (!typedFormData.monto_pagado || Number(typedFormData.monto_pagado) <= 0) {
+      errors.monto_pagado = "El monto debe ser mayor a cero";
+    }
+    
+    setValidationErrors(errors);
+    const formIsValid = Object.keys(errors).length === 0;
+    setIsFormValid(formIsValid);
+    
+    return formIsValid;
+  };
+
+  // Validators
+  const validateDescuento = (value: any): ValidationResult => {
+    const numValue = parseFloat(value) || 0;
+    if (numValue < 0) {
+      return { isValid: false, message: "El descuento no puede ser negativo" };
+    }
+    if (numValue > montoTotalCarrito) {
+      return { isValid: false, message: "El descuento no puede ser mayor al total" };
+    }
+    return { isValid: true, message: "" };
+  };
+
+  const validateMontoPagado = (value: any): ValidationResult => {
+    const numValue = parseFloat(value) || 0;
+    if (numValue <= 0) {
+      return { isValid: false, message: "El monto debe ser mayor a cero" };
+    }
+    return { isValid: true, message: "" };
+  };
+
+  const inputs: CustomInput[] = [
+    createCustomInput(
+      "metodo_pago",
+      "Método de Pago",
+      typedFormData.metodo_pago,
+      handleInputChange,
+      {
+        type: "select",
+        options: [
+          createInputOption("tarjeta", "Tarjeta"),
+          createInputOption("efectivo", "Efectivo"),
+        ],
+        className: "formulario-select"
+      }
     ),
-    new CustomInput("notas", "notas", "textarea", "Notas", formData.notas, handleInputChange, "", [], "formulario-textarea"),
-    new CustomInput("monto_pagado", "monto_pagado", "number", "Monto Pagado *", formData.monto_pagado, handleInputChange, "", [], "formulario-input", {}, true),
+    createCustomInput(
+      "descuento_aplicado",
+      "Descuento",
+      typedFormData.descuento_aplicado,
+      handleDescuentoChange,
+      {
+        type: "number",
+        className: "formulario-input",
+        placeholder: "0.00",
+        validator: validateDescuento,
+      }
+    ),
+    createCustomInput(
+      "notas",
+      "Notas",
+      typedFormData.notas,
+      handleInputChange,
+      {
+        type: "textarea",
+        className: "formulario-textarea",
+        placeholder: "Observaciones adicionales...",
+        rows: 3
+      }
+    ),
+    createCustomInput(
+      "monto_pagado",
+      "Monto Pagado *",
+      typedFormData.monto_pagado,
+      handleInputChange,
+      {
+        type: "number",
+        className: "formulario-input",
+        disabled: true,
+        validator: validateMontoPagado
+      }
+    ),
   ];
 
-  const submitButtonText = formData.metodo_pago === 'tarjeta' ? 'Proceder al Pago' : 'Guardar Venta';
-  const submitButton = new CustomButton("submit_venta", submitButtonText, handleConfirmPayment, "btn-guardar", {}, "button");
-  const resetButton = new CustomButton("reset_venta", "Limpiar", () => {
-    resetForm();
-    setCarrito([]);
-  }, "btn-limpiar", {}, "button");
+  const submitButtonText = typedFormData.metodo_pago === 'tarjeta' ? 'Proceder al Pago' : 'Guardar Venta';
+  const submitButton = createCustomButton(
+    submitButtonText,
+    handleConfirmPayment,
+    {
+      id: "submit_venta",
+      className: `btn-guardar ${!isFormValid ? 'disabled' : ''}`,
+      type: "button",
+      disabled: !isFormValid,
+      style: {
+        opacity: isFormValid ? 1 : 0.6,
+        cursor: isFormValid ? 'pointer' : 'not-allowed'
+      }
+    }
+  );
+  
+  const resetButton = createCustomButton(
+    "Limpiar",
+    () => {
+      resetForm();
+      setCarrito([]);
+      setValidationErrors({});
+      setIsFormValid(false);
+    },
+    {
+      id: "reset_venta",
+      className: "btn-limpiar",
+      type: "button"
+    }
+  );
 
   return (
     <div className="ventas-container">
@@ -467,6 +564,27 @@ export const Venta = () => {
           <section className="ventas-formulario" id="formulario">
             <div className="formulario-contenedor">
               <h2 className="formulario-titulo">Registrar Nueva Venta</h2>
+              
+              {/* Mostrar estado de validación */}
+              {Object.keys(validationErrors).length > 0 && (
+                <div style={{ 
+                  backgroundColor: '#fef2f2', 
+                  border: '1px solid #fecaca', 
+                  borderRadius: '6px', 
+                  padding: '12px', 
+                  marginBottom: '16px' 
+                }}>
+                  <div style={{ color: '#dc2626', fontSize: '14px', fontWeight: '600' }}>
+                    Corrige los siguientes errores:
+                  </div>
+                  <ul style={{ margin: '8px 0 0 20px', color: '#dc2626', fontSize: '13px' }}>
+                    {Object.entries(validationErrors).map(([field, error]) => (
+                      <li key={field}>{error}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
               <Form onSubmit={handleSubmit} inputs={inputs} submitButton={submitButton} resetButton={resetButton} className="formulario-grid" />
             </div>
           </section>

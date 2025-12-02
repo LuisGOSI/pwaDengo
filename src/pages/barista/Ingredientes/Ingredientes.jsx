@@ -31,9 +31,12 @@ export const Ingredientes = () => {
   });
 
   const tipos = [
-    "Base",
-    "Endulzante",
-    "Lacteo",
+    "base",
+    "endulzante",
+    "leche",
+    "topping",
+    "extra",
+    "saborizante"
   ];
 
   const handleFiltroChange = (e) => {

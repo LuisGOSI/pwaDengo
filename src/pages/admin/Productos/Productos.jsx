@@ -6,38 +6,72 @@ import Sidebar from "../../../components/layout/Sidebar";
 import { useAPI } from "../../../utils/UseAPI";
 import { useShowContent } from "../../../utils/UseShowContent";
 import { FormProductos } from "./FormProductos";
+import { conf } from "../../../conf";
 
 export const Productos = () => {
   const { isOpen } = useSidebar();
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("");
   const [estado, setEstado] = useState("");
-  const [sucursal, setSucursal] = useState("");
 
   //[CAMBIOS NUEVOS]
 
-  const { get, del } = useAPI("https://dengo-back.onrender.com/api/"); //Se pasas la URL base como parametro
+  const { get, del } = useAPI(`${conf.BACKEND_URL}/api/`); //Se pasas la URL base como parametro
   const [productos, setProductos] = useState([]); //Estado para almacenar los productos
+  const [productosFiltrados, setProductosFiltrados] = useState([]); //Estado para productos filtrados
+  const [categorias, setCategorias] = useState([]); //Estado para categorías
   const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } = useShowContent();
 
   useEffect(() => {
     loadProductos();
+    loadCategorias();
   }, []);
 
   const loadProductos = () => {
     get("productos").then((res) => {
       setProductos(res.data);
+      setProductosFiltrados(res.data); // Inicializar productos filtrados
+    });
+  };
+
+  const loadCategorias = () => {
+    get("categorias").then((res) => {
+      setCategorias(res.data);
     });
   };
 
   const handleFiltrar = () => {
-    console.log("Filtrando productos...", {
-      busqueda,
-      categoria,
-      estado,
-      sucursal,
-    });
+    let productosFiltro = [...productos];
+
+    // Filtrar por nombre
+    if (busqueda.trim() !== "") {
+      productosFiltro = productosFiltro.filter(producto =>
+        producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
+      );
+    }
+
+    // Filtrar por categoría
+    if (categoria !== "") {
+      productosFiltro = productosFiltro.filter(producto =>
+        producto.categoria_id.toString() === categoria
+      );
+    }
+
+    // Filtrar por estado
+    if (estado !== "") {
+      const esActivo = estado === "activo";
+      productosFiltro = productosFiltro.filter(producto =>
+        producto.activo === esActivo
+      );
+    }
+
+    setProductosFiltrados(productosFiltro);
   };
+
+  // Aplicar filtros automáticamente cuando cambien los valores
+  useEffect(() => {
+    handleFiltrar();
+  }, [busqueda, categoria, estado, productos]);
 
   const handleDelete = async (id) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar este producto?")) {
@@ -90,6 +124,7 @@ export const Productos = () => {
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
                 className="filtro-input"
+                placeholder="Buscar por nombre..."
               />
             </div>
 
@@ -100,12 +135,12 @@ export const Productos = () => {
                 onChange={(e) => setCategoria(e.target.value)}
                 className="filtro-select"
               >
-                <option value=""></option>
-                <option value="cafe">Café</option>
-                <option value="panaderia">Panadería</option>
-                <option value="comida">Comida</option>
-                <option value="bebidas">Bebidas</option>
-                <option value="postres">Postres</option>
+                <option value="">Todas las categorías</option>
+                {categorias.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.nombre}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -116,43 +151,31 @@ export const Productos = () => {
                 onChange={(e) => setEstado(e.target.value)}
                 className="filtro-select"
               >
-                <option value=""></option>
-                <option value="disponible">Disponible</option>
-                <option value="agotado">Agotado</option>
-                <option value="descontinuado">Descontinuado</option>
+                <option value="">Todos los estados</option>
+                <option value="activo">Activo</option>
+                <option value="inactivo">Inactivo</option>
               </select>
             </div>
 
-            <div className="filtro-group">
-              <label>Sucursal</label>
-              <select
-                value={sucursal}
-                onChange={(e) => setSucursal(e.target.value)}
-                className="filtro-select"
-              >
-                <option value=""></option>
-                <option value="todas">Todas</option>
-                <option value="centro">Centro</option>
-                <option value="norte">Norte</option>
-                <option value="sur">Sur</option>
-              </select>
-            </div>
           </div>
 
-          <button onClick={handleFiltrar} className="btn-filtrar">
-            Filtrar
+          <button onClick={() => {
+            setBusqueda("");
+            setCategoria("");
+            setEstado("");
+          }} className="btn-filtrar">
+            Limpiar Filtros
           </button>
         </div>
 
-        {/* Lista de productos */}
-        {productos.length === 0 ? (
-          <p className="sin-productos">No hay productos disponibles.</p>
+        {productosFiltrados.length === 0 ? (
+          <p className="sin-productos">No hay productos que coincidan con los filtros.</p>
         ) : (
           <div className="productos-lista">
             <div className="lista-header">
               <h2 className="lista-titulo">Lista de Productos</h2>
               <p className="lista-subtitulo">
-                Total: {productos.length} productos
+                Mostrando: {productosFiltrados.length} de {productos.length} productos
               </p>
             </div>
 
@@ -163,11 +186,12 @@ export const Productos = () => {
                     <th>NOMBRE</th>
                     <th>CATEGORÍA</th>
                     <th>PRECIO</th>
+                    <th>ESTADO</th>
                     <th>ACCIONES</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {productos.map((producto) => (
+                  {productosFiltrados.map((producto) => (
                     <tr key={producto.id}>
                       <td>
                         <div className="producto-info">
@@ -187,10 +211,15 @@ export const Productos = () => {
                         <span
                           className={`categoria-badge categoria-${producto.categoria_id}`}
                         >
-                          {producto.categoria_id}
+                          {producto.categorias.nombre}
                         </span>
                       </td>
                       <td className="producto-precio">${producto.precio}</td>
+                      <td>
+                        <span className={`estado-badge ${producto.activo ? 'estado-activo' : 'estado-inactivo'}`}>
+                          {producto.activo ? 'Activo' : 'Inactivo'}
+                        </span>
+                      </td>
                       <td>
                         <div className="acciones-container">
                           <button

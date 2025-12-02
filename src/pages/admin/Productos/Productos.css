@@ -239,29 +239,70 @@
     font-weight: 500;
 }
 
-.categoria-cafe {
-    background-color: #dce9ff;
-    color: #1976d2;
-}
-
-.categoria-panaderia {
-    background-color: #f3e5f5;
-    color: #8e24aa;
-}
-
-.categoria-comida {
-    background-color: #ffe8d6;
-    color: #e65100;
-}
-
-.categoria-bebidas {
+/* Estilos dinámicos para categorías por ID */
+.categoria-1 {
     background-color: #e8f5e9;
     color: #2e7d32;
 }
 
-.categoria-postres {
+.categoria-2 {
+    background-color: #dce9ff;
+    color: #1976d2;
+}
+
+.categoria-3 {
+    background-color: #ffe8d6;
+    color: #e65100;
+}
+
+.categoria-4 {
+    background-color: #f3e5f5;
+    color: #8e24aa;
+}
+
+.categoria-5 {
     background-color: #fff3e0;
     color: #ef6c00;
+}
+
+.categoria-6 {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.categoria-7 {
+    background-color: #e0f2f1;
+    color: #00695c;
+}
+
+.categoria-8 {
+    background-color: #fce4ec;
+    color: #ad1457;
+}
+
+/* Estilos para categorías adicionales */
+.categoria-badge:not([class*="categoria-"]) {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+/* Estado Badges */
+.estado-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.estado-activo {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.estado-inactivo {
+    background-color: #ffebee;
+    color: #c62828;
 }
 
 /* Sucursal y Precio */

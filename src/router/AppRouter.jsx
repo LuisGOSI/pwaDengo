@@ -27,6 +27,9 @@ import { ProductosComunidad } from "../pages/admin/ProductosComunidad/ProductosC
 import { Configuracion } from "../pages/admin/Configuracion/Configuracion.jsx";
 import { Cartelera } from "../pages/admin/Cartelera/Cartelera.jsx";
 import { Venta } from "../pages/caja/Venta/Venta.jsx";
+import Feed from "../pages/community/Feed/Feed.tsx";
+import MisCreaciones from "../pages/community/MisCreaciones/MisCreaciones.tsx";
+import NuevaCreacion from "../pages/community/NuevaCreacion/NuevaCreacion.tsx";
 
 export const AppRouter = () => {
 	return (
@@ -165,6 +168,27 @@ export const AppRouter = () => {
 					</SidebarProvider>
 				</ProtectedRoute>
 			} />
+			/* Community routes (for client. These routes should be protected) */
+			<Route path="/community" element={
+				<SidebarProvider>
+					<Feed />
+				</SidebarProvider>
+			}/>
+			<Route path="/community/feed" element={
+				<SidebarProvider>
+					<Feed />
+				</SidebarProvider>
+			}/>
+			<Route path="/community/mis-creaciones" element={
+				<SidebarProvider>
+					<MisCreaciones />
+				</SidebarProvider>
+			}/>
+			<Route path="/community/nueva-creacion" element={
+				<SidebarProvider>
+					<NuevaCreacion />
+				</SidebarProvider>
+			}/>"
 
 			{/* Rutas especiales */}
 			<Route path="/no-autorizado" element={<NoAutorizado />} />

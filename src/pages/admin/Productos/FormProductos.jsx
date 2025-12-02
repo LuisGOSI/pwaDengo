@@ -2,18 +2,30 @@ import { useEffect, useState } from "react";
 import { useAPI } from "../../../utils/UseAPI";
 import { useForm } from "../../../utils/UseForm";
 import "./Productos.css";
+import { useAuth } from "../../../services/AuthContext";
 
 export const FormProductos = ({ initialData, onClose }) => {
+  const { user } = useAuth();
   const { formData, handleInputChange, resetForm, setFormData } = useForm({
     nombre: "",
     descripcion: "",
     precio: 0,
     url_imagen: "",
     categoria_id: 0,
-    creado_por: "b46d3602-5244-49b5-a0d6-d17233e28aa4",
+    creado_por: user ? user.id : "",
   });
 
-  const { post, put, loading, error } = useAPI("http://localhost:3000/api/");
+  const { post, put, get, loading, error } = useAPI("http://localhost:3000/api/");
+  const [categorias, setCategorias] = useState([]);
+
+  useEffect(() => {
+    const fetchCategorias = async () => {
+      const response = await get("categorias");
+      setCategorias(response.data);
+    };
+
+    fetchCategorias();
+  }, []);
 
   const handleSubmit = async () => {
     let result;
@@ -37,6 +49,17 @@ export const FormProductos = ({ initialData, onClose }) => {
       setFormData(initialData);
     }
   }, [initialData]);
+
+  const validatePrice = (e) => {
+    const value = e.target.value;
+    if (!Number(value)) {
+      e.target.value = "";
+    }
+    if (value.includes("-")) {
+      e.target.value = value.replace("-", "");
+    }
+    handleInputChange(e);
+  }
 
   return (
     <div className="formContainer">
@@ -80,7 +103,7 @@ export const FormProductos = ({ initialData, onClose }) => {
               type="number"
               name="precio"
               value={formData.precio}
-              onChange={handleInputChange}
+              onChange={validatePrice}
               placeholder="0.00"
               step="0.01"
               min="0"
@@ -96,22 +119,7 @@ export const FormProductos = ({ initialData, onClose }) => {
               name="url_imagen"
               value={formData.url_imagen}
               onChange={handleInputChange}
-              placeholder="0.00"
-              required
-              className="input"
-            />
-          </div>
-
-          <div>
-            <label className="label">Categoria</label>
-            <input
-              type="number"
-              name="categoria_id"
-              value={formData.categoria_id}
-              onChange={handleInputChange}
-              placeholder="0.00"
-              step="1"
-              min="0"
+              placeholder="http://example.com/imagen.jpg"
               required
               className="input"
             />
@@ -119,12 +127,13 @@ export const FormProductos = ({ initialData, onClose }) => {
 
           <div>
             <label className="label">Categoría *</label>
-            <select name="categoria" className="select">
-              <option value="">Selecciona una categoría</option>
-              <option value="Bebidas">Bebidas</option>
-              <option value="Postres">Postres</option>
-              <option value="Comida">Comida</option>
-              <option value="Panadería">Panadería</option>
+            <select value={formData.categoria_id ?? ''} name="categoria_id" className="select" onChange={handleInputChange} required>
+              <option value="" disabled>Selecciona una categoría</option>
+              {categorias.map((categoria) => (
+                <option key={categoria.id} value={categoria.id}>
+                  {categoria.nombre}
+                </option>
+              ))}
             </select>
           </div>
         </div>
