@@ -10,7 +10,7 @@ import { FormIngredientes } from "./FormIngredientes";
 export const Ingredientes = () => {
   const { isOpen } = useSidebar();
   const [ingredientes, setIngredientes] = useState([]);
-  const { get, error, loading } = useAPI("https://dengo-back.onrender.com/api/");
+  const { get, error, loading } = useAPI(`${conf.BACKEND_URL}/api/`);
   const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } =
     useShowContent();
 
