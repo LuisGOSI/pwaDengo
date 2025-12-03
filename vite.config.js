@@ -21,12 +21,12 @@ export default defineConfig({
         background_color: '#ffffff',
         icons: [
           {
-            src: '/icons/prueba1.png',
+            src: '/icons/Dengo.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: '/icons/prueba2.png',
+            src: '/icons/Dengo.png',
             sizes: '512x512',
             type: 'image/png'
           }
