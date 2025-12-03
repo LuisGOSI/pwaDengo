@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAPI } from "../../../utils/UseAPI";
 import { useForm } from "../../../utils/UseForm";
+import { conf } from "../../../conf";
 
 export const FormIngredientes = ({ initialData, onClose }) => {
   const { formData, handleInputChange, resetForm, setFormData } = useForm({
@@ -11,7 +12,7 @@ export const FormIngredientes = ({ initialData, onClose }) => {
     creado_por: "b46d3602-5244-49b5-a0d6-d17233e28aa4",
   });
 
-  const { post, put, loading, error } = useAPI("https://dengo-back.onrender.com/api/");
+  const { post, put, loading, error } = useAPI(`${conf.BACKEND_URL}/api/`);
 
   const handleSubmit = async () => {
     let result;

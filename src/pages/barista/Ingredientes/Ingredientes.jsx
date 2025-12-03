@@ -6,11 +6,12 @@ import { Outlet } from "react-router-dom";
 import { useAPI } from "../../../utils/UseAPI";
 import { useShowContent } from "../../../utils/UseShowContent";
 import { FormIngredientes } from "./FormIngredientes";
+import { conf } from "../../../conf";
 
 export const Ingredientes = () => {
   const { isOpen } = useSidebar();
   const [ingredientes, setIngredientes] = useState([]);
-  const { get, error, loading } = useAPI("https://dengo-back.onrender.com/api/");
+  const { get, error, loading } = useAPI(`${conf.BACKEND_URL}/api/`);
   const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } =
     useShowContent();
 

@@ -241,18 +241,34 @@
 }
 
 .tipo-base {
-    background-color: #ffe8d6;
-    color: #e65100;
+    background-color: #db9004;
+    color: #ffffff;
 }
 
 .tipo-endulzante {
-    background-color: #f3e5f5;
-    color: #8e24aa;
+    background-color: #e7d215;
+    color: #ffffff;
 }
 
-.tipo-lacteo {
-    background-color: #e3f2fd;
-    color: #1565c0;
+.tipo-leche {
+    background-color: #57b2f3;
+    color: #ffffff;
+}
+
+.tipo-saborizante{
+    background-color: #c60bcc;
+    color: #ffffff;
+}
+
+.tipo-topping{
+    background-color: #de0985;
+    color: #ffffff;
+}
+
+
+.tipo-extra{
+    background-color: #ea7f0d;
+    color: #ffffff;
 }
 
 /* Estado Badges */
