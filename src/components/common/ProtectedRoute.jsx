@@ -22,7 +22,7 @@ export function ProtectedRoute({ children, allowedRoles }) {
     }
 
     if (user && type === 'cliente' ) {
-        return <Navigate to="/portal-cliente" replace />;
+        return <Navigate to="/community" replace />;
     }
 
     // Si se especifican roles y el usuario no tiene un rol permitido

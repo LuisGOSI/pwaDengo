@@ -93,6 +93,9 @@ export default function Feed() {
           <p className="feed-breadcrumb">Comunidad | Creaciones Públicas</p>
         </div>
         <div className="feed-header-actions">
+          <button className="btn-home" onClick={() => navigate('/')}>
+            ← Volver al Inicio
+          </button>
           <button className="btn-mis-creaciones" onClick={() => navigate('/community/mis-creaciones')}>
             Ver Mis Creaciones
           </button>
