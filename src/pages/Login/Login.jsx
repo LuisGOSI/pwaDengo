@@ -67,6 +67,8 @@ export default function Login() {
 
 				if (error) throw error;
 
+				setAuthLoading(false)
+
 				alert("Cuenta creada con éxito.");
 				setEmail("");
 				setPassword("");
