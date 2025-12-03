@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAPI } from "../../../utils/UseAPI";
 import { useForm } from "../../../utils/UseForm";
+import { conf } from "../../../conf";
 
 export const FormIngredientes = ({ initialData, onClose }) => {
   const { formData, handleInputChange, resetForm, setFormData } = useForm({

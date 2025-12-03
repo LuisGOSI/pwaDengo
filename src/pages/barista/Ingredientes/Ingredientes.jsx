@@ -6,6 +6,7 @@ import { Outlet } from "react-router-dom";
 import { useAPI } from "../../../utils/UseAPI";
 import { useShowContent } from "../../../utils/UseShowContent";
 import { FormIngredientes } from "./FormIngredientes";
+import { conf } from "../../../conf";
 
 export const Ingredientes = () => {
   const { isOpen } = useSidebar();
