@@ -2,37 +2,32 @@ import { useEffect, useState, useRef, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
 	ChevronLeft,
-	ChevronRight,
-	Home,
-	FileText,
-	ShoppingCart,
-	Calendar,
-	DollarSign,
-	CreditCard,
-	Package,
-	Layers,
-	Grid,
-	Users,
-	Tag,
-	Megaphone,
-	Bell,
-	Star,
-	PieChart,
-	Settings,
-	UserCog,
-	LogOut,
+    ChevronRight,
+    Home,
+    ShoppingCart,
+    DollarSign,
+    CreditCard,
+    Package,
+    Layers,
+    Grid,
+    Users,
+    Tag,
+    Megaphone,
+    Settings,
+    LogOut,
 } from "lucide-react";
 import logo from "../../assets/images/icono_dengo.svg";
 import { useSidebar } from "../../context/SidebarContext";
 import { useAuth } from "../../services/AuthContext";
 
+const MOBILE_BREAKPOINT = 768;
 export default function Sidebar() {
-	const { isOpen, toggleSidebar } = useSidebar();
-	const { signOut, role, user, userData } = useAuth();
-	const navigate = useNavigate();
-	const location = useLocation();
-	const navRef = useRef(null);
-	const scrollPositionRef = useRef(0);
+    const { isOpen, toggleSidebar } = useSidebar(); // Asegúrate de exportar setIsOpen en tu contexto si es posible, si no, toggleSidebar sirve
+    const { signOut, role, user, userData } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const navRef = useRef(null);
+    const scrollPositionRef = useRef(0);
 
 	const initials = user.email
 		.split(" ")
@@ -54,9 +49,7 @@ export default function Sidebar() {
 		if (path.includes("/admin/Sucursal")) return "sucursales";
 		if (path.includes("/admin/ordenes")) return "pedidos";
 		if (path.includes("/admin/ingredientes")) return "ingredientes";
-		if (path.includes("/admin/ProductosComunidad"))
-			return "productos-comunidad";
-		if (path.includes("/admin/configuracion")) return "configuracion";
+		if (path.includes("/admin/ProductosComunidad")) return "productos-comunidad";
 		return "inicio";
 	};
 
@@ -191,25 +184,6 @@ export default function Sidebar() {
 					icon: Users,
 					path: "/admin/usuarios",
 					roles: [1, 2],
-				},
-				// {
-				// 	id: "segmentacion",
-				// 	label: "Segmentación",
-				// 	icon: PieChart,
-				// 	path: "/admin/SegmentacionPromociones",
-				// 	roles: [1, 2],
-				// },
-			],
-		},
-		{
-			title: "CONFIGURACIÓN",
-			items: [
-				{
-					id: "configuracion",
-					label: "Configuración",
-					icon: Settings,
-					path: "/admin/configuracion",
-					roles: [1, 2, 3, 4],
 				},
 			],
 		},

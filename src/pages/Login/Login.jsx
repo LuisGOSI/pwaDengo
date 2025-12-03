@@ -60,11 +60,14 @@ export default function Login() {
 				const { error } = await supabase.auth.signUp({
 					email,
 					password,
+					options: {
+						redirectTo: `${window.location.origin}/portal-cliente`
+					},
 				});
 
 				if (error) throw error;
 
-				alert("Cuenta creada. Revisa tu correo electrónico para verificarla.");
+				alert("Cuenta creada con éxito.");
 				setEmail("");
 				setPassword("");
 				setIsSignUp(false);

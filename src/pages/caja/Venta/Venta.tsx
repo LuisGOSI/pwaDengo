@@ -11,6 +11,11 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useToast } from "../../../context/MensajeContext";
 
+// ----- SIDEBAR -----
+import Sidebar from '../../../components/layout/Sidebar';
+import { useSidebar } from '../../../context/SidebarContext';
+import { Outlet } from 'react-router-dom';
+
 interface Producto {
   id: number;
   nombre: string;
@@ -123,6 +128,9 @@ const StripePaymentForm: React.FC<StripePaymentFormProps> = ({ onSuccess, onErro
 };
 
 export const Venta: React.FC = () => {
+
+  const { isOpen } = useSidebar();
+
   const { get, post } = useAPI(`${conf.BACKEND_URL}/api/`);
   const { showToast } = useToast();
 
@@ -141,7 +149,7 @@ export const Venta: React.FC = () => {
     descuento_aplicado: 0,
     notas: "",
   });
-  
+
   const typedFormData = formData as VentaFormData;
 
   const loadProductos = () => {
@@ -259,7 +267,7 @@ export const Venta: React.FC = () => {
 
   const handleDescuentoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void => {
     const value = parseFloat(e.target.value) || 0;
-    
+
     setFormData((prev) => ({
       ...prev,
       descuento_aplicado: value,
@@ -353,32 +361,32 @@ export const Venta: React.FC = () => {
   // Function to validate the entire form
   const validateAllInputs = () => {
     const errors: Record<string, string> = {};
-    
+
     // Validate discount
     const descuentoValidation = validateDescuento(typedFormData.descuento_aplicado);
     if (!descuentoValidation.isValid) {
       errors.descuento_aplicado = descuentoValidation.message;
     }
-    
+
     // Validate amount paid
     const montoValidation = validateMontoPagado(typedFormData.monto_pagado);
     if (!montoValidation.isValid) {
       errors.monto_pagado = montoValidation.message;
     }
-    
+
     // Additional business validations
     if (carrito.length === 0) {
       errors.carrito = "Debe agregar al menos un producto al carrito";
     }
-    
+
     if (!typedFormData.monto_pagado || Number(typedFormData.monto_pagado) <= 0) {
       errors.monto_pagado = "El monto debe ser mayor a cero";
     }
-    
+
     setValidationErrors(errors);
     const formIsValid = Object.keys(errors).length === 0;
     setIsFormValid(formIsValid);
-    
+
     return formIsValid;
   };
 
@@ -470,7 +478,7 @@ export const Venta: React.FC = () => {
       }
     }
   );
-  
+
   const resetButton = createCustomButton(
     "Limpiar",
     () => {
@@ -487,165 +495,169 @@ export const Venta: React.FC = () => {
   );
 
   return (
-    <div className="ventas-container">
-      <Modal title="Resumen de Venta" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div dangerouslySetInnerHTML={{ __html: htmlContent }}></div>
-      </Modal>
-      <header className="ventas-header">
-        <div className="ventas-header-left">
-          <h1 className="ventas-titulo">Módulo de Ventas</h1>
-          <p className="ventas-breadcrumb">Gestión | Registros de Ventas</p>
-        </div>
-        <button
-          className="btn-nueva-venta"
-          onClick={() =>
-            document
-              .getElementById("formulario")
-              ?.scrollIntoView({ behavior: "smooth" })
-          }
-        >
-          <span className="btn-icono">+</span>
-          Nueva Venta
-        </button>
-      </header>
+    <main className={`main-content ${!isOpen ? 'sidebar-closed' : ''}`}>
+      <div className="ventas-container">
+        <Sidebar />
+        <Modal title="Resumen de Venta" isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <div dangerouslySetInnerHTML={{ __html: htmlContent }}></div>
+        </Modal>
+        <header className="ventas-header">
+          <div className="ventas-header-left">
+            <h1 className="ventas-titulo">Módulo de Ventas</h1>
+            <p className="ventas-breadcrumb">Gestión | Registros de Ventas</p>
+          </div>
+          <button
+            className="btn-nueva-venta"
+            onClick={() =>
+              document
+                .getElementById("formulario")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+          >
+            <span className="btn-icono">+</span>
+            Nueva Venta
+          </button>
+        </header>
 
-      <div className="ventas-layout-principal">
-        {/* ------------------- LISTA DE PRODUCTOS ------------------- */}
-        <section className="ventas-productos">
-          <div className="productos-contenedor">
-            <h2 className="productos-titulo">Seleccionar Productos</h2>
+        <div className="ventas-layout-principal">
+          {/* ------------------- LISTA DE PRODUCTOS ------------------- */}
+          <section className="ventas-productos">
+            <div className="productos-contenedor">
+              <h2 className="productos-titulo">Seleccionar Productos</h2>
 
-            <div className="productos-input-seccion">
-              <h3 className="input-titulo">Agregar por ID de Producto</h3>
-              <div className="producto-input-group">
-                <input
-                  type="text"
-                  value={productoIdInput}
-                  onChange={(e) => setProductoIdInput(e.target.value)}
-                  placeholder="Ej: 101"
-                  className="formulario-input"
-                  onKeyPress={(e) => e.key === "Enter" && agregarPorId()}
-                />
-                <button className="btn-agregar-id" onClick={agregarPorId}>
-                  Agregar
-                </button>
-              </div>
-            </div>
-
-            <div className="productos-grid">
-              {productosDisponibles.map((producto) => (
-                <div key={producto.id} className="producto-card">
-                  <div className="producto-header">
-                    <span className="producto-categoria">
-                      {producto.categoria_id}
-                    </span>
-                    <span className="producto-precio">
-                      ${producto.precio.toFixed(2)}
-                    </span>
-                  </div>
-
-                  <h3 className="producto-nombre">{producto.nombre}</h3>
-                  <p className="producto-id">{producto.id}</p>
-
-                  <button
-                    className="btn-agregar-producto"
-                    onClick={() => agregarProductoAlCarrito(producto)}
-                  >
-                    Agregar al Carrito
+              <div className="productos-input-seccion">
+                <h3 className="input-titulo">Agregar por ID de Producto</h3>
+                <div className="producto-input-group">
+                  <input
+                    type="text"
+                    value={productoIdInput}
+                    onChange={(e) => setProductoIdInput(e.target.value)}
+                    placeholder="Ej: 101"
+                    className="formulario-input"
+                    onKeyPress={(e) => e.key === "Enter" && agregarPorId()}
+                  />
+                  <button className="btn-agregar-id" onClick={agregarPorId}>
+                    Agregar
                   </button>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
+              </div>
 
-        {/* ------------------- FORMULARIO DE VENTA ------------------- */}
-        <div className="ventas-columna-derecha">
-          <section className="ventas-formulario" id="formulario">
-            <div className="formulario-contenedor">
-              <h2 className="formulario-titulo">Registrar Nueva Venta</h2>
-              
-              {/* Mostrar estado de validación */}
-              {Object.keys(validationErrors).length > 0 && (
-                <div style={{ 
-                  backgroundColor: '#fef2f2', 
-                  border: '1px solid #fecaca', 
-                  borderRadius: '6px', 
-                  padding: '12px', 
-                  marginBottom: '16px' 
-                }}>
-                  <div style={{ color: '#dc2626', fontSize: '14px', fontWeight: '600' }}>
-                    Corrige los siguientes errores:
-                  </div>
-                  <ul style={{ margin: '8px 0 0 20px', color: '#dc2626', fontSize: '13px' }}>
-                    {Object.entries(validationErrors).map(([field, error]) => (
-                      <li key={field}>{error}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              
-              <Form onSubmit={handleSubmit} inputs={inputs} submitButton={submitButton} resetButton={resetButton} className="formulario-grid" />
-            </div>
-          </section>
-
-          {/* ------------------- CARRITO ------------------- */}
-          <section className="ventas-carrito">
-            <div className="carrito-contenedor">
-              <h2 className="carrito-titulo">Carrito</h2>
-
-              {carrito.length === 0 ? (
-                <p className="carrito-vacio">El carrito está vacío</p>
-              ) : (
-                <div>
-                  {carrito.map((item) => (
-                    <div key={item.timestamp} className="carrito-item">
-                      <div>
-                        <p className="carrito-item-nombre">{item.nombre}</p>
-                        <p>${item.precio}</p>
-                      </div>
-
-                      <button
-                        className="btn-eliminar-item"
-                        onClick={() => eliminarDelCarrito(item.timestamp)}
-                      >
-                        ✕
-                      </button>
+              <div className="productos-grid">
+                {productosDisponibles.map((producto) => (
+                  <div key={producto.id} className="producto-card">
+                    <div className="producto-header">
+                      <span className="producto-categoria">
+                        {producto.categoria_id}
+                      </span>
+                      <span className="producto-precio">
+                        ${producto.precio.toFixed(2)}
+                      </span>
                     </div>
-                  ))}
 
-                  <div className="carrito-total">
-                    <p>Total:</p>
-                    <p>${montoTotalCarrito.toFixed(2)}</p>
+                    <h3 className="producto-nombre">{producto.nombre}</h3>
+                    <p className="producto-id">{producto.id}</p>
+
+                    <button
+                      className="btn-agregar-producto"
+                      onClick={() => agregarProductoAlCarrito(producto)}
+                    >
+                      Agregar al Carrito
+                    </button>
                   </div>
-                </div>
-              )}
+                ))}
+              </div>
             </div>
           </section>
-        </div>
-      </div>
 
-      <Modal
-        title="Procesamiento de Pago"
-        isOpen={stripeModalOpen}
-        onClose={handleStripeCancel}
-      >
-        {clientSecret && stripeOptions && (
-          <Elements
-            stripe={stripePromise}
-            options={{
-              ...stripeOptions,
-              clientSecret: clientSecret
-            }}
-          >
-            <StripePaymentForm
-              onSuccess={handleStripeSuccess}
-              onError={handleStripeError}
-              onCancel={handleStripeCancel}
-            />
-          </Elements>
-        )}
-      </Modal>
-    </div>
+          {/* ------------------- FORMULARIO DE VENTA ------------------- */}
+          <div className="ventas-columna-derecha">
+            <section className="ventas-formulario" id="formulario">
+              <div className="formulario-contenedor">
+                <h2 className="formulario-titulo">Registrar Nueva Venta</h2>
+
+                {/* Mostrar estado de validación */}
+                {Object.keys(validationErrors).length > 0 && (
+                  <div style={{
+                    backgroundColor: '#fef2f2',
+                    border: '1px solid #fecaca',
+                    borderRadius: '6px',
+                    padding: '12px',
+                    marginBottom: '16px'
+                  }}>
+                    <div style={{ color: '#dc2626', fontSize: '14px', fontWeight: '600' }}>
+                      Corrige los siguientes errores:
+                    </div>
+                    <ul style={{ margin: '8px 0 0 20px', color: '#dc2626', fontSize: '13px' }}>
+                      {Object.entries(validationErrors).map(([field, error]) => (
+                        <li key={field}>{error}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <Form onSubmit={handleSubmit} inputs={inputs} submitButton={submitButton} resetButton={resetButton} className="formulario-grid" />
+              </div>
+            </section>
+
+            {/* ------------------- CARRITO ------------------- */}
+            <section className="ventas-carrito">
+              <div className="carrito-contenedor">
+                <h2 className="carrito-titulo">Carrito</h2>
+
+                {carrito.length === 0 ? (
+                  <p className="carrito-vacio">El carrito está vacío</p>
+                ) : (
+                  <div>
+                    {carrito.map((item) => (
+                      <div key={item.timestamp} className="carrito-item">
+                        <div>
+                          <p className="carrito-item-nombre">{item.nombre}</p>
+                          <p>${item.precio}</p>
+                        </div>
+
+                        <button
+                          className="btn-eliminar-item"
+                          onClick={() => eliminarDelCarrito(item.timestamp)}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+
+                    <div className="carrito-total">
+                      <p>Total:</p>
+                      <p>${montoTotalCarrito.toFixed(2)}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <Modal
+          title="Procesamiento de Pago"
+          isOpen={stripeModalOpen}
+          onClose={handleStripeCancel}
+        >
+          {clientSecret && stripeOptions && (
+            <Elements
+              stripe={stripePromise}
+              options={{
+                ...stripeOptions,
+                clientSecret: clientSecret
+              }}
+            >
+              <StripePaymentForm
+                onSuccess={handleStripeSuccess}
+                onError={handleStripeError}
+                onCancel={handleStripeCancel}
+              />
+            </Elements>
+          )}
+        </Modal>
+      </div>
+      <Outlet />
+    </main>
   );
 };
