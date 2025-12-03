@@ -7,12 +7,8 @@ self.skipWaiting();
 clientsClaim();
 
 // precache
-precacheAndRoute([
-  { url: '/manifest.webmanifest', revision: null },
-  { url: '/icons/icon-192.png', revision: null },
-  { url: '/icons/icon-512.png', revision: null },
-  ...self.__WB_MANIFEST
-]);
+
+precacheAndRoute(self.__WB_MANIFEST);
 
 // cache HTML para que la app abra offline
 registerRoute(
