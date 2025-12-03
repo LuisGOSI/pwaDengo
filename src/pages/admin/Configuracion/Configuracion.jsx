@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './configuracion.css';
+import './Configuracion.css';
 import Sidebar from '../../../components/layout/Sidebar';
 import { useSidebar } from '../../../context/SidebarContext';
 import { Outlet } from 'react-router-dom';
