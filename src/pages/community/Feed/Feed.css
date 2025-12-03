@@ -54,6 +54,12 @@
   border: 2px solid #7a5c3f;
 }
 
+.btn-home {
+  background-color: white;
+  color: #7a5c3f;
+  border: 2px solid #7a5c3f;
+}
+
 .btn-mis-creaciones:hover {
   background-color: #7a5c3f;
   color: white;

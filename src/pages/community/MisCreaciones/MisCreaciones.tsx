@@ -21,7 +21,7 @@ interface MyCreation {
 
 export default function MisCreaciones() {
   const { get, post } = useAPI(`${conf.BACKEND_URL}/api/`);
-  const { user } = useAuth();
+  const { user, signOut } = useAuth(); // 👈 Traemos signOut
   const { showToast } = useToast();
   const [myCreations, setMyCreations] = useState<MyCreation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,9 +31,24 @@ export default function MisCreaciones() {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const navigate = useNavigate();
 
+  // 👇 Función para cerrar sesión
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigate("/login");
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+      showToast(
+        "error",
+        "Error al cerrar sesión",
+        "No se pudo cerrar sesión correctamente."
+      );
+    }
+  };
+
   const loadMyCreations = async () => {
     if (!user?.id) return;
-    
+
     try {
       setLoading(true);
       const response = await get(`comunidad/usuario/${user.id}`);
@@ -42,7 +57,11 @@ export default function MisCreaciones() {
       }
     } catch (error) {
       console.error("Error loading my creations:", error);
-      showToast('error', 'Error al cargar creaciones', 'No se pudieron cargar tus creaciones. Intenta nuevamente.');
+      showToast(
+        "error",
+        "Error al cargar creaciones",
+        "No se pudieron cargar tus creaciones. Intenta nuevamente."
+      );
     } finally {
       setLoading(false);
     }
@@ -52,7 +71,7 @@ export default function MisCreaciones() {
     loadMyCreations();
   }, [user]);
 
-  const filteredCreations = myCreations.filter(creation => 
+  const filteredCreations = myCreations.filter((creation) =>
     creation.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
     creation.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -69,25 +88,38 @@ export default function MisCreaciones() {
 
   const confirmDelete = async () => {
     if (!selectedCreation) return;
-    
+
     try {
-      // Llamada DELETE a la API
-      const response = await post(`comunidad/eliminar/`, { id: selectedCreation.id });
-      
-    if (response.success) {
-      // Remover del estado local tras eliminación exitosa
-      setMyCreations(prev => prev.filter(creation => creation.id !== selectedCreation.id));
-      setIsDeleteModalOpen(false);
-      setSelectedCreation(null);
-      
-      showToast('success', 'Creación eliminada', 'Tu creación ha sido eliminada exitosamente');
-    } else {
-      console.error("Error deleting creation:", response.message);
-      showToast('error', 'Error al eliminar', 'No se pudo eliminar la creación. Intenta nuevamente.');
-    }
+      const response = await post("comunidad/eliminar/", { id: selectedCreation.id });
+
+      if (response.success) {
+        setMyCreations((prev) =>
+          prev.filter((creation) => creation.id !== selectedCreation.id)
+        );
+
+        setIsDeleteModalOpen(false);
+        setSelectedCreation(null);
+
+        showToast(
+          "success",
+          "Creación eliminada",
+          "Tu creación ha sido eliminada exitosamente"
+        );
+      } else {
+        console.error("Error deleting creation:", response.message);
+        showToast(
+          "error",
+          "Error al eliminar",
+          "No se pudo eliminar la creación. Intenta nuevamente."
+        );
+      }
     } catch (error) {
       console.error("Error deleting creation:", error);
-      showToast('error', 'Error al eliminar', 'Ocurrió un error al eliminar la creación. Intenta nuevamente.');
+      showToast(
+        "error",
+        "Error al eliminar",
+        "Ocurrió un error al eliminar la creación. Intenta nuevamente."
+      );
     }
   };
 
@@ -97,7 +129,7 @@ export default function MisCreaciones() {
       month: "long",
       day: "numeric",
       hour: "2-digit",
-      minute: "2-digit"
+      minute: "2-digit",
     });
   };
 
@@ -108,13 +140,23 @@ export default function MisCreaciones() {
           <h1 className="mis-creaciones-titulo">Mis Creaciones</h1>
           <p className="mis-creaciones-breadcrumb">Comunidad | Mis Publicaciones</p>
         </div>
+
         <div className="mis-creaciones-header-actions">
-          <button className="btn-volver-feed" onClick={() => navigate('/community/feed')}>
+          <button className="btn-volver-feed" onClick={() => navigate("/community/feed")}>
             ← Volver al Feed
           </button>
-          <button className="btn-nueva-creacion" onClick={() => navigate('/community/nueva-creacion')}>
+
+          <button
+            className="btn-nueva-creacion"
+            onClick={() => navigate("/community/nueva-creacion")}
+          >
             <span className="btn-icono">+</span>
             Nueva Creación
+          </button>
+
+          {/* 👇 Botón de cerrar sesión */}
+          <button className="btn-cerrar-sesion" onClick={handleLogout}>
+            Cerrar Sesión
           </button>
         </div>
       </header>
@@ -146,21 +188,18 @@ export default function MisCreaciones() {
           {filteredCreations.length === 0 ? (
             <div className="no-creaciones">
               <h3>
-                {searchTerm 
-                  ? "No se encontraron creaciones" 
-                  : "Aún no tienes creaciones"
-                }
+                {searchTerm ? "No se encontraron creaciones" : "Aún no tienes creaciones"}
               </h3>
               <p>
-                {searchTerm 
-                  ? "Intenta con otros términos de búsqueda" 
-                  : "¡Crea tu primera bebida personalizada!"
-                }
+                {searchTerm
+                  ? "Intenta con otros términos de búsqueda"
+                  : "¡Crea tu primera bebida personalizada!"}
               </p>
+
               {!searchTerm && (
-                <button 
+                <button
                   className="btn-crear-primera"
-                  onClick={() => navigate('/community/nueva-creacion')}
+                  onClick={() => navigate("/community/nueva-creacion")}
                 >
                   Crear Mi Primera Bebida
                 </button>
@@ -176,7 +215,7 @@ export default function MisCreaciones() {
                       {creation.estado}
                     </span>
                   </div>
-                  <button 
+                  <button
                     className="btn-delete-creacion"
                     onClick={() => handleDeleteClick(creation)}
                     title="Eliminar creación"
@@ -184,19 +223,19 @@ export default function MisCreaciones() {
                     🗑️
                   </button>
                 </div>
+
                 <div className="creacion-content">
                   <h3 className="creacion-title">{creation.nombre}</h3>
                   <p className="creacion-description">{creation.descripcion}</p>
+
                   <div className="creacion-meta">
                     <span className="creacion-date">{formatDate(creation.creado_en)}</span>
                     <span className="creacion-id">ID: {creation.id}</span>
                   </div>
                 </div>
+
                 <div className="creacion-actions">
-                  <button 
-                    className="btn-ver-detalles"
-                    onClick={() => handleViewDetails(creation)}
-                  >
+                  <button className="btn-ver-detalles" onClick={() => handleViewDetails(creation)}>
                     Ver Detalles
                   </button>
                 </div>
@@ -206,7 +245,7 @@ export default function MisCreaciones() {
         </div>
       )}
 
-      {/* Modal de confirmación de eliminación */}
+      {/* Modal eliminar */}
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
@@ -215,20 +254,18 @@ export default function MisCreaciones() {
       >
         {selectedCreation && (
           <div className="delete-modal-content">
-            <p>¿Estás seguro de que deseas eliminar la creación <strong>"{selectedCreation.nombre}"</strong>?</p>
+            <p>
+              ¿Estás seguro de que deseas eliminar la creación{" "}
+              <strong>"{selectedCreation.nombre}"</strong>?
+            </p>
+
             <p className="warning-text">Esta acción no se puede deshacer.</p>
-            
+
             <div className="modal-actions">
-              <button 
-                className="btn-cancel"
-                onClick={() => setIsDeleteModalOpen(false)}
-              >
+              <button className="btn-cancel" onClick={() => setIsDeleteModalOpen(false)}>
                 Cancelar
               </button>
-              <button 
-                className="btn-confirm-delete"
-                onClick={confirmDelete}
-              >
+              <button className="btn-confirm-delete" onClick={confirmDelete}>
                 Eliminar
               </button>
             </div>
@@ -236,7 +273,7 @@ export default function MisCreaciones() {
         )}
       </Modal>
 
-      {/* Modal de detalles */}
+      {/* Modal detalles */}
       <Modal
         isOpen={isDetailModalOpen}
         onClose={() => setIsDetailModalOpen(false)}
@@ -245,15 +282,34 @@ export default function MisCreaciones() {
       >
         {selectedCreation && (
           <div className="detail-modal-content">
-            <img src={selectedCreation.imagen} alt={selectedCreation.nombre} className="modal-image" />
+            <img
+              src={selectedCreation.imagen}
+              alt={selectedCreation.nombre}
+              className="modal-image"
+            />
+
             <div className="modal-details">
-              <p><strong>ID:</strong> {selectedCreation.id}</p>
-              <p><strong>Descripción:</strong> {selectedCreation.descripcion}</p>
-              <p><strong>Estado:</strong> {selectedCreation.estado}</p>
-              <p><strong>Creado:</strong> {formatDate(selectedCreation.creado_en)}</p>
-              <p><strong>Actualizado:</strong> {formatDate(selectedCreation.actualizado_en)}</p>
+              <p>
+                <strong>ID:</strong> {selectedCreation.id}
+              </p>
+              <p>
+                <strong>Descripción:</strong> {selectedCreation.descripcion}
+              </p>
+              <p>
+                <strong>Estado:</strong> {selectedCreation.estado}
+              </p>
+              <p>
+                <strong>Creado:</strong> {formatDate(selectedCreation.creado_en)}
+              </p>
+              <p>
+                <strong>Actualizado:</strong> {formatDate(selectedCreation.actualizado_en)}
+              </p>
+
               {selectedCreation.comentario_administrador && (
-                <p><strong>Comentario del administrador:</strong> {selectedCreation.comentario_administrador}</p>
+                <p>
+                  <strong>Comentario del administrador:</strong>{" "}
+                  {selectedCreation.comentario_administrador}
+                </p>
               )}
             </div>
           </div>
