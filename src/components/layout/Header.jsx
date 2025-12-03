@@ -156,7 +156,7 @@ export default function Header() {
 						<button
 							className="header-user-btn header-user-btn-desktop"
 							onClick={() => {
-								window.location.href = role === 0 ? "/portal-cliente" : "/admin";
+								window.location.href = role === 0 ? "/community" : "/admin";
 							}}
 						>
 							<CircleUserRound className="header-user-icon" />
