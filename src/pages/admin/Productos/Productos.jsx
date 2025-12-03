@@ -8,18 +8,23 @@ import { useShowContent } from "../../../utils/UseShowContent";
 import { FormProductos } from "./FormProductos";
 import { conf } from "../../../conf";
 
+import { useToast } from "../../../context/MensajeContext";
+import { useConfirm } from "../../../components/common/Mensaje/ConfirmModal";
+
 export const Productos = () => {
   const { isOpen } = useSidebar();
+
+  const { showToast } = useToast();
+  const { showConfirm } = useConfirm();
+
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("");
   const [estado, setEstado] = useState("");
 
-  //[CAMBIOS NUEVOS]
-
-  const { get, del } = useAPI(`${conf.BACKEND_URL}/api/`); //Se pasas la URL base como parametro
-  const [productos, setProductos] = useState([]); //Estado para almacenar los productos
-  const [productosFiltrados, setProductosFiltrados] = useState([]); //Estado para productos filtrados
-  const [categorias, setCategorias] = useState([]); //Estado para categorías
+  const { get, del } = useAPI(`${conf.BACKEND_URL}/api/`);
+  const [productos, setProductos] = useState([]);
+  const [productosFiltrados, setProductosFiltrados] = useState([]);
+  const [categorias, setCategorias] = useState([]);
   const { objEdit, showForm, handleAdd, handleEdit, handleCloseForm } = useShowContent();
 
   useEffect(() => {
@@ -28,36 +33,70 @@ export const Productos = () => {
   }, []);
 
   const loadProductos = () => {
-    get("productos").then((res) => {
-      setProductos(res.data);
-      setProductosFiltrados(res.data); // Inicializar productos filtrados
-    });
+    get("productos")
+      .then((res) => {
+        const data = res.data || res;
+        setProductos(data);
+        setProductosFiltrados(data);
+      })
+      .catch((err) => {
+        console.error(err);
+        showToast("error", "Error", "No se pudieron cargar los productos.");
+      });
   };
 
   const loadCategorias = () => {
-    get("categorias").then((res) => {
-      setCategorias(res.data);
+    get("categorias")
+      .then((res) => {
+        setCategorias(res.data || res);
+      })
+      .catch((err) => {
+        console.error(err);
+        showToast("error", "Error", "No se pudieron cargar las categorías.");
+      });
+  };
+
+  const handleDelete = async (id) => {
+    const confirmed = await showConfirm({
+      title: "¿Eliminar producto?",
+      message: "Esta acción no se puede deshacer. El producto será eliminado del catálogo.",
+      confirmText: "Sí, eliminar",
+      cancelText: "Cancelar",
+      type: "danger"
     });
+
+    if (!confirmed) return;
+
+    try {
+      const result = await del(`productos/${id}`);
+
+      if (result) {
+        await loadProductos();
+        showToast("success", "Producto Eliminado", "El producto ha sido eliminado correctamente.");
+      } else {
+        showToast("error", "Error al eliminar", "No se pudo completar la operación.");
+      }
+    } catch (error) {
+      console.error(error);
+      showToast("error", "Error del Servidor", "Ocurrió un problema al intentar eliminar el producto.");
+    }
   };
 
   const handleFiltrar = () => {
     let productosFiltro = [...productos];
 
-    // Filtrar por nombre
     if (busqueda.trim() !== "") {
       productosFiltro = productosFiltro.filter(producto =>
         producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
       );
     }
 
-    // Filtrar por categoría
     if (categoria !== "") {
       productosFiltro = productosFiltro.filter(producto =>
         producto.categoria_id.toString() === categoria
       );
     }
 
-    // Filtrar por estado
     if (estado !== "") {
       const esActivo = estado === "activo";
       productosFiltro = productosFiltro.filter(producto =>
@@ -68,17 +107,9 @@ export const Productos = () => {
     setProductosFiltrados(productosFiltro);
   };
 
-  // Aplicar filtros automáticamente cuando cambien los valores
   useEffect(() => {
     handleFiltrar();
   }, [busqueda, categoria, estado, productos]);
-
-  const handleDelete = async (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este producto?")) {
-      const result = await del(`productos/${id}`);
-      if (result) loadProductos();
-    }
-  };
 
   const handleEditClick = (producto) => {
     handleEdit(producto);
@@ -104,8 +135,8 @@ export const Productos = () => {
             onClick={showForm ? handleFormClose : handleAdd}
             className="btn-nuevo-producto"
           >
-            <span className="btn-icono">+</span>
-            Nuevo Producto
+            <span className="btn-icono">{showForm ? '-' : '+'}</span>
+            {showForm ? 'Cerrar Formulario' : 'Nuevo Producto'}
           </button>
         </div>
 
@@ -169,6 +200,7 @@ export const Productos = () => {
           </button>
         </div>
 
+        {/* Tabla */}
         {productosFiltrados.length === 0 ? (
           <p className="sin-productos">No hay productos que coincidan con los filtros.</p>
         ) : (
@@ -212,7 +244,7 @@ export const Productos = () => {
                         <span
                           className={`categoria-badge categoria-${producto.categoria_id}`}
                         >
-                          {producto.categorias.nombre}
+                          {producto.categorias?.nombre || 'Sin categoría'}
                         </span>
                       </td>
                       <td className="producto-precio">${producto.precio}</td>
@@ -228,17 +260,7 @@ export const Productos = () => {
                             className="btn-accion btn-editar"
                             title="Editar producto"
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
+                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                               <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                             </svg>
@@ -249,17 +271,7 @@ export const Productos = () => {
                             className="btn-accion btn-eliminar"
                             title="Eliminar producto"
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
+                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <polyline points="3 6 5 6 21 6"></polyline>
                               <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                               <line x1="10" y1="11" x2="10" y2="17"></line>

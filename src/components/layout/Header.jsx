@@ -153,15 +153,15 @@ export default function Header() {
 							<span className="header-user-text">Iniciar sesión</span>
 						</button>
 					) : (
-						<button 
-            className="header-user-btn header-user-btn-desktop"
-            onClick={() => {
-              window.location.href = role === 0 ? "/perfil" : "/admin";
-            }}
-            >
+						<button
+							className="header-user-btn header-user-btn-desktop"
+							onClick={() => {
+								window.location.href = role === 0 ? "/community" : "/admin";
+							}}
+						>
 							<CircleUserRound className="header-user-icon" />
 							<span className="header-user-text">
-								{role === 0 && "Mi perfil"}
+								{role === 0 && "Mi portal"}
 								{role === 1 && "Admin"}
 								{role === 2 && "Gerente"}
 								{role === 3 && "Barista"}

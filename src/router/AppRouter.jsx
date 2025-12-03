@@ -28,6 +28,9 @@ import { Venta } from "../pages/caja/Venta/Venta.jsx";
 import Feed from "../pages/community/Feed/Feed.tsx";
 import MisCreaciones from "../pages/community/MisCreaciones/MisCreaciones.tsx";
 import NuevaCreacion from "../pages/community/NuevaCreacion/NuevaCreacion.tsx";
+import { PortalCliente } from "../pages/PortalClientes/PortalCliente.jsx";
+
+
 
 export const AppRouter = () => {
 	return (
@@ -79,7 +82,7 @@ export const AppRouter = () => {
 			<Route path="/caja/Venta" element={
 				<ProtectedRoute allowedRoles={[1, 2, 4]}>
 					<SidebarProvider>
-						<Venta/>
+						<Venta />
 					</SidebarProvider>
 				</ProtectedRoute>
 			} />
@@ -156,37 +159,32 @@ export const AppRouter = () => {
 					</SidebarProvider>
 				</ProtectedRoute>
 			} />
-			{/* Ruta a Usuarios y roles*/}
 
-			{/* Ruta a configuración*/}
-			<Route path="/admin/configuracion" element={
-				<ProtectedRoute allowedRoles={[1, 2, 3, 4]}>
-					<SidebarProvider>
-						<Configuracion />
-					</SidebarProvider>
-				</ProtectedRoute>
-			} />
-			/* Community routes (for client. These routes should be protected) */
+
+
+			{/* Ruta a Portal de cliente */}
+			<Route path="/portal-cliente" element={<PortalCliente />} />
+
 			<Route path="/community" element={
 				<SidebarProvider>
 					<Feed />
 				</SidebarProvider>
-			}/>
+			} />
 			<Route path="/community/feed" element={
 				<SidebarProvider>
 					<Feed />
 				</SidebarProvider>
-			}/>
+			} />
 			<Route path="/community/mis-creaciones" element={
 				<SidebarProvider>
 					<MisCreaciones />
 				</SidebarProvider>
-			}/>
+			} />
 			<Route path="/community/nueva-creacion" element={
 				<SidebarProvider>
 					<NuevaCreacion />
 				</SidebarProvider>
-			}/>"
+			} />"
 
 			{/* Rutas especiales */}
 			<Route path="/no-autorizado" element={<NoAutorizado />} />
