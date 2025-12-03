@@ -24,7 +24,7 @@ interface CommunityPost {
 
 export default function Feed() {
   const { get } = useAPI(`${conf.BACKEND_URL}/api/`);
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { showToast } = useToast();
   const [posts, setPosts] = useState<CommunityPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,7 +43,11 @@ export default function Feed() {
       }
     } catch (error) {
       console.error("Error loading feed:", error);
-      showToast('error', 'Error al cargar feed', 'No se pudo cargar el feed de la comunidad. Intenta nuevamente.');
+      showToast(
+        "error",
+        "Error al cargar feed",
+        "No se pudo cargar el feed de la comunidad. Intenta nuevamente."
+      );
     } finally {
       setLoading(false);
     }
@@ -54,7 +58,7 @@ export default function Feed() {
   }, []);
 
   const filteredAndSortedPosts = posts
-    .filter(post => 
+    .filter((post) =>
       post.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
       post.descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
       post.usuarios.nombre.toLowerCase().includes(searchTerm.toLowerCase())
@@ -85,6 +89,23 @@ export default function Feed() {
     });
   };
 
+  // =========================
+  // ⭐ NUEVO: Cerrar sesión
+  // =========================
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigate("/login");
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+      showToast(
+        "error",
+        "Error al cerrar sesión",
+        "No se pudo cerrar sesión correctamente."
+      );
+    }
+  };
+
   return (
     <div className="feed-container">
       <header className="feed-header">
@@ -92,16 +113,30 @@ export default function Feed() {
           <h1 className="feed-titulo">Feed de la Comunidad</h1>
           <p className="feed-breadcrumb">Comunidad | Creaciones Públicas</p>
         </div>
+
         <div className="feed-header-actions">
-          <button className="btn-home" onClick={() => navigate('/')}>
+          <button className="btn-mis-creaciones" onClick={() => navigate("/")}>
             ← Volver al Inicio
           </button>
-          <button className="btn-mis-creaciones" onClick={() => navigate('/community/mis-creaciones')}>
+
+          <button
+            className="btn-mis-creaciones"
+            onClick={() => navigate("/community/mis-creaciones")}
+          >
             Ver Mis Creaciones
           </button>
-          <button className="btn-nueva-creacion" onClick={() => navigate('/community/nueva-creacion')}>
+
+          <button
+            className="btn-nueva-creacion"
+            onClick={() => navigate("/community/nueva-creacion")}
+          >
             <span className="btn-icono">+</span>
             Nueva Creación
+          </button>
+
+          {/* ⭐ NUEVO: Botón de cerrar sesión */}
+          <button className="btn-cerrar-sesion" onClick={handleLogout}>
+            Cerrar sesión
           </button>
         </div>
       </header>
@@ -116,6 +151,7 @@ export default function Feed() {
             className="search-input"
           />
         </div>
+
         <div className="sort-section">
           <select
             value={sortBy}
@@ -140,10 +176,9 @@ export default function Feed() {
             <div className="no-posts">
               <h3>No se encontraron creaciones</h3>
               <p>
-                {searchTerm 
-                  ? "Intenta con otros términos de búsqueda" 
-                  : "¡Sé el primero en compartir una creación!"
-                }
+                {searchTerm
+                  ? "Intenta con otros términos de búsqueda"
+                  : "¡Sé el primero en compartir una creación!"}
               </p>
             </div>
           ) : (
@@ -152,16 +187,19 @@ export default function Feed() {
                 <div className="post-image">
                   <img src={post.imagen} alt={post.nombre} />
                 </div>
+
                 <div className="post-content">
                   <h3 className="post-title">{post.nombre}</h3>
                   <p className="post-description">{post.descripcion}</p>
+
                   <div className="post-meta">
                     <span className="post-author">Por: {post.usuarios.nombre}</span>
                     <span className="post-date">{formatDate(post.creado_en)}</span>
                   </div>
                 </div>
+
                 <div className="post-actions">
-                  <button 
+                  <button
                     className="btn-ordenar"
                     onClick={() => handleOrderClick(post)}
                   >
@@ -174,7 +212,6 @@ export default function Feed() {
         </div>
       )}
 
-      {/* Modal para mostrar detalles */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -183,7 +220,12 @@ export default function Feed() {
       >
         {selectedPost && (
           <div className="detail-modal-content">
-            <img src={selectedPost.imagen} alt={selectedPost.nombre} className="modal-image" />
+            <img
+              src={selectedPost.imagen}
+              alt={selectedPost.nombre}
+              className="modal-image"
+            />
+
             <div className="modal-details">
               <p><strong>ID:</strong> {selectedPost.id}</p>
               <p><strong>Descripción:</strong> {selectedPost.descripcion}</p>
