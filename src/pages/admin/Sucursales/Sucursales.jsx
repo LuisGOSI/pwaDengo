@@ -224,12 +224,11 @@ export const Sucursales = () => {
         }
 
         // Teléfono
-        const regexTelefono = /^[0-9()+\-\s]{7,20}$/;
-        if (!regexTelefono.test(formData.telefono.trim())) {
+        if (formData.telefono.length !== 10) {
             showToast(
                 "warning",
                 "Teléfono inválido",
-                "Debe ser un número válido. Ej: (477) 123-4567."
+                "El teléfono debe tener 10 dígitos numéricos."
             );
             return false;
         }
@@ -272,6 +271,35 @@ export const Sucursales = () => {
         }
 
         return true;
+    };
+
+    // Función auxiliar para dar formato visual (XXX) XXX-XXXX
+    const formatPhoneNumber = (value) => {
+        if (!value) return "";
+        // Aseguramos que trabajamos con el valor limpio para formatear
+        const phoneNumber = value.replace(/[^\d]/g, '');
+        const phoneLength = phoneNumber.length;
+
+        if (phoneLength < 4) return phoneNumber;
+        if (phoneLength < 7) {
+            return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+        }
+        return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+    };
+
+    // Handler específico para el input de teléfono
+    const handlePhoneChange = (e) => {
+        // 1. Extraemos solo los números
+        const input = e.target.value.replace(/\D/g, '');
+
+        // 2. Limitamos estrictamente a 10 dígitos
+        const rawValue = input.substring(0, 10);
+
+        // 3. Guardamos en el estado SOLO los números limpios (ej: "4771234567")
+        setFormData({
+            ...formData,
+            telefono: rawValue
+        });
     };
 
     return (
@@ -323,10 +351,12 @@ export const Sucursales = () => {
                                             type="text"
                                             id="telefono"
                                             name="telefono"
-                                            value={formData.telefono}
-                                            onChange={handleInputChange}
+                                            value={formatPhoneNumber(formData.telefono)}
+                                            onChange={handlePhoneChange}
                                             required
                                             placeholder="Ej: (477) 123-4567"
+                                            maxLength={14} 
+                                            className="form-control"
                                         />
                                     </div>
                                 </div>

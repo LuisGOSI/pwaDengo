@@ -8,6 +8,7 @@ type AuthContextType = {
     role: number | null;
     loading: boolean;
     userData: any | null;
+    type: string | null;
     signOut: () => Promise<void>;
 };
 
@@ -17,6 +18,7 @@ const AuthContext = createContext<AuthContextType>({
     role: null,
     loading: true,
     userData: null,
+    type: null,
     signOut: async () => { },
 });
 
@@ -30,6 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [session, setSession] = useState<Session | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const [role, setRole] = useState<number | null>(null);
+    const [type, setType] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [userData, setUserData] = useState<any>(null);
 
@@ -63,15 +66,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
             const { data, error } = await supabase
                 .from("usuarios")
-                .select("rol_id, nombre, apellidos,sucursal_personal_id")
+                .select("rol_id, nombre, apellidos,sucursal_personal_id, tipo_cuenta")
                 .eq("id", user.id)
                 .single();
 
             if (error) {
                 console.error("Error obteniendo rol:", error);
                 setRole(null);
+                setType(null);
             } else {
                 setRole(Number(data.rol_id));
+                setType(data.tipo_cuenta);
                 setUserData(data);
             }
         };
@@ -85,7 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ session, user, role, loading, userData, signOut }}>
+        <AuthContext.Provider value={{ session, user, role, loading, userData, type, signOut }}>
             {children}
         </AuthContext.Provider>
     );

@@ -3,7 +3,7 @@ import { useAuth } from "../../services/AuthContext";
 import Spinner from "./Spinner";
 
 export function ProtectedRoute({ children, allowedRoles }) {
-    const { user, role, loading } = useAuth();
+    const { user, role, loading, type } = useAuth();
 
     // Si está cargando, mostrar spinner
     if (loading) {
@@ -16,8 +16,13 @@ export function ProtectedRoute({ children, allowedRoles }) {
     }
 
     // Si tenemos usuario pero el rol aún es null (está cargando), mostrar spinner
-    if (user && role === null) {
+    if (user && type === null) {
+        console.log(type);
         return <Spinner />;
+    }
+
+    if (user && type === 'cliente' ) {
+        return <Navigate to="/portal-cliente" replace />;
     }
 
     // Si se especifican roles y el usuario no tiene un rol permitido
