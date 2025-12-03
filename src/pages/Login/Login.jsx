@@ -27,7 +27,7 @@ export default function Login() {
             } 
             // Si el rol es null o 0, asumimos que es CLIENTE y lo mandamos al portal
             else {
-                navigate("/portal-cliente");
+                navigate("/community");
             }
         }
     }, [session, role, navigate, location]);
