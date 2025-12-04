@@ -21,8 +21,15 @@ interface Producto {
   nombre: string;
   precio: number;
   categoria_id: string;
+  categorias:Categoria
   timestamp?: number;
 }
+
+interface Categoria {
+  id: number;
+  nombre: string;
+}
+
 
 interface ItemCarrito extends Producto {
   timestamp: number;
@@ -547,7 +554,7 @@ export const Venta: React.FC = () => {
                   <div key={producto.id} className="producto-card">
                     <div className="producto-header">
                       <span className="producto-categoria">
-                        {producto.categoria_id}
+                        {producto.categorias.nombre}
                       </span>
                       <span className="producto-precio">
                         ${producto.precio.toFixed(2)}
