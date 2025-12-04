@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom"; // Importamos useNavigate
+import { useLocation, useNavigate } from "react-router-dom";
 import supabase from "../../services/supabase";
 import { useAuth } from "../../services/AuthContext";
+// 1. Importamos el hook de mensajes
+import { useMensaje } from "../../context/MensajeContext";
 import Header from "../../components/layout/Header";
 import { Footer } from "../../components/layout/Footer";
 
@@ -9,8 +11,11 @@ import "./Login.css";
 
 export default function Login() {
     const location = useLocation();
-    const navigate = useNavigate(); // Hook para navegar
+    const navigate = useNavigate();
     const { session, loading, role } = useAuth();
+
+    // 2. Extraemos la función para mostrar alertas
+    const { mostrarMensaje } = useMensaje();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -44,7 +49,8 @@ export default function Login() {
 
             if (error) throw error;
         } catch (error) {
-            alert(error.message || "Ocurrió un error con Google");
+            // 3. Reemplazo de alerta de error
+            mostrarMensaje("error", error.message || "Ocurrió un error con Google");
             setAuthLoading(false);
         }
     };
@@ -53,12 +59,14 @@ export default function Login() {
         e.preventDefault();
 
         if (!email || !password) {
-            alert("Por favor completa todos los campos");
+            // 3. Reemplazo de alerta de validación
+            mostrarMensaje("error", "Por favor completa todos los campos");
             return;
         }
 
         if (password.length < 6) {
-            alert("La contraseña debe tener al menos 6 caracteres");
+            // 3. Reemplazo de alerta de validación
+            mostrarMensaje("error", "La contraseña debe tener al menos 6 caracteres");
             return;
         }
 
@@ -76,10 +84,10 @@ export default function Login() {
 
                 if (error) throw error;
 
-                // No detenemos el loading aquí para que la redirección del useEffect actúe si hay sesión
-                alert("Cuenta creada con éxito.");
+                // 3. Reemplazo de alerta de éxito
+                mostrarMensaje("success", "Cuenta creada con éxito.");
+                
                 if (!session) {
-                    // Solo limpiamos si no hubo autologin inmediato
                     setIsSignUp(false);
                     setEmail("");
                     setPassword("");
@@ -92,15 +100,14 @@ export default function Login() {
                 });
 
                 if (error) throw error;
-                // Si es exitoso, el useEffect detectará la sesión y redirigirá
             }
         } catch (error) {
-            alert(error.message || "Ocurrió un error");
+            // 3. Reemplazo de alerta de error general
+            mostrarMensaje("error", error.message || "Ocurrió un error");
             setAuthLoading(false);
         }
     };
 
-    // Mostrar spinner mientras carga el contexto de Auth
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-screen">
@@ -109,7 +116,6 @@ export default function Login() {
         );
     }
 
-    // Mostrar spinner si hay sesión mientras el useEffect redirige
     if (session) {
         return (
             <div className="flex justify-center items-center min-h-screen">
