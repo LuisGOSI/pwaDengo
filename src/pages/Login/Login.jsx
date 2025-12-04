@@ -1,23 +1,25 @@
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom"; // Importamos useNavigate
+import { useLocation, useNavigate } from "react-router-dom";
 import supabase from "../../services/supabase";
 import { useAuth } from "../../services/AuthContext";
 import Header from "../../components/layout/Header";
 import { Footer } from "../../components/layout/Footer";
+import { useToast } from "../../context/MensajeContext"; // 1. Importar Contexto
 
 import "./Login.css";
 
 export default function Login() {
     const location = useLocation();
-    const navigate = useNavigate(); // Hook para navegar
+    const navigate = useNavigate();
     const { session, loading, role } = useAuth();
+    const { showToast } = useToast(); // 2. Inicializar hook
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [authLoading, setAuthLoading] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
 
-    // Lógica de redirección centralizada
+    // Lógica de redirección centralizada (INTACTA)
     useEffect(() => {
         if (session) {
             // Si el rol es mayor a 0, es personal/admin
@@ -38,13 +40,14 @@ export default function Login() {
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: "google",
                 options: {
-                    redirectTo: `${window.location.origin}/community`, 
+                    redirectTo: `${window.location.origin}/community`,
                 },
             });
 
             if (error) throw error;
         } catch (error) {
-            alert(error.message || "Ocurrió un error con Google");
+            console.error(error);
+            showToast("error", "Error Google", "Ocurrió un error al conectar con Google.");
             setAuthLoading(false);
         }
     };
@@ -52,13 +55,14 @@ export default function Login() {
     const handleAuth = async (e) => {
         e.preventDefault();
 
+        // Validaciones con Toasts
         if (!email || !password) {
-            alert("Por favor completa todos los campos");
+            showToast("warning", "Campos vacíos", "Por favor completa todos los campos.");
             return;
         }
 
         if (password.length < 6) {
-            alert("La contraseña debe tener al menos 6 caracteres");
+            showToast("warning", "Contraseña corta", "La contraseña debe tener al menos 6 caracteres.");
             return;
         }
 
@@ -76,10 +80,10 @@ export default function Login() {
 
                 if (error) throw error;
 
-                // No detenemos el loading aquí para que la redirección del useEffect actúe si hay sesión
-                alert("Cuenta creada con éxito.");
+                showToast("success", "Cuenta Creada", "Tu cuenta ha sido registrada con éxito.");
+
                 if (!session) {
-                    // Solo limpiamos si no hubo autologin inmediato
+                    // Solo limpiamos si no hubo autologin inmediato (caso confirmación email)
                     setIsSignUp(false);
                     setEmail("");
                     setPassword("");
@@ -92,10 +96,18 @@ export default function Login() {
                 });
 
                 if (error) throw error;
+                
+                showToast("success", "Bienvenido", "Iniciando sesión...");
                 // Si es exitoso, el useEffect detectará la sesión y redirigirá
             }
         } catch (error) {
-            alert(error.message || "Ocurrió un error");
+            console.error(error);
+            // Traducción de errores comunes
+            let msg = error.message || "Ocurrió un error";
+            if (msg.includes("Invalid login credentials")) msg = "Credenciales incorrectas.";
+            if (msg.includes("User already registered")) msg = "El usuario ya está registrado.";
+            
+            showToast("error", "Error de Autenticación", msg);
             setAuthLoading(false);
         }
     };
@@ -235,7 +247,6 @@ export default function Login() {
                                     src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                                     alt="Google"
                                     className="w-5 h-5"
-                                    disabled={authLoading}
                                 />
                                 Google
                             </button>
