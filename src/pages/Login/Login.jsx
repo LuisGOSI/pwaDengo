@@ -24,8 +24,7 @@ export default function Login() {
         if (session) {
             // Si el rol es mayor a 0, es personal/admin
             if (role && role > 0) {
-                const from = location.state?.from?.pathname || "/admin";
-                navigate(from);
+                navigate("/admin");
             } 
             // Si el rol es null o 0, asumimos que es CLIENTE y lo mandamos al portal
             else {
