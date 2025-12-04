@@ -19,15 +19,19 @@ export default function Login() {
     const [authLoading, setAuthLoading] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
 
-    // Lógica de redirección centralizada (INTACTA)
+// Lógica de redirección centralizada
     useEffect(() => {
         if (session) {
-            // Si el rol es mayor a 0, es personal/admin
-            if (role && role > 0) {
-                navigate("/admin");
+            // NUEVO: Si el rol aún es null (está cargando), no hacemos nada y esperamos la siguiente actualización
+            if (role === null) return;
+
+            // Ahora sí, ya tenemos el rol cargado:
+            if (role > 0) {
+                const from = location.state?.from?.pathname || "/admin";
+                navigate(from);
             } 
-            // Si el rol es null o 0, asumimos que es CLIENTE y lo mandamos al portal
             else {
+                // Rol 0 (cliente)
                 navigate("/community");
             }
         }
